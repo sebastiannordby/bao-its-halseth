@@ -3,9 +3,9 @@
 
 <PageTitle>Weather</PageTitle>
 
-<h1>Weather</h1>
+<RadzenText>Weather</RadzenText>
 
-<p>This component demonstrates showing data.</p>
+<RadzenText>This component demonstrates showing data.</RadzenText>
 
 @if (forecasts == null)
 {
@@ -16,20 +16,56 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
+
+                <th>
+                    <RadzenText>
+                        Date
+                    </RadzenText>
+                </th>
+                <th>
+                    <RadzenText>
+                        Temp. (C)
+                    </RadzenText>
+                </th>
+
+                <th>
+                    <RadzenText>
+                        Temp. (F)
+                    </RadzenText>
+                </th>
+                <th>
+                    <RadzenText>
+                        Summary
+                    </RadzenText>
+                </th>
             </tr>
         </thead>
         <tbody>
             @foreach (var forecast in forecasts)
             {
                 <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
+                    <td>
+                        <RadzenText>
+                            @forecast.Date.ToShortDateString()
+                        </RadzenText>
+                    </td>
+                    <td>
+                        <RadzenText>
+                            @forecast.TemperatureC
+                        </RadzenText>
+                    </td>
+                    
+                    <td>
+                        <RadzenText>
+                            @forecast.TemperatureF
+                        </RadzenText>
+                    </td>
+
+                    <td>
+                        <RadzenText>
+                            @forecast.Summary
+                        </RadzenText>
+                    </td>
                 </tr>
             }
         </tbody>

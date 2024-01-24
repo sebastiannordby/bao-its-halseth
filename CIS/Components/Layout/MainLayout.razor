@@ -10,14 +10,7 @@
         </RadzenStack>
     </RadzenHeader>
     <RadzenSidebar @bind-Expanded="@sidebar1Expanded">
-        <RadzenPanelMenu>
-            <RadzenPanelMenuItem Text="Home" Icon="home" Click="@(()=>Navigation.NavigateTo("/"))"  />
-            <RadzenPanelMenuItem Text="Users" Icon="account_box" />
-            <RadzenPanelMenuItem Text="Weather" Icon="cloud" Click="@(()=> Navigation.NavigateTo("/weather"))" />
-        </RadzenPanelMenu>
-        <div class="rz-p-4">
-            Sidebar
-        </div>
+        <NavMenu/>
     </RadzenSidebar>
     <RadzenBody>
         <div class="rz-p-4">
@@ -34,21 +27,7 @@
 
 
 
-@* <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div> *@
 
 <div id="blazor-error-ui">
     An unhandled error has occurred.
@@ -66,6 +45,5 @@
     private void ToggleExpand()
     {
         sidebar1Expanded = !sidebar1Expanded;
-
     }
 }
