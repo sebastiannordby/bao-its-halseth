@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace CIS.Domain.Models
 {
-    public sealed class Customer
+    public class Region
     {
         public int Number { get; set; }
-        public string ContactPersonEmailAddress { get; set; }
-        public string ContactPersonPhoneNumber { get; set; }
-        public bool IsActive { get; set; }
+        public required string Name { get; set; }
     }
 }
