@@ -12,6 +12,7 @@
 /CIS/bin/Debug/net8.0
 /CIS.Client/bin/Debug/net8.0
 /CIS.Client/obj
+/CIS/node_modules
 /CIS.Domain/bin/Debug/net8.0
 /CIS/node_modules
 /.vs/bao-its-halseth/v17
