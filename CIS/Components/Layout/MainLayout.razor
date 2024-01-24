@@ -1,6 +1,40 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
+
+
+<RadzenLayout>
+    <RadzenHeader>
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
+            <RadzenSidebarToggle Click=ToggleExpand />
+            <RadzenLabel Text="Header" />
+        </RadzenStack>
+    </RadzenHeader>
+    <RadzenSidebar @bind-Expanded="@sidebar1Expanded">
+        <RadzenPanelMenu>
+            <RadzenPanelMenuItem Text="Home" Icon="home" Click="@(()=>Navigation.NavigateTo("/"))"  />
+            <RadzenPanelMenuItem Text="Users" Icon="account_box" />
+            <RadzenPanelMenuItem Text="Weather" Icon="cloud" Click="@(()=> Navigation.NavigateTo("/weather"))" />
+        </RadzenPanelMenu>
+        <div class="rz-p-4">
+            Sidebar
+        </div>
+    </RadzenSidebar>
+    <RadzenBody>
+        <div class="rz-p-4">
+            @Body
+        </div>
+    </RadzenBody>
+    <RadzenFooter>
+        Footer
+    </RadzenFooter>
+</RadzenLayout>
+
+
+
+
+
+
+@* <div class="page">
     <div class="sidebar">
         <NavMenu />
     </div>
@@ -14,10 +48,24 @@
             @Body
         </article>
     </main>
-</div>
+</div> *@
 
 <div id="blazor-error-ui">
     An unhandled error has occurred.
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+
+
+@code {
+    [Inject] NavigationManager Navigation { get; set; }
+
+    bool sidebar1Expanded = true;
+
+
+    private void ToggleExpand()
+    {
+        sidebar1Expanded = !sidebar1Expanded;
+
+    }
+}
