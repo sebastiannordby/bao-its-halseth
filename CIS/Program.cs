@@ -1,4 +1,4 @@
-using CIS.Components;
+using CIS;
 
 var builder = WebApplication.CreateBuilder(args);
 

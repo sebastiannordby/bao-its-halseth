@@ -17,9 +17,6 @@
             @Body
         </div>
     </RadzenBody>
-    <RadzenFooter>
-        Footer
-    </RadzenFooter>
 </RadzenLayout>
 
 
@@ -39,7 +36,26 @@
 @code {
     [Inject] NavigationManager Navigation { get; set; }
 
+
+
     bool sidebar1Expanded = true;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        Navigation.LocationChanged += LocationChanged;
+    }
+
+
+    private void LocationChanged(object sender, LocationChangedEventArgs args)
+    {
+        //TODO:
+        //Lag mapping mellom route og header title
+        //HeaderTitle kan da settes her
+    }
+
+
 
 
     private void ToggleExpand()

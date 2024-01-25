@@ -10,4 +10,12 @@
     <PackageReference Include="Radzen.Blazor" Version="4.24.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CIS.Domain\CIS.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
+
 </Project>

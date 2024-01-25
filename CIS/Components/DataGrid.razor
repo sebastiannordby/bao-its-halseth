@@ -1,0 +1,110 @@
+﻿@using CIS.Domain.Customers
+
+<RadzenContent>
+    <RadzenHeader class="flex justif-center w-full items-center rounded-t p-1 *:mr-1">
+        <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="edit" Disabled=@(!itemSelected?.Any() ?? true) />
+        <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Disabled=@(!itemSelected?.Any() ?? true) />
+        <RadzenTextBox class="ml-auto" Placeholder="Søk..." ValueChanged="SearchChanged" />
+    </RadzenHeader>
+
+    <RadzenDataGrid Data=displayData
+                    Value=itemSelected
+                    ValueChanged="ItemSelected_Changed"
+                    class="!rounded-b [&_span]\:!leading-3 [&_td]:!p-1 [&_td>span]:!text-xs [&_span>input]:!text-xs [&_span>input]:!leading-3 [&_span>input]:!p-1 [&_span>input]:!h-min [&_.rz-cell-filter]:!p-0 [&_span>input]:!px-1"
+                    TItem="Customer"
+                    AllowColumnResize=true
+                    AllowAlternatingRows=false
+                    AllowFiltering=true
+                    AllowSorting=true
+                    AllowPaging=true
+                    SelectionMode="DataGridSelectionMode.Single"
+                    EditMode="DataGridEditMode.Single"
+                    FilterMode="FilterMode.Simple"
+                    PageSize="15"
+                    ShowPagingSummary=true>
+
+        <Columns>
+            <RadzenDataGridColumn TItem="Customer" Title="Nummer" Property="@(nameof(Customer.Number))" Filterable=false/>
+            <RadzenDataGridColumn TItem="Customer" Title="Navn" Property="@(nameof(Customer.Name))" />
+            <RadzenDataGridColumn TItem="Customer" Title="Kontaktperson" Property="@(nameof(Customer.ContactPersonName))" />
+            <RadzenDataGridColumn TItem="Customer" Title="Email" Property="@(nameof(Customer.ContactPersonEmailAddress))" />
+            <RadzenDataGridColumn TItem="Customer" Title="Telefon" Property="@(nameof(Customer.ContactPersonPhoneNumber))" />
+            <RadzenDataGridColumn TItem="Customer" Title="Aktiv" TextAlign=TextAlign.Center Property="@(nameof(Customer.IsActive))">
+                <Template Context="customer">
+                    <RadzenCheckBox TValue=bool Value="@customer.IsActive" ReadOnly=true />
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+
+</RadzenContent>
+
+
+
+
+@code {
+
+    [Parameter]
+    public List<Customer> Data { get;set; }
+
+    [Parameter]
+    public Customer ItemSelected { get; set; }
+
+    [Parameter] 
+    public EventCallback<Customer> ItemSelectedChanged { get; set; }
+
+
+    private List<Customer> displayData;
+    public IList<Customer> itemSelected { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        Data = new();
+
+
+        for (int i = 0; i < 50; i++)
+        {
+            Data.Add(new()
+                {
+                    Number = 1234,
+                    Name = "Narvesen Oslo s",
+                    ContactPersonName = "Jon Doe",
+                    ContactPersonEmailAddress = "jondoe@mail.no",
+                    ContactPersonPhoneNumber = "12345678",
+                    IsActive = true,
+                });
+        }
+
+        Data.Add(new()
+        {
+            Number = 4321,
+            Name = "Delli Oslo s",
+            ContactPersonName = "Jane Doe",
+            ContactPersonEmailAddress = "janedoe@mail.no",
+            ContactPersonPhoneNumber = "87654321",
+            IsActive = false,
+        });
+
+        displayData = Data;
+    }
+
+
+    private async void ItemSelected_Changed(IList<Customer> itemSelected)
+    {
+        ItemSelected = itemSelected.FirstOrDefault();
+        await ItemSelectedChanged.InvokeAsync(ItemSelected);
+    }
+
+
+    private void SearchChanged(string input)
+    {
+        input = input.ToLower();
+        displayData = Data.Where(s => s.Name.ToLower().Contains(input)
+        || s.Number.ToString().Contains(input)
+        || s.ContactPersonName.ToLower().Contains(input)
+        || s.ContactPersonEmailAddress.ToLower().Contains(input)
+        || s.ContactPersonPhoneNumber.ToLower().Contains(input)).ToList();
+    }
+}

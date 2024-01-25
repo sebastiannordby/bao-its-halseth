@@ -548,22 +548,42 @@ video {
   position: static;
 }
 
+.ml-auto {
+  margin-left: auto;
+}
+
+.flex {
+  display: flex;
+}
+
 .table {
   display: table;
 }
 
-.px-3 {
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
+.w-full {
+  width: 100%;
 }
 
-.px-4 {
-  padding-left: 1rem;
-  padding-right: 1rem;
+.items-center {
+  align-items: center;
 }
 
-.ps-3 {
-  padding-inline-start: 0.75rem;
+.\!rounded-b {
+  border-bottom-right-radius: 0.25rem !important;
+  border-bottom-left-radius: 0.25rem !important;
+}
+
+.rounded-t {
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+}
+
+.p-1 {
+  padding: 0.25rem;
+}
+
+.\!leading-3 {
+  line-height: .75rem !important;
 }
 
 html, body {
@@ -616,4 +636,72 @@ h1:focus {
 
 .darker-border-checkbox.form-check-input {
   border-color: #929292;
+}
+
+.\*\:mr-1 > * {
+  margin-right: 0.25rem;
+}
+
+.\[\&_\.rz-cell-filter-content\]\:\!py-0 .rz-cell-filter-content {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+
+.\[\&_\.rz-cell-filter\]\:\!p-0 .rz-cell-filter {
+  padding: 0px !important;
+}
+
+.\[\&_rz-cell-filter-content\]\:\!py-0 rz-cell-filter-content {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+
+.\[\&_span\>input\]\:\!h-min span>input {
+  height: -moz-min-content !important;
+  height: min-content !important;
+}
+
+.\[\&_span\>input\]\:\!p-1 span>input {
+  padding: 0.25rem !important;
+}
+
+.\[\&_span\>input\]\:\!px-1 span>input {
+  padding-left: 0.25rem !important;
+  padding-right: 0.25rem !important;
+}
+
+.\[\&_span\>input\]\:\!text-xs span>input {
+  font-size: 0.75rem !important;
+  line-height: 1rem !important;
+}
+
+.\[\&_span\>input\]\:\!leading-3 span>input {
+  line-height: .75rem !important;
+}
+
+.\[\&_td\>span\]\:\!text-xs td>span {
+  font-size: 0.75rem !important;
+  line-height: 1rem !important;
+}
+
+.\[\&_td\]\:\!p-1 td {
+  padding: 0.25rem !important;
+}
+
+.\[\&_th\>div\]\:\!p-1 th>div {
+  padding: 0.25rem !important;
+}
+
+.\[\&_th\>div\]\:\!p-0 th>div {
+  padding: 0px !important;
+}
+
+.\[\&_th\>div\]\:\!py-0 th>div {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+
+.\[\&_th\>rz-cell-filter-content\]\:\!py-0 th>rz-cell-filter-content {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
 }
