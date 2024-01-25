@@ -2,13 +2,13 @@
 
 <RadzenContent>
     <RadzenHeader class="flex justif-center w-full items-center rounded-t p-1 *:mr-1">
-        <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="edit" Disabled=@(!itemSelected?.Any() ?? true) />
-        <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Disabled=@(!itemSelected?.Any() ?? true) />
+        <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="edit" Disabled=@(!_itemSelected?.Any() ?? true) />
+        <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Disabled=@(!_itemSelected?.Any() ?? true) />
         <RadzenTextBox class="ml-auto" Placeholder="Søk..." ValueChanged="SearchChanged" />
     </RadzenHeader>
 
-    <RadzenDataGrid Data=displayData
-                    Value=itemSelected
+    <RadzenDataGrid Data=_displayData
+                    Value=_itemSelected
                     ValueChanged="ItemSelected_Changed"
                     class="!rounded-b [&_span]\:!leading-3 [&_td]:!p-1 [&_td>span]:!text-xs [&_span>input]:!text-xs [&_span>input]:!leading-3 [&_span>input]:!p-1 [&_span>input]:!h-min [&_.rz-cell-filter]:!p-0 [&_span>input]:!px-1"
                     TItem="Customer"
@@ -54,8 +54,8 @@
     public EventCallback<Customer> ItemSelectedChanged { get; set; }
 
 
-    private List<Customer> displayData;
-    public IList<Customer> itemSelected { get; set; }
+    private List<Customer> _displayData;
+    public IList<Customer> _itemSelected { get; set; }
 
     protected override void OnInitialized()
     {
@@ -87,12 +87,13 @@
             IsActive = false,
         });
 
-        displayData = Data;
+        _displayData = Data;
     }
 
 
     private async void ItemSelected_Changed(IList<Customer> itemSelected)
     {
+        _itemSelected = itemSelected;
         ItemSelected = itemSelected.FirstOrDefault();
         await ItemSelectedChanged.InvokeAsync(ItemSelected);
     }
@@ -101,7 +102,7 @@
     private void SearchChanged(string input)
     {
         input = input.ToLower();
-        displayData = Data.Where(s => s.Name.ToLower().Contains(input)
+        _displayData = Data.Where(s => s.Name.ToLower().Contains(input)
         || s.Number.ToString().Contains(input)
         || s.ContactPersonName.ToLower().Contains(input)
         || s.ContactPersonEmailAddress.ToLower().Contains(input)
