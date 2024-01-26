@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.Domain.Customers
+namespace CIS.Domain.Customers.Models
 {
     public class CustomerGroup
     {

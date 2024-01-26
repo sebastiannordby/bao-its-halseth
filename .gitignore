@@ -12,3 +12,5 @@
 /CIS.Client/obj
 /CIS.Domain/bin/Debug/net8.0
 /CIS/node_modules
+/.vs/bao-its-halseth/v17
+/CIS.DataAccess/obj
