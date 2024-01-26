@@ -1,0 +1,14 @@
+﻿@inject NavigationManager Navigation
+
+<RadzenPanelMenu>
+    <RadzenPanelMenuItem Text="Kunder" Icon="home" Click="@(()=>Navigation.NavigateTo("/customers"))" />
+    <RadzenPanelMenuItem Text="Bestillinger" Icon="list" Click="@(()=> Navigation.NavigateTo("/counter"))" />
+    <RadzenPanelMenuItem Text="Bestillings forslag" Icon="list" Click="@(()=> Navigation.NavigateTo("/counter"))" />
+    <RadzenPanelMenuItem Text="Produkter" Icon="inventory" Click="@(()=> Navigation.NavigateTo("/weather"))" />
+    <RadzenPanelMenuItem Text="Historikk" Icon="inbox" Click="@(()=> Navigation.NavigateTo("/weather"))" />
+    <RadzenPanelMenuItem Text="Salgstall" Icon="tag" Click="@(()=> Navigation.NavigateTo("/weather"))" />
+    <RadzenPanelMenuItem Text="Restordre" Icon="description" Click="@(()=> Navigation.NavigateTo("/weather"))" />
+    <RadzenPanelMenuItem Text="Send ordre" Icon="send" Click="@(()=> Navigation.NavigateTo("/weather"))" />
+</RadzenPanelMenu>
+
+
