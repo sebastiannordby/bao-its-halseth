@@ -7,22 +7,22 @@
         <RadzenTextBox class="ml-auto" Placeholder="Søk..." ValueChanged="SearchChanged" />
     </RadzenHeader>
 
-    <RadzenDataGrid Data=_displayData
-                    Value=_itemSelected
-                    ValueChanged="ItemSelected_Changed"
-                    class="!rounded-b [&_span]\:!leading-3 [&_td]:!p-1 [&_td>span]:!text-xs [&_span>input]:!text-xs [&_span>input]:!leading-3 [&_span>input]:!p-1 [&_span>input]:!h-min [&_.rz-cell-filter]:!p-0 [&_span>input]:!px-1"
-                    TItem="Customer"
-                    AllowColumnResize=true
-                    AllowAlternatingRows=false
-                    AllowFiltering=true
-                    AllowSorting=true
-                    AllowPaging=true
-                    SelectionMode="DataGridSelectionMode.Single"
-                    EditMode="DataGridEditMode.Single"
-                    FilterMode="FilterMode.Simple"
-                    PageSize="15"
-                    ShowPagingSummary=true>
-
+    <RadzenDataGrid 
+        Data=_displayData
+        Value=_itemSelected
+        ValueChanged="ItemSelected_Changed"
+        class="!rounded-b [&_span]\:!leading-3 [&_td]:!p-1 [&_td>span]:!text-xs [&_span>input]:!text-xs [&_span>input]:!leading-3 [&_span>input]:!p-1 [&_span>input]:!h-min [&_.rz-cell-filter]:!p-0 [&_span>input]:!px-1"
+        TItem="Customer"
+        AllowColumnResize=true
+        AllowAlternatingRows=false
+        AllowFiltering=true
+        AllowSorting=true
+        AllowPaging=true
+        SelectionMode="DataGridSelectionMode.Single"
+        EditMode="DataGridEditMode.Single"
+        FilterMode="FilterMode.Simple"
+        PageSize="15"
+        ShowPagingSummary=true>
         <Columns>
             <RadzenDataGridColumn TItem="Customer" Title="Nummer" Property="@(nameof(Customer.Number))" Filterable=false/>
             <RadzenDataGridColumn TItem="Customer" Title="Navn" Property="@(nameof(Customer.Name))" />
@@ -36,14 +36,9 @@
             </RadzenDataGridColumn>
         </Columns>
     </RadzenDataGrid>
-
 </RadzenContent>
 
-
-
-
 @code {
-
     [Parameter]
     public List<Customer> Data { get;set; }
 
@@ -52,7 +47,6 @@
 
     [Parameter] 
     public EventCallback<Customer> ItemSelectedChanged { get; set; }
-
 
     private List<Customer> _displayData;
     public IList<Customer> _itemSelected { get; set; }
@@ -90,14 +84,12 @@
         _displayData = Data;
     }
 
-
     private async void ItemSelected_Changed(IList<Customer> itemSelected)
     {
         _itemSelected = itemSelected;
         ItemSelected = itemSelected.FirstOrDefault();
         await ItemSelectedChanged.InvokeAsync(ItemSelected);
     }
-
 
     private void SearchChanged(string input)
     {
