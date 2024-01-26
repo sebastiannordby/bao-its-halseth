@@ -1,7 +1,4 @@
 ﻿@inherits LayoutComponentBase
-
-
-
 <RadzenLayout>
     <RadzenHeader>
         <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
@@ -19,34 +16,22 @@
     </RadzenBody>
 </RadzenLayout>
 
-
-
-
-
-
-
-
 <div id="blazor-error-ui">
     An unhandled error has occurred.
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
 
-
 @code {
-    [Inject] NavigationManager Navigation { get; set; }
+    [Inject] 
+    public NavigationManager Navigation { get; set; }
 
-
-
-    bool sidebar1Expanded = true;
+    private bool sidebar1Expanded = true;
 
     protected override void OnInitialized()
     {
-        base.OnInitialized();
-
         Navigation.LocationChanged += LocationChanged;
     }
-
 
     private void LocationChanged(object sender, LocationChangedEventArgs args)
     {
@@ -54,9 +39,6 @@
         //Lag mapping mellom route og header title
         //HeaderTitle kan da settes her
     }
-
-
-
 
     private void ToggleExpand()
     {
