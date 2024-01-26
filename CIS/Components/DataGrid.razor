@@ -1,4 +1,5 @@
-﻿@    using CIS.Domain.Customers
+﻿@using CIS.Domain.Customers.Models
+@using CIS.Domain.Customers
 
 <RadzenContent>
     <RadzenHeader class="flex justif-center w-full items-center rounded-t p-1 *:mr-1">
@@ -24,12 +25,32 @@
         PageSize="15"
         ShowPagingSummary=true>
         <Columns>
-            <RadzenDataGridColumn TItem="Customer" Title="Nummer" Property="@(nameof(Customer.Number))" Filterable=false/>
-            <RadzenDataGridColumn TItem="Customer" Title="Navn" Property="@(nameof(Customer.Name))" />
-            <RadzenDataGridColumn TItem="Customer" Title="Kontaktperson" Property="@(nameof(Customer.ContactPersonName))" />
-            <RadzenDataGridColumn TItem="Customer" Title="Email" Property="@(nameof(Customer.ContactPersonEmailAddress))" />
-            <RadzenDataGridColumn TItem="Customer" Title="Telefon" Property="@(nameof(Customer.ContactPersonPhoneNumber))" />
-            <RadzenDataGridColumn TItem="Customer" Title="Aktiv" TextAlign=TextAlign.Center Property="@(nameof(Customer.IsActive))">
+            <RadzenDataGridColumn 
+                TItem="Customer" 
+                Title="Nummer" 
+                Property="@(nameof(Customer.Number))" 
+                Filterable=false/>
+            <RadzenDataGridColumn 
+                TItem="Customer" 
+                Title="Navn" 
+                Property="@(nameof(Customer.Name))" />
+            <RadzenDataGridColumn 
+                TItem="Customer" 
+                Title="Kontaktperson" 
+                Property="@(nameof(Customer.ContactPersonName))" />
+            <RadzenDataGridColumn 
+                TItem="Customer" 
+                Title="Email"
+                Property="@(nameof(Customer.ContactPersonEmailAddress))" />
+            <RadzenDataGridColumn 
+                TItem="Customer" 
+                Title="Telefon" 
+                Property="@(nameof(Customer.ContactPersonPhoneNumber))" />
+            <RadzenDataGridColumn 
+                TItem="Customer" 
+                Title="Aktiv" 
+                TextAlign=TextAlign.Center 
+                Property="@(nameof(Customer.IsActive))">
                 <Template Context="customer">
                     <RadzenCheckBox TValue=bool Value="@customer.IsActive" ReadOnly=true />
                 </Template>
@@ -51,35 +72,24 @@
     private List<Customer> _displayData;
     public IList<Customer> _itemSelected { get; set; }
 
-    protected override void OnInitialized()
+    protected override async void OnInitialized()
     {
-        base.OnInitialized();
-
         Data = new();
-
 
         for (int i = 0; i < 50; i++)
         {
-            Data.Add(new()
-                {
-                    Number = 1234,
-                    Name = "Narvesen Oslo s",
-                    ContactPersonName = "Jon Doe",
-                    ContactPersonEmailAddress = "jondoe@mail.no",
-                    ContactPersonPhoneNumber = "12345678",
-                    IsActive = true,
-                });
-        }
+            var customer = await Customer.Initialize(
+                number: i,
+                name: "Narvesen Oslo S " + 1,
+                contactPersonName: "Jon Doe " + i,
+                contactPersonEmailAddress: "jondoe" + i + "@gmail.com",
+                contactPersonPhoneNumber: "" + i,
+                customerGroupNumber: null,
+                isActive: true
+            );
 
-        Data.Add(new()
-        {
-            Number = 4321,
-            Name = "Delli Oslo s",
-            ContactPersonName = "Jane Doe",
-            ContactPersonEmailAddress = "janedoe@mail.no",
-            ContactPersonPhoneNumber = "87654321",
-            IsActive = false,
-        });
+            Data.Add(customer);
+        }
 
         _displayData = Data;
     }

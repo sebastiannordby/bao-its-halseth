@@ -1,10 +1,17 @@
 using CIS;
+using CIS.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+var connectionString = builder.Configuration["ConnectionString"];
+if (string.IsNullOrWhiteSpace(connectionString))
+    throw new ArgumentException("ConnectionString must be configured in user secrets or appsettings.json.");
+
+builder.Services.AddDataAccess(connectionString);
 
 var app = builder.Build();
 
@@ -17,7 +24,6 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
 app.UseAntiforgery();
 
