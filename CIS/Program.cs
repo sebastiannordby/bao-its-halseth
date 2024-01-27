@@ -1,5 +1,6 @@
 using CIS;
 using CIS.DataAccess;
+using Microsoft.Fast.Components.FluentUI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,11 +8,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-var connectionString = builder.Configuration["ConnectionString"];
-if (string.IsNullOrWhiteSpace(connectionString))
-    throw new ArgumentException("ConnectionString must be configured in user secrets or appsettings.json.");
+//var connectionString = builder.Configuration["ConnectionString"];
+//if (string.IsNullOrWhiteSpace(connectionString))
+//    throw new ArgumentException("ConnectionString must be configured in user secrets or appsettings.json.");
 
-builder.Services.AddDataAccess(connectionString);
+//builder.Services.AddDataAccess(connectionString);
+
+builder.Services.AddFluentUIComponents();
+builder.Services.AddDataGridEntityFrameworkAdapter();
 
 var app = builder.Build();
 

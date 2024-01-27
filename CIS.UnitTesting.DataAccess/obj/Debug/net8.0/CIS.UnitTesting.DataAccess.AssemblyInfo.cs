@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CIS.UnitTesting.DataAccess")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+84a050592758fd1de06226e4175c7f7c9e5e4400")]
 [assembly: System.Reflection.AssemblyProductAttribute("CIS.UnitTesting.DataAccess")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CIS.UnitTesting.DataAccess")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -8,8 +8,8 @@
         <PropertyColumn Property="@(p=>p.ContactPersonName)" Sortable="true"/>
         <PropertyColumn Property="@(p=>p.ContactPersonEmailAddress)" Sortable="true"/>
         <PropertyColumn Property="@(p=>p.ContactPersonPhoneNumber)" Sortable="true"/>
-        <TemplateColumn Sortable="true" Align="Align.Center">
-            <FluentCheckbox Value="@((Customer p)=>p.IsActive)"/>
+        <TemplateColumn Context="data" Tooltip=true TooltipText="@(c=> c.IsActive ? "Aktiv" : "Inaktiv")" Sortable="true" Align="Align.Center">
+            <FluentCheckbox Value="@(data.IsActive)"/>
         </TemplateColumn>
 
 
@@ -19,7 +19,7 @@
 
 @code {
     [Parameter]
-    public IQueryable<Customer> Data { get;set; }
+    public List<Customer> Data { get;set; }
 
     [Parameter]
     public Customer ItemSelected { get; set; }
@@ -49,7 +49,7 @@
             Data.Add(customer);
         }
 
-        _displayData = Data;
+        _displayData = Data.AsQueryable();
     }
 
     private async void ItemSelected_Changed(IList<Customer> itemSelected)
@@ -66,6 +66,6 @@
         || s.Number.ToString().Contains(input)
         || s.ContactPersonName.ToLower().Contains(input)
         || s.ContactPersonEmailAddress.ToLower().Contains(input)
-        || s.ContactPersonPhoneNumber.ToLower().Contains(input)).ToList();
+        || s.ContactPersonPhoneNumber.ToLower().Contains(input)).AsQueryable();
     }
 }
