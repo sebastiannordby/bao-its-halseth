@@ -18,3 +18,7 @@
 /CIS.DataAccess.Tests/obj
 /CIS.UnitTesting/obj
 /CIS.UnitTesting.DataAccess/bin/Debug/net8.0
+/CIS.DataAccess/bin/Debug/net8.0
+/CIS.UnitTesting/bin/Debug/net8.0
+/CIS.UnitTesting.DataAccess/obj/Debug/net8.0
+/CIS.UnitTesting.DataAccess/obj
