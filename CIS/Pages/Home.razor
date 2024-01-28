@@ -5,3 +5,25 @@
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+
+<MudLayout>
+    <MudButton>Test</MudButton>
+
+    @if (visible)
+    {
+        <MudButton>Hello world</MudButton>
+    }
+</MudLayout>
+
+
+@code{
+    private bool visible;
+
+
+    private void ButtonClicked()
+    {
+        visible = !visible;
+        StateHasChanged();
+    }
+
+}
