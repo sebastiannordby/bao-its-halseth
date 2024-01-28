@@ -10,11 +10,11 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddMudServices();
 
-var connectionString = builder.Configuration["ConnectionString"];
-if (string.IsNullOrWhiteSpace(connectionString))
-    throw new ArgumentException("ConnectionString must be configured in user secrets or appsettings.json.");
+//var connectionString = builder.Configuration["ConnectionString"];
+//if (string.IsNullOrWhiteSpace(connectionString))
+//    throw new ArgumentException("ConnectionString must be configured in user secrets or appsettings.json.");
 
-builder.Services.AddDataAccess(connectionString);
+//builder.Services.AddDataAccess(connectionString);
 
 var app = builder.Build();
 

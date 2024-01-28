@@ -1,11 +1,29 @@
 ﻿@using CIS.Domain.Customers.Models
 @using CIS.Domain.Customers
 
-<MudLayout>
-    <MudDataGrid>
-
+<MudLayout Class="h-full">
+    <MudDataGrid 
+        ColumnResizeMode=ResizeMode.Column 
+        FixedHeader=true 
+        Items="_displayData"
+        RowClass="[&>td]:!text-[10px] [&>td]:!p-1"
+        
+        T="Customer" Dense=true Bordered=true >
+        <ToolBarContent>
+            <MudSpacer/>
+            <MudTextField Placeholder="Søk..."/>
+        </ToolBarContent>
         <Columns>
-
+            <PropertyColumn CellStyle="max-width:20px" Resizable="true" Property="x=>x.Number" Title="#"/>
+            <PropertyColumn Resizable="true" CellClass="whitespace-nowrap" Property="x=>x.Name"  />
+            <PropertyColumn Resizable="true" Property="x=>x.ContactPersonName"/>
+            <PropertyColumn Resizable="true" Property="x=>x.ContactPersonEmailAddress"/>
+            <PropertyColumn Resizable="true" Property="x=>x.ContactPersonPhoneNumber"/>
+            <TemplateColumn  Resizable="true" Context="item"  >
+                <CellTemplate >
+                    <MudCheckBox Value="item.Item.IsActive" ReadOnly=true/>
+                </CellTemplate>
+            </TemplateColumn>
         </Columns>
     </MudDataGrid>
 

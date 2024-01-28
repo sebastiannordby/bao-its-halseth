@@ -1,17 +1,21 @@
-﻿<MudLayout>
-<MudCardHeader Style="fill" >
-    CIS
-</MudCardHeader>
-    <MudNavMenu Class="d-flex flex-column align-content-end">
-        <MudButton IconClass=@Icons.Material.Filled.Person >Kunder</MudButton>
-        <MudButton IconClass="" >Bestillinger</MudButton>
-        <MudButton IconClass="" >Produkter</MudButton>
-        <MudButton IconClass="" >Historikk</MudButton>
-        <MudButton IconClass="" >Salgstall</MudButton>
-        <MudButton IconClass="" >Restordre</MudButton>
-        <MudButton IconColor=Color.Dark IconClass="@(Icons.Material.Filled.Send)" >Send ordre</MudButton>
-     
-    </MudNavMenu>
-</MudLayout>
+﻿@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<MudNavMenu>
+
+    <MudNavLink Href="/customers">Kunder</MudNavLink>
+    <MudNavLink Href="/counter">Bestillinger</MudNavLink>
+    <MudNavLink Href="/counter">Bestillings forslag</MudNavLink>
+    <MudNavLink Href="/weather">Produkter</MudNavLink>
+    <MudNavLink Href="/weather">Historikk</MudNavLink>
+    <MudNavLink Href="/weather">Salgstall</MudNavLink>
+    <MudNavLink Href="/weather">Restordre</MudNavLink>
+    <MudNavLink Href="/weather">Send ordre</MudNavLink>
+
+</MudNavMenu>
+
+
+
+
 
 

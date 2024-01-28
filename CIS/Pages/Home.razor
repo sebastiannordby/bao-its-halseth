@@ -1,5 +1,4 @@
 ﻿@page "/"
-@rendermode InteractiveServer
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
@@ -7,7 +6,7 @@
 Welcome to your new app.
 
 <MudLayout>
-    <MudButton>Test</MudButton>
+    <MudButton Color=@(Color.Primary)  OnClick="ButtonClicked">Test</MudButton>
 
     @if (visible)
     {

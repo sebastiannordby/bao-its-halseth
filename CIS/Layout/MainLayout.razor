@@ -1,7 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @rendermode InteractiveAuto
 
-<MudThemeProvider />
+<MudThemeProvider IsDarkMode=true  />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
@@ -12,12 +12,16 @@
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Edge=Edge.Start @onclick=DrawerToggle/>
         CIS
     </MudAppBar>
-    <MudDrawer Open=drawerOpen>
-        <NavMenu/>
+    <MudDrawer  @bind-Open=drawerOpen >
+        <MudDrawerHeader Class="flex w-full align-center">
+                <MudText>CIS</MudText>
+        </MudDrawerHeader>
+        <MudDrawerContainer Class="flex flex-col ">
+            <NavMenu/>
+        </MudDrawerContainer>
     </MudDrawer>
     <MudMainContent>
-        <MudContainer>
-            <MudButton OnClick="DrawerToggle">Test</MudButton>
+        <MudContainer Class="pt-[10px]">
             @Body
         </MudContainer>
     </MudMainContent>

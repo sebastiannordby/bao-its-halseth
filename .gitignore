@@ -26,3 +26,8 @@
 /CIS.UnitTesting.DataAccess/obj/Debug/net8.0/ref/CIS.UnitTesting.DataAccess.dll
 /CIS.UnitTesting.DataAccess/obj/Debug/net8.0/refint
 /CIS.UnitTesting.DataAccess/obj/Debug/net8.0
+/CIS.DataAccess/bin/Debug/net8.0/CIS.DataAccess.dll                                                    
+/CIS.DataAccess/bin/Debug/net8.0/CIS.DataAccess.pdb                                                    
+/CIS.UnitTesting/obj/Debug/net8.0/CIS.UnitTesting.DataAccess.AssemblyInfo.cs                
+/CIS.UnitTesting/obj/Debug/net8.0/CIS.UnitTesting.DataAccess.AssemblyInfoInputs.cache       
+/CIS.UnitTesting/obj/Debug/net8.0/CIS.UnitTesting.DataAccess.csproj.AssemblyReference.cache 
