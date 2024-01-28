@@ -11,3 +11,14 @@
 /CIS.Client/bin/Debug/net8.0
 /CIS.Client/obj
 /CIS.Domain/bin/Debug/net8.0
+/CIS/node_modules
+/.vs/bao-its-halseth/v17
+/CIS.DataAccess/obj
+/CIS.DataAccess.Tests/bin/Debug/net8.0
+/CIS.DataAccess.Tests/obj
+/CIS.UnitTesting/obj
+/CIS.UnitTesting.DataAccess/bin/Debug/net8.0
+/CIS.UnitTesting/bin/Debug/net8.0
+/CIS.UnitTesting.DataAccess/obj
+/CIS.DataAccess/bin/Debug/net8.0/CIS.DataAccess.dll
+/CIS.DataAccess/bin/Debug/net8.0/CIS.DataAccess.pdb

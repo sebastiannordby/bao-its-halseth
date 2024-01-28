@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.Domain.Customers
+namespace CIS.DataAccess.Models
 {
-    public sealed class Customer
+    public sealed class CustomerDao
     {
         public int Number { get; set; }
         public required string Name { get; set; }

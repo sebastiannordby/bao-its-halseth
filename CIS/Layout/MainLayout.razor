@@ -1,0 +1,47 @@
+﻿@inherits LayoutComponentBase
+<RadzenLayout>
+    <RadzenHeader>
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
+            <RadzenSidebarToggle Click=ToggleExpand />
+            <RadzenLabel Text="Header" />
+        </RadzenStack>
+    </RadzenHeader>
+    <RadzenSidebar @bind-Expanded="@sidebar1Expanded">
+        <NavMenu/>
+    </RadzenSidebar>
+    <RadzenBody>
+        <div class="rz-p-4">
+            @Body
+        </div>
+    </RadzenBody>
+</RadzenLayout>
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
+
+@code {
+    [Inject] 
+    public NavigationManager Navigation { get; set; }
+
+    private bool sidebar1Expanded = true;
+
+    protected override void OnInitialized()
+    {
+        Navigation.LocationChanged += LocationChanged;
+    }
+
+    private void LocationChanged(object sender, LocationChangedEventArgs args)
+    {
+        //TODO:
+        //Lag mapping mellom route og header title
+        //HeaderTitle kan da settes her
+    }
+
+    private void ToggleExpand()
+    {
+        sidebar1Expanded = !sidebar1Expanded;
+    }
+}
