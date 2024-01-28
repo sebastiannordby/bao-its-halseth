@@ -1,20 +1,30 @@
 ﻿@inherits LayoutComponentBase
-<RadzenLayout>
-    <RadzenHeader>
-        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
-            <RadzenSidebarToggle Click=ToggleExpand />
-            <RadzenLabel Text="Header" />
-        </RadzenStack>
-    </RadzenHeader>
-    <RadzenSidebar @bind-Expanded="@sidebar1Expanded">
-        <NavMenu/>
-    </RadzenSidebar>
-    <RadzenBody>
-        <div class="rz-p-4">
+@rendermode InteractiveAuto
+
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+
+
+<MudLayout>
+    <MudAppBar>
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Edge=Edge.Start @onclick=DrawerToggle/>
+        CIS
+    </MudAppBar>
+    <MudDrawer Open=drawerOpen>
+        <MudNavMenu>
+            <MudNavLink Href="/">Home</MudNavLink>
+            <MudNavLink Href="/weather">Weather</MudNavLink>
+        </MudNavMenu>
+    </MudDrawer>
+    <MudMainContent>
+        <MudContainer>
+            <MudButton OnClick="DrawerToggle">Test</MudButton>
             @Body
-        </div>
-    </RadzenBody>
-</RadzenLayout>
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
 
 <div id="blazor-error-ui">
     An unhandled error has occurred.
@@ -39,9 +49,13 @@
         //Lag mapping mellom route og header title
         //HeaderTitle kan da settes her
     }
+@code{
+    bool drawerOpen;
 
-    private void ToggleExpand()
+    private void DrawerToggle()
     {
-        sidebar1Expanded = !sidebar1Expanded;
+        Console.WriteLine("Hello there");
+        drawerOpen = !drawerOpen;
+        StateHasChanged();
     }
 }

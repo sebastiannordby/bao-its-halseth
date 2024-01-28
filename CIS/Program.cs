@@ -1,7 +1,3 @@
-using CIS.Client.Layout;
-using CIS.Components;
-using CIS.Components.Layout;
-using MudBlazor;
 using MudBlazor.Services;
 using CIS;
 using CIS.DataAccess;
@@ -10,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents().AddInteractiveWebAssemblyComponents();
+    .AddInteractiveServerComponents();
 builder.Services.AddMudServices();
 
 var connectionString = builder.Configuration["ConnectionString"];
@@ -36,8 +32,6 @@ app.UseAntiforgery();
 
 
 app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode()
-    .AddInteractiveWebAssemblyRenderMode()
-    .AddAdditionalAssemblies(typeof(MainLayout).Assembly);
+    .AddInteractiveServerRenderMode();
 
 app.Run();
