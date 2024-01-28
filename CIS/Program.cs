@@ -1,6 +1,7 @@
 using MudBlazor.Services;
 using CIS;
 using CIS.DataAccess;
+using CIS.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +29,6 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAntiforgery();
-
 
 
 app.MapRazorComponents<App>()

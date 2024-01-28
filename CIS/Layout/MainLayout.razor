@@ -13,10 +13,7 @@
         CIS
     </MudAppBar>
     <MudDrawer Open=drawerOpen>
-        <MudNavMenu>
-            <MudNavLink Href="/">Home</MudNavLink>
-            <MudNavLink Href="/weather">Weather</MudNavLink>
-        </MudNavMenu>
+        <NavMenu/>
     </MudDrawer>
     <MudMainContent>
         <MudContainer>
@@ -50,7 +47,19 @@
         //HeaderTitle kan da settes her
     }
 @code{
+
+
     bool drawerOpen;
+
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+
+        if(drawerOpen)
+            drawerOpen = false;
+
+    }
 
     private void DrawerToggle()
     {
