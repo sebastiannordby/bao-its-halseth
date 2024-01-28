@@ -1,63 +1,15 @@
 ﻿@using CIS.Domain.Customers.Models
 @using CIS.Domain.Customers
 
-<RadzenContent>
-    <RadzenHeader class="flex justif-center w-full items-center rounded-t p-1 *:mr-1">
-        <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="edit" Disabled=@(!_itemSelected?.Any() ?? true) />
-        <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Disabled=@(!_itemSelected?.Any() ?? true) />
-        <RadzenTextBox class="ml-auto" Placeholder="Søk..." ValueChanged="SearchChanged" />
-    </RadzenHeader>
+<MudLayout>
+    <MudDataGrid>
 
-    <RadzenDataGrid 
-        Data=_displayData
-        Value=_itemSelected
-        ValueChanged="ItemSelected_Changed"
-        class="!rounded-b [&_span]\:!leading-3 [&_td]:!p-1 [&_td>span]:!text-xs [&_span>input]:!text-xs [&_span>input]:!leading-3 [&_span>input]:!p-1 [&_span>input]:!h-min [&_.rz-cell-filter]:!p-0 [&_span>input]:!px-1"
-        TItem="Customer"
-        AllowColumnResize=true
-        AllowAlternatingRows=false
-        AllowFiltering=true
-        AllowSorting=true
-        AllowPaging=true
-        SelectionMode="DataGridSelectionMode.Single"
-        EditMode="DataGridEditMode.Single"
-        FilterMode="FilterMode.Simple"
-        PageSize="15"
-        ShowPagingSummary=true>
         <Columns>
-            <RadzenDataGridColumn 
-                TItem="Customer" 
-                Title="Nummer" 
-                Property="@(nameof(Customer.Number))" 
-                Filterable=false/>
-            <RadzenDataGridColumn 
-                TItem="Customer" 
-                Title="Navn" 
-                Property="@(nameof(Customer.Name))" />
-            <RadzenDataGridColumn 
-                TItem="Customer" 
-                Title="Kontaktperson" 
-                Property="@(nameof(Customer.ContactPersonName))" />
-            <RadzenDataGridColumn 
-                TItem="Customer" 
-                Title="Email"
-                Property="@(nameof(Customer.ContactPersonEmailAddress))" />
-            <RadzenDataGridColumn 
-                TItem="Customer" 
-                Title="Telefon" 
-                Property="@(nameof(Customer.ContactPersonPhoneNumber))" />
-            <RadzenDataGridColumn 
-                TItem="Customer" 
-                Title="Aktiv" 
-                TextAlign=TextAlign.Center 
-                Property="@(nameof(Customer.IsActive))">
-                <Template Context="customer">
-                    <RadzenCheckBox TValue=bool Value="@customer.IsActive" ReadOnly=true />
-                </Template>
-            </RadzenDataGridColumn>
+
         </Columns>
-    </RadzenDataGrid>
-</RadzenContent>
+    </MudDataGrid>
+
+</MudLayout>
 
 @code {
     [Parameter]

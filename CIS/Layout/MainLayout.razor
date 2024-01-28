@@ -29,11 +29,15 @@
     <a class="dismiss">🗙</a>
 </div>
 
-@code {
+@code{
+
+
     [Inject] 
     public NavigationManager Navigation { get; set; }
 
-    private bool sidebar1Expanded = true;
+    bool drawerOpen;
+
+
 
     protected override void OnInitialized()
     {
@@ -46,10 +50,6 @@
         //Lag mapping mellom route og header title
         //HeaderTitle kan da settes her
     }
-@code{
-
-
-    bool drawerOpen;
 
 
     protected override void OnAfterRender(bool firstRender)
