@@ -1,27 +1,39 @@
 ﻿@inherits LayoutComponentBase
 
-
 @* <FluentDesignTheme StorageName="theme" Mode="DesignThemeModes.Dark" /> *@
 
 
-<FluentToastProvider />
-<FluentDialogProvider />
-<FluentTooltipProvider />
-<FluentMessageBarProvider />
+@* <FluentToastProvider /> *@
+@* <FluentDialogProvider /> *@
+@* <FluentTooltipProvider /> *@
+@* <FluentMessageBarProvider /> *@
 
-<FluentMainLayout>
+
+<FluentMainLayout >
+    <NavMenuContent>
+        <NavMenu />
+    </NavMenuContent>
+
     <Header>
-        <div>
-            <FluentLabel >CIS</FluentLabel>
+        <div class="flex">
+            <FluentLabel Class="!font-bold" Color="Color.Fill"  >CIS</FluentLabel>
         </div>
     </Header>
-    <NavMenuContent>
-        <NavMenu/>
-    </NavMenuContent>
+    
     <Body>
-        @Body
+      
+        <div class="p-3 flex flex-col max-h-full h-full">
+            @Body
+        </div>
     </Body>
+
 </FluentMainLayout>
+
+
+
+
+
+
 
 <div id="blazor-error-ui">
     An unhandled error has occurred.

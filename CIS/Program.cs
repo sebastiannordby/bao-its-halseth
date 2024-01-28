@@ -4,9 +4,15 @@ using Microsoft.Fast.Components.FluentUI;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
+
+
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
 
 //var connectionString = builder.Configuration["ConnectionString"];
 //if (string.IsNullOrWhiteSpace(connectionString))
@@ -14,8 +20,17 @@ builder.Services.AddRazorComponents()
 
 //builder.Services.AddDataAccess(connectionString);
 
-builder.Services.AddFluentUIComponents();
+
+
+builder.Services.AddFluentUIComponents(config =>
+{
+    config.UseTooltipServiceProvider = true;
+});
+
 builder.Services.AddDataGridEntityFrameworkAdapter();
+
+
+
 
 var app = builder.Build();
 

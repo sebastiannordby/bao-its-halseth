@@ -4,8 +4,15 @@
 
 
 
+
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    max-height: calc(100% - 10px);
+    height: 100%;
+    display:flex;
+    flex-direction:column;
+    overflow-y: hidden;
 }
 
 a, .btn-link {
