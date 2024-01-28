@@ -642,18 +642,8 @@ h1:focus {
   margin-right: 0.25rem;
 }
 
-.\[\&_\.rz-cell-filter-content\]\:\!py-0 .rz-cell-filter-content {
-  padding-top: 0px !important;
-  padding-bottom: 0px !important;
-}
-
 .\[\&_\.rz-cell-filter\]\:\!p-0 .rz-cell-filter {
   padding: 0px !important;
-}
-
-.\[\&_rz-cell-filter-content\]\:\!py-0 rz-cell-filter-content {
-  padding-top: 0px !important;
-  padding-bottom: 0px !important;
 }
 
 .\[\&_span\>input\]\:\!h-min span>input {
@@ -686,22 +676,4 @@ h1:focus {
 
 .\[\&_td\]\:\!p-1 td {
   padding: 0.25rem !important;
-}
-
-.\[\&_th\>div\]\:\!p-1 th>div {
-  padding: 0.25rem !important;
-}
-
-.\[\&_th\>div\]\:\!p-0 th>div {
-  padding: 0px !important;
-}
-
-.\[\&_th\>div\]\:\!py-0 th>div {
-  padding-top: 0px !important;
-  padding-bottom: 0px !important;
-}
-
-.\[\&_th\>rz-cell-filter-content\]\:\!py-0 th>rz-cell-filter-content {
-  padding-top: 0px !important;
-  padding-bottom: 0px !important;
 }

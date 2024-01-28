@@ -21,15 +21,15 @@
         AllowPaging=true
         SelectionMode="DataGridSelectionMode.Single"
         EditMode="DataGridEditMode.Single"
-        FilterMode="FilterMode.Simple"
         PageSize="15"
         ShowPagingSummary=true>
         <Columns>
             <RadzenDataGridColumn 
                 TItem="Customer" 
-                Title="Nummer" 
+                Title="#" 
+                TextAlign="TextAlign.Right"
                 Property="@(nameof(Customer.Number))" 
-                Filterable=false/>
+                Filterable=true/>
             <RadzenDataGridColumn 
                 TItem="Customer" 
                 Title="Navn" 
