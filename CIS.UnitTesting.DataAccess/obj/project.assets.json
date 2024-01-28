@@ -3739,19 +3739,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\133000sebj\\.nuget\\packages\\": {}
+    "C:\\Users\\andre\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\133000sebj\\source\\repos\\bao-its-halseth\\CIS.UnitTesting.DataAccess\\CIS.UnitTesting.DataAccess.csproj",
+      "projectUniqueName": "C:\\Workspace-Own\\bao-its-halseth\\CIS.UnitTesting.DataAccess\\CIS.UnitTesting.DataAccess.csproj",
       "projectName": "CIS.UnitTesting.DataAccess",
-      "projectPath": "C:\\Users\\133000sebj\\source\\repos\\bao-its-halseth\\CIS.UnitTesting.DataAccess\\CIS.UnitTesting.DataAccess.csproj",
-      "packagesPath": "C:\\Users\\133000sebj\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\133000sebj\\source\\repos\\bao-its-halseth\\CIS.UnitTesting.DataAccess\\obj\\",
+      "projectPath": "C:\\Workspace-Own\\bao-its-halseth\\CIS.UnitTesting.DataAccess\\CIS.UnitTesting.DataAccess.csproj",
+      "packagesPath": "C:\\Users\\andre\\.nuget\\packages\\",
+      "outputPath": "C:\\Workspace-Own\\bao-its-halseth\\CIS.UnitTesting.DataAccess\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\133000sebj\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\andre\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -3768,11 +3773,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\133000sebj\\source\\repos\\bao-its-halseth\\CIS.DataAccess\\CIS.DataAccess.csproj": {
-              "projectPath": "C:\\Users\\133000sebj\\source\\repos\\bao-its-halseth\\CIS.DataAccess\\CIS.DataAccess.csproj"
+            "C:\\Workspace-Own\\bao-its-halseth\\CIS.DataAccess\\CIS.DataAccess.csproj": {
+              "projectPath": "C:\\Workspace-Own\\bao-its-halseth\\CIS.DataAccess\\CIS.DataAccess.csproj"
             },
-            "C:\\Users\\133000sebj\\source\\repos\\bao-its-halseth\\CIS.UnitTesting\\CIS.UnitTesting.csproj": {
-              "projectPath": "C:\\Users\\133000sebj\\source\\repos\\bao-its-halseth\\CIS.UnitTesting\\CIS.UnitTesting.csproj"
+            "C:\\Workspace-Own\\bao-its-halseth\\CIS.UnitTesting\\CIS.UnitTesting.csproj": {
+              "projectPath": "C:\\Workspace-Own\\bao-its-halseth\\CIS.UnitTesting\\CIS.UnitTesting.csproj"
             }
           }
         }
@@ -3828,7 +3833,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
