@@ -21,26 +21,46 @@ namespace CIS.DataAccess.Services
 
         public async Task<bool> Import(IEnumerable<CustomerImportDefinition> importDefinitions)
         {
-            foreach(var customer in importDefinitions)
+            foreach(var customerDefinition in importDefinitions)
             {
                 var doesExist = await _dbContext.Customers
-                    .AnyAsync(x => x.Number == customer.Number);
+                    .AnyAsync(x => x.Number == customerDefinition.Number);
                 if (doesExist)
                     continue;
 
                 var customerDao = new CustomerDao()
                 {
-                    Number = customer.Number,
-                    Name = customer.Name,
-                    ContactPersonEmailAddress = customer.ContactPersonEmailAddress,
-                    ContactPersonName = customer.ContactPersonName,
-                    ContactPersonPhoneNumber = customer.ContactPersonPhoneNumber,
-                    CustomerGroupNumber = customer.CustomerGroupNumber,
-                    IsActive = customer.IsActive
+                    Number = customerDefinition.Number,
+                    Name = customerDefinition.Name,
+                    ContactPersonEmailAddress = customerDefinition.ContactPersonEmailAddress,
+                    ContactPersonName = customerDefinition.ContactPersonName,
+                    ContactPersonPhoneNumber = customerDefinition.ContactPersonPhoneNumber,
+                    CustomerGroupNumber = customerDefinition.CustomerGroupNumber,
+                    IsActive = customerDefinition.IsActive
                 };
 
                 await _dbContext.Customers.AddAsync(customerDao);
                 await _dbContext.SaveChangesAsync();
+
+                if (customerDefinition.Store is not null)
+                {
+                    var storeDefinition = customerDefinition.Store;
+
+                    var storeDao = new StoreDao() 
+                    { 
+                        Number = customerDefinition.Number,
+                        Name = customerDefinition.Name,
+                        AddressLine = storeDefinition.AddressLine,
+                        AddressPostalCode = storeDefinition.AddressPostalCode,
+                        AddressPostalOffice = storeDefinition.AddressPostalOffice,
+                        IsActive = true,
+                        RegionId = null,
+                        OwnerCustomerNumber = customerDao.Number
+                    };
+
+                    await _dbContext.Stores.AddAsync(storeDao);
+                    await _dbContext.SaveChangesAsync();
+                }
             }
 
             return true;

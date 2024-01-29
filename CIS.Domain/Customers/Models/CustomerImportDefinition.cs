@@ -8,12 +8,23 @@ namespace CIS.Domain.Customers.Models
 {
     public class CustomerImportDefinition
     {
-        public int Number { get; set; }
+        public required int Number { get; set; }
         public required string Name { get; set; }
-        public string? ContactPersonName { get; set; }
-        public string? ContactPersonEmailAddress { get; set; }
-        public string? ContactPersonPhoneNumber { get; set; }
-        public int? CustomerGroupNumber { get; set; }
-        public bool IsActive { get; set; }
+        public required string? ContactPersonName { get; set; }
+        public required string? ContactPersonEmailAddress { get; set; }
+        public required string? ContactPersonPhoneNumber { get; set; }
+        public required int? CustomerGroupNumber { get; set; }
+        public required bool IsActive { get; set; }
+
+        public StoreDefinition? Store { get; set; }
+
+        public class StoreDefinition
+        {
+            public required int? Number { get; set; }
+            public required string Name { get; set; }
+            public required string? AddressLine { get; set; }
+            public required string? AddressPostalCode { get; set; }
+            public required string? AddressPostalOffice { get; set; }
+        }
     }
 }
