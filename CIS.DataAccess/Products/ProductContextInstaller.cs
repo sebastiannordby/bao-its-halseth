@@ -1,5 +1,7 @@
-﻿using CIS.DataAccess.Products.Services;
+﻿using CIS.DataAccess.Products.Repositories;
+using CIS.DataAccess.Products.Services;
 using CIS.Domain.Products.Models.Import;
+using CIS.Library.Products.Repositories;
 using CIS.Library.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -16,8 +18,8 @@ namespace CIS.DataAccess.Products
             this IServiceCollection services)
         {
             return services
-                .AddScoped<IExecuteImportService<ProductImportDefinition>, ImportProductService>();
-
+                .AddScoped<IExecuteImportService<ProductImportDefinition>, ImportProductService>()
+                .AddScoped<IProductViewRepository, ProductViewRepository>();
         }
     }
 }

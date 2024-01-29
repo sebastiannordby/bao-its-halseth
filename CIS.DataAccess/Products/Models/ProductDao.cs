@@ -11,7 +11,7 @@ namespace CIS.DataAccess.Products.Models
         public int Number { get; set; }
         public required string Name { get; set; }
         public string? AlternateName { get; set; }
-        public int? ProductGroupId { get; set; }
+        public int? ProductGroupNumber { get; set; }
         public int? ProductPriceId { get; set; }
     }
 }
