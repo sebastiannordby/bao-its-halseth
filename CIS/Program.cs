@@ -1,38 +1,27 @@
 using CIS;
 using CIS.DataAccess;
-using Microsoft.Fast.Components.FluentUI;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-
-
-
-
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+.AddInteractiveServerComponents();
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (string.IsNullOrWhiteSpace(connectionString))
+    throw new ArgumentException("ConnectionString must be configured in user secrets or appsettings.json.");
 
-//var connectionString = builder.Configuration["ConnectionString"];
-//if (string.IsNullOrWhiteSpace(connectionString))
-//    throw new ArgumentException("ConnectionString must be configured in user secrets or appsettings.json.");
-
-//builder.Services.AddDataAccess(connectionString);
-
-
-
-builder.Services.AddFluentUIComponents(config =>
+builder.Services.AddDataAccess(opt =>
 {
-    config.UseTooltipServiceProvider = true;
+    //opt.UseSqlServer(connectionString);
 });
-
-builder.Services.AddDataGridEntityFrameworkAdapter();
-
-
 
 
 var app = builder.Build();
+
+app.InitializeDatabase();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -50,3 +39,5 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
 app.Run();
+
+

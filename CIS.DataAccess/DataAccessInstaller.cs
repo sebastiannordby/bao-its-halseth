@@ -1,4 +1,9 @@
-﻿using CIS.DataAccess.Repositories;
+﻿using CIS.DataAccess.Customers.Repositories;
+using CIS.DataAccess.Repositories;
+using CIS.DataAccess.Services;
+using CIS.Domain.Customers.Services;
+using CIS.Library.Customers.Repositories;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -12,14 +17,28 @@ namespace CIS.DataAccess
     public static class DataAccessInstaller
     {
         public static IServiceCollection AddDataAccess(
-            this IServiceCollection services, string connectionString)
+            this IServiceCollection services, Action<DbContextOptionsBuilder>? factory)
         {
-            services.AddDbContext<CISDbContext>(opt =>
-            {
-                opt.UseSqlServer(connectionString);
-            });
+            services.AddDbContext<CISDbContext>(factory);
+
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<ICustomerViewRepository, CustomerViewRepository>();
 
             return services;
+        }
+
+        public static void MigrateDataAccess(this IServiceProvider provider)
+        {
+            var appDbContext = provider.GetRequiredService<CISDbContext>();
+
+            try
+            {
+                appDbContext.Database.Migrate();
+            }
+            catch (Exception)
+            {
+
+            }
         }
     }
 }
