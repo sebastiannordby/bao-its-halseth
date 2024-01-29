@@ -10,21 +10,19 @@
         <FluentButton IconStart="@(new Icons.Filled.Size24.Delete())" Appearance="Appearance.Accent" BackgroundColor="red" />
     </FluentToolbar>
 
-    <FluentDataGrid Class="overflow-y-auto"
-                    TGridItem=TGridItem
-                    Items="_displayData"
-                    GenerateHeader="GenerateHeaderOption.Sticky"
-                    OnRowFocus="(s)=>ItemSelected_Changed((TGridItem)s.Data)"
-                    ItemSize="23"
-                    Virtualize=true
-                    GridTemplateColumns="@(GridTemplateColumns ?? string.Empty)"
-                    ResizableColumns=true>
-
-
+    <FluentDataGrid 
+        Class="overflow-y-auto"
+        TGridItem=TGridItem
+        Items="_displayData"
+        GenerateHeader="GenerateHeaderOption.Sticky"
+        OnRowFocus="(s)=>ItemSelected_Changed((TGridItem)s.Data)"
+        ItemSize="23"
+        Virtualize=true
+        GridTemplateColumns="@(GridTemplateColumns ?? string.Empty)"
+        ResizableColumns=true>
         <ChildContent>
             @Columns
         </ChildContent>
-
     </FluentDataGrid>
 </FluentLayout>
 
@@ -50,9 +48,7 @@
     [Parameter]
     public string GridTemplateColumns { get; set; }
 
-
     private IQueryable<TGridItem> _displayData;
-
 
     private async void ItemSelected_Changed(TGridItem itemSelected)
     {
@@ -66,5 +62,4 @@
         input = input.ToLower();
         _displayData = Items.Where(s => Filter.Invoke(input, s)).AsQueryable();
     }
-
 }
