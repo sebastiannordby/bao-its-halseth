@@ -1,98 +1,65 @@
 ﻿@using CIS.Domain.Customers.Models
 @using CIS.Domain.Customers
+@using CIS.Library.Customers.Models
+@typeparam TGridItem
+@attribute [CascadingTypeParameter(nameof(TGridItem))]
 
+<FluentLayout>
+    <FluentToolbar>
+        <FluentButton IconStart="@(new Icons.Filled.Size24.Edit())" Appearance="@(Appearance.Accent)" BackgroundColor="yellow" />
+        <FluentButton IconStart="@(new Icons.Filled.Size24.Delete())" Appearance="Appearance.Accent" BackgroundColor="red" />
+    </FluentToolbar>
 
-    <FluentLayout >
+    <FluentDataGrid 
+        Class="overflow-y-auto"
+        TGridItem=TGridItem
+        Items="_displayData"
+        GenerateHeader="GenerateHeaderOption.Sticky"
+        OnRowFocus="(s)=>ItemSelected_Changed((TGridItem)s.Data)"
+        ItemSize="23"
+        Virtualize=true
+        GridTemplateColumns="@(GridTemplateColumns ?? string.Empty)"
+        ResizableColumns=true>
+        <ChildContent>
+            @Columns
+        </ChildContent>
+    </FluentDataGrid>
+</FluentLayout>
 
-        <FluentToolbar >
-            <FluentButton IconStart="@(new Icons.Filled.Size24.Edit())" Appearance="@(Appearance.Accent)" BackgroundColor="yellow" />
-            <FluentButton IconStart="@(new Icons.Filled.Size24.Delete())" Appearance="Appearance.Accent" BackgroundColor="red" />
-        </FluentToolbar>
-
-        <FluentDataGrid 
-            Class="overflow-y-auto"
-            TGridItem=Customer 
-            Items="_displayData" 
-            GenerateHeader="GenerateHeaderOption.Sticky"
-            ItemSize="23"
-            Virtualize=true
-            GridTemplateColumns="1fr 3fr 2fr 3fr 2fr 1fr"
-            ResizableColumns=true >
-        
-            <PropertyColumn Property="@(p=>p.Number)" Title="#" Sortable="true" Align="Align.End" />
-            <PropertyColumn Property="@(p=>p.Name)" Title="Navn" Sortable="true" Align="Align.Start"/>
-            <PropertyColumn Property="@(p=>p.ContactPersonName)" Title="Kontakt" Sortable="true" Align="Align.Start"/>
-            <PropertyColumn Property="@(p=>p.ContactPersonEmailAddress)" Title="Email" Sortable="true" Align="Align.Start"/>
-            <PropertyColumn Property="@(p=>p.ContactPersonPhoneNumber)" Title="Telefon" Sortable="true" Align="Align.Start"/>
-
-            <TemplateColumn Title="Aktiv" Context="data" Tooltip=true TooltipText="@(c=> c.IsActive ? "Aktiv" : "Inaktiv")" Sortable="true" Align="Align.End">
-                <FluentCheckbox Value="@(data.IsActive)" ReadOnly=true/>
-            </TemplateColumn>
-
-        </FluentDataGrid>
-    </FluentLayout>
-
-@code {
+@code{
     [Parameter]
-    public List<Customer> Data { get;set; }
+    public List<TGridItem> Items { get; set; }
 
     [Parameter]
-    public Customer ItemSelected { get; set; }
+    public TGridItem ItemSelected { get; set; }
 
-    [Parameter] 
-    public EventCallback<Customer> ItemSelectedChanged { get; set; }
+    [Parameter]
+    public EventCallback<TGridItem> ItemSelectedChanged { get; set; }
 
-    private IQueryable<Customer> _displayData;
-    public IList<Customer> _itemSelected { get; set; }
+    [Parameter]
+    public RenderFragment Columns { get; set; }
 
-    protected override async void OnInitialized()
+    [Parameter]
+    public Func<string, TGridItem, bool> Filter { get; set; }
+
+    /// <summary>
+    /// Sets column width "1fr 2fr 1fr" etc
+    /// </summary>
+    [Parameter]
+    public string GridTemplateColumns { get; set; }
+
+    private IQueryable<TGridItem> _displayData;
+
+    private async void ItemSelected_Changed(TGridItem itemSelected)
     {
-        Data = new();
-
-        for (int i = 0; i < 50; i++)
-        {
-            var customer = await Customer.Initialize(
-                number: i,
-                name: "Narvesen Oslo S " + 1,
-                contactPersonName: "Jon Doe " + i,
-                contactPersonEmailAddress: "jondoe" + i + "@gmail.com",
-                contactPersonPhoneNumber: "1234567" + i,
-                customerGroupNumber: null,
-                isActive: true
-            );
-
-            Data.Add(customer);
-        }
-
-        var jane = await Customer.Initialize(
-            number: Data.Count,
-            name: "Narvesen grønland",
-            contactPersonName: "Jane Doe" + Data.Count,
-            contactPersonEmailAddress: "janedoe" + Data.Count + "@gmail.com",
-            contactPersonPhoneNumber: "123456" + Data.Count,
-            customerGroupNumber: null,
-            isActive: false
-        );
-
-        Data.Add(jane);
-
-        _displayData = Data.AsQueryable();
-    }
-
-    private async void ItemSelected_Changed(IList<Customer> itemSelected)
-    {
-        _itemSelected = itemSelected;
-        ItemSelected = itemSelected.FirstOrDefault();
+        var test = new FluentDataGrid<CustomerView>();
+        ItemSelected = itemSelected;
         await ItemSelectedChanged.InvokeAsync(ItemSelected);
     }
 
     private void SearchChanged(string input)
     {
         input = input.ToLower();
-        _displayData = Data.Where(s => s.Name.ToLower().Contains(input)
-        || s.Number.ToString().Contains(input)
-        || s.ContactPersonName.ToLower().Contains(input)
-        || s.ContactPersonEmailAddress.ToLower().Contains(input)
-        || s.ContactPersonPhoneNumber.ToLower().Contains(input)).AsQueryable();
+        _displayData = Items.Where(s => Filter.Invoke(input, s)).AsQueryable();
     }
 }

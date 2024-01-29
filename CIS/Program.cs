@@ -1,7 +1,7 @@
 using CIS;
 using CIS.DataAccess;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Microsoft.FluentUI.AspNetCore.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +17,9 @@ builder.Services.AddDataAccess(opt =>
 {
     //opt.UseSqlServer(connectionString);
 });
+
+builder.Services.AddFluentUIComponents();
+
 
 
 var app = builder.Build();
