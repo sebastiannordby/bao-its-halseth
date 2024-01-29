@@ -1,5 +1,6 @@
 ﻿using CIS.DataAccess.Customers;
 using CIS.DataAccess.Customers.Repositories;
+using CIS.DataAccess.Products;
 using CIS.DataAccess.Stores;
 using CIS.DataAccess.Stores.Repositories;
 using CIS.Domain.Customers.Services;
@@ -24,7 +25,8 @@ namespace CIS.DataAccess
             return services
                 .AddDbContext<CISDbContext>(factory)
                 .AddCustomerServices()
-                .AddStoreServices();
+                .AddStoreServices()
+                .AddProductServices();
         }
 
         public static void MigrateDataAccess(this IServiceProvider provider)

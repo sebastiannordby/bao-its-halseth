@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 
 namespace CIS.DataAccess.Customers.Services
 {
-    internal class CustomerService : IExecuteImportService<CustomerImportDefinition>, ICustomerService
+    internal class ImportCustomerService : IExecuteImportService<CustomerImportDefinition>
     {
         private readonly CISDbContext _dbContext;
 
-        public CustomerService(CISDbContext dbContext)
+        public ImportCustomerService(CISDbContext dbContext)
         {
             _dbContext = dbContext;
         }

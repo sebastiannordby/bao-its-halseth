@@ -22,8 +22,7 @@ namespace CIS.DataAccess.Customers
             this IServiceCollection services)
         {
             return services
-                .AddScoped<ICustomerService, CustomerService>()
-                .AddScoped<IExecuteImportService<CustomerImportDefinition>, CustomerService>()
+                .AddScoped<IExecuteImportService<CustomerImportDefinition>, ImportCustomerService>()
                 .AddScoped<ICustomerViewRepository, CustomerViewRepository>();
         }
 

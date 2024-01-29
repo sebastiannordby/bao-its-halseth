@@ -11,7 +11,8 @@ namespace CIS.Domain.Products.Models.Import
         public int Number { get; set; }
         public required string Name { get; set; }
         public string? AlternateName { get; set; }
-        public int? ProductGroupId { get; set; }
+        public int? ProductGroupNumber { get; set; }
+        public string? ProductGroupName { get; set; }
 
         public decimal? CostPrice { get; set; }
         public decimal? PurchasePrice { get; set; }

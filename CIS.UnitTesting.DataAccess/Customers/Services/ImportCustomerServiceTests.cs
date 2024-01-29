@@ -13,14 +13,15 @@ using System.Threading.Tasks;
 
 namespace CIS.UnitTesting.DataAccess.Customers.Services
 {
-    public sealed class CustomerServiceTests : DataAccessTest
+    public sealed class ImportCustomerServiceTests : DataAccessTest
     {
         [Test]
         public void ServicesAvailableInDI()
         {
-            var customerService = Services.GetRequiredService<ICustomerService>();
+            var importService = Services
+                .GetRequiredService<IExecuteImportService<CustomerImportDefinition>>();
 
-            Assert.IsNotNull(customerService);
+            Assert.IsNotNull(importService);
         }
 
         [Test]

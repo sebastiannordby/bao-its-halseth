@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace CIS.Library.Services
 {
-    public interface IExecuteImportService<TModel>
+    public interface IExecuteImportService<TDefinition>
     {
-        Task<bool> Import(IEnumerable<TModel> models);
+        Task<bool> Import(IEnumerable<TDefinition> definitions);
     }
 }
