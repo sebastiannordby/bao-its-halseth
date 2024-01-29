@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.DataAccess.Models
+namespace CIS.DataAccess.Customers.Models
 {
     public sealed class CustomerDao
     {

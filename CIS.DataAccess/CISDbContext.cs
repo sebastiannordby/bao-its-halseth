@@ -1,4 +1,7 @@
-﻿using CIS.DataAccess.Models;
+﻿using CIS.DataAccess.Customers;
+using CIS.DataAccess.Customers.Models;
+using CIS.DataAccess.Products.Models;
+using CIS.DataAccess.Stores.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -32,15 +35,7 @@ namespace CIS.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<CustomerDao>(entity =>
-            {
-                entity.HasKey(x => x.Number);
-            });
-
-            modelBuilder.Entity<CustomerGroupDao>(entity =>
-            {
-                entity.HasKey(x => x.Number);
-            });
+            modelBuilder.SetupCustomerModels();
 
             modelBuilder.Entity<ProductDao>(entity =>
             {

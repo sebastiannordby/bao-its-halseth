@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.Domain.Products
+namespace CIS.Domain.Products.Models
 {
     public class ProductPrice
     {
@@ -23,11 +23,11 @@ namespace CIS.Domain.Products
         /// <summary>
         /// What the Store makes on a product.
         /// </summary>
-        public decimal? StorePrice { get; set; } 
+        public decimal? StorePrice { get; set; }
 
         /// <summary>
         /// Currency code in like NOK, SEK, DKK.
         /// </summary>
-        public required string CurrencyCode { get; set; } 
+        public required string CurrencyCode { get; set; }
     }
 }

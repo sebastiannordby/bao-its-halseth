@@ -1,6 +1,8 @@
-﻿using CIS.DataAccess.Models;
-using CIS.Domain.Customers.Models;
+﻿using CIS.DataAccess.Customers.Models;
+using CIS.DataAccess.Stores.Models;
 using CIS.Domain.Customers.Services;
+using CIS.Library.Customers.Models.Import;
+using CIS.Library.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,9 +10,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.DataAccess.Services
+namespace CIS.DataAccess.Customers.Services
 {
-    internal class CustomerService : ICustomerService
+    internal class CustomerService : IExecuteImportService<CustomerImportDefinition>, ICustomerService
     {
         private readonly CISDbContext _dbContext;
 
@@ -21,7 +23,7 @@ namespace CIS.DataAccess.Services
 
         public async Task<bool> Import(IEnumerable<CustomerImportDefinition> importDefinitions)
         {
-            foreach(var customerDefinition in importDefinitions)
+            foreach (var customerDefinition in importDefinitions)
             {
                 var doesExist = await _dbContext.Customers
                     .AnyAsync(x => x.Number == customerDefinition.Number);
@@ -46,8 +48,8 @@ namespace CIS.DataAccess.Services
                 {
                     var storeDefinition = customerDefinition.Store;
 
-                    var storeDao = new StoreDao() 
-                    { 
+                    var storeDao = new StoreDao()
+                    {
                         Number = customerDefinition.Number,
                         Name = customerDefinition.Name,
                         AddressLine = storeDefinition.AddressLine,

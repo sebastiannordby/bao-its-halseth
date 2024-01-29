@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.Domain.Products
+namespace CIS.DataAccess.Products.Models
 {
-    public class ProductGroup
+    public sealed class ProductGroupDao
     {
-        public int Id { get; set; }
+        public int Number { get; set; }
         public required string Name { get; set; }
     }
 }

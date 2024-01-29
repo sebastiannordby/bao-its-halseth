@@ -1,7 +1,8 @@
 ﻿using CIS.DataAccess;
-using CIS.Domain.Customers.Models;
 using CIS.Domain.Customers.Services;
+using CIS.Library.Customers.Models.Import;
 using CIS.Library.Customers.Repositories;
+using CIS.Library.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -25,7 +26,8 @@ namespace CIS.UnitTesting.DataAccess.Customers.Services
         [Test]
         public async Task TestImportCustomers()
         {
-            var customerService = Services.GetRequiredService<ICustomerService>();
+            var customerService = Services
+                .GetRequiredService<IExecuteImportService<CustomerImportDefinition>>();
             var dbContext = Services.GetRequiredService<CISDbContext>();
             var customersToImport = new List<CustomerImportDefinition>()
             {

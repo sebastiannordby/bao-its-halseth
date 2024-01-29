@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.DataAccess.Models
+namespace CIS.DataAccess.Stores.Models
 {
     public sealed class StoreDao
     {

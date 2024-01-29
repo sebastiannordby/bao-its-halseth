@@ -1,4 +1,5 @@
 ﻿using CIS.DataAccess;
+using CIS.DataAccess.Customers.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace CIS.UnitTesting.DataAccess.Services
 
         public async Task Insert()
         {
-            await _dbContext.Customers.AddAsync(new CIS.DataAccess.Models.CustomerDao()
+            await _dbContext.Customers.AddAsync(new CustomerDao()
             {
                 Number = 1,
                 Name = "Seven11 - Oslo Lufthavn",
