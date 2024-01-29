@@ -1,10 +1,25 @@
 ﻿@page "/customers"
-@using CIS.Domain.Customers
 
 
-<DataGrid/>
+
+
+<DataGrid TGridItem="CustomerView" >
+
+    <Columns>
+       <PropertyColumn Property="@(p=>p.Number)" Title="#" Sortable="true" Align="Align.End" />
+        <PropertyColumn Property="@(p=>p.Name)" Title="Navn" Sortable="true" Align="Align.Start" />
+        <PropertyColumn Property="@(p=>p.ContactPersonName)" Title="Kontakt" Sortable="true" Align="Align.Start" />
+        <PropertyColumn Property="@(p=>p.ContactPersonEmailAddress)" Title="Email" Sortable="true" Align="Align.Start" />
+        <PropertyColumn Property="@(p=>p.ContactPersonPhoneNumber)" Title="Telefon" Sortable="true" Align="Align.Start" />
+        <TemplateColumn Title="Aktiv" Context="data" Tooltip=true TooltipText="@(c=> c.IsActive ? "Aktiv" : "Inaktiv")" Sortable="true" Align="Align.End">
+            <FluentCheckbox Value="@(data.IsActive)" ReadOnly=true />
+        </TemplateColumn>
+    </Columns>
+
+</DataGrid> 
 
 @code {
 
-  
+    
+
 }

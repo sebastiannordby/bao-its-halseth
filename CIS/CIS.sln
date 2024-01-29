@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CIS.UnitTesting", "..\CIS.U
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CIS.UnitTesting.DataAccess", "..\CIS.UnitTesting.DataAccess\CIS.UnitTesting.DataAccess.csproj", "{C3D80101-7D78-495C-A14D-2C4F612E9D25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CIS.Library", "..\CIS.Library\CIS.Library.csproj", "{F036CD62-775A-472F-9F20-9568584CF87B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CIS.Library", "..\CIS.Library\CIS.Library.csproj", "{F036CD62-775A-472F-9F20-9568584CF87B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
