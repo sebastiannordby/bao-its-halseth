@@ -9,6 +9,6 @@ namespace CIS.Domain.Customers.Services
 {
     public interface ICustomerService
     {
-        Task<bool> Import(Customer customer);
+        Task<bool> Import(IEnumerable<CustomerImportDefinition> importDefinitions);
     }
 }
