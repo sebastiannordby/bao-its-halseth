@@ -8,6 +8,8 @@
     <FluentToolbar>
         <FluentButton IconStart="@(new Icons.Filled.Size24.Edit())" Appearance="@(Appearance.Accent)" BackgroundColor="yellow" />
         <FluentButton IconStart="@(new Icons.Filled.Size24.Delete())" Appearance="Appearance.Accent" BackgroundColor="red" />
+        <FluentSpacer/>
+        <FluentTextField  @bind-Value="_filter" @bind-Value:event="OnInput" @onchange=FilterChanged/>
     </FluentToolbar>
 
     <FluentDataGrid 
@@ -27,6 +29,7 @@
 </FluentLayout>
 
 @code{
+
     [Parameter]
     public List<TGridItem> Items { get; set; }
 
@@ -48,6 +51,9 @@
     [Parameter]
     public string GridTemplateColumns { get; set; }
 
+
+    private string _filter;
+
     private IQueryable<TGridItem> _displayData;
 
     private async void ItemSelected_Changed(TGridItem itemSelected)
@@ -57,9 +63,11 @@
         await ItemSelectedChanged.InvokeAsync(ItemSelected);
     }
 
-    private void SearchChanged(string input)
+    private void FilterChanged()
     {
-        input = input.ToLower();
-        _displayData = Items.Where(s => Filter.Invoke(input, s)).AsQueryable();
+        if (string.IsNullOrEmpty(_filter)) return;
+
+        var filter = _filter.ToLower();
+        _displayData = Items.Where(s => Filter.Invoke(filter, s)).AsQueryable();
     }
 }
