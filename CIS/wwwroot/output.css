@@ -1,5 +1,5 @@
 /*
-! tailwindcss v3.4.1 | MIT License | https://tailwindcss.com
+! tailwindcss v3.3.2 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -32,11 +32,9 @@
 4. Use the user's configured `sans` font-family by default.
 5. Use the user's configured `sans` font-feature-settings by default.
 6. Use the user's configured `sans` font-variation-settings by default.
-7. Disable tap highlights on iOS
 */
 
-html,
-:host {
+html {
   line-height: 1.5;
   /* 1 */
   -webkit-text-size-adjust: 100%;
@@ -46,14 +44,12 @@ html,
   -o-tab-size: 4;
      tab-size: 4;
   /* 3 */
-  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   /* 4 */
   font-feature-settings: normal;
   /* 5 */
   font-variation-settings: normal;
   /* 6 */
-  -webkit-tap-highlight-color: transparent;
-  /* 7 */
 }
 
 /*
@@ -125,10 +121,8 @@ strong {
 }
 
 /*
-1. Use the user's configured `mono` font-family by default.
-2. Use the user's configured `mono` font-feature-settings by default.
-3. Use the user's configured `mono` font-variation-settings by default.
-4. Correct the odd `em` font sizing in all browsers.
+1. Use the user's configured `mono` font family by default.
+2. Correct the odd `em` font sizing in all browsers.
 */
 
 code,
@@ -137,12 +131,8 @@ samp,
 pre {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   /* 1 */
-  font-feature-settings: normal;
-  /* 2 */
-  font-variation-settings: normal;
-  /* 3 */
   font-size: 1em;
-  /* 4 */
+  /* 2 */
 }
 
 /*
@@ -200,10 +190,6 @@ optgroup,
 select,
 textarea {
   font-family: inherit;
-  /* 1 */
-  font-feature-settings: inherit;
-  /* 1 */
-  font-variation-settings: inherit;
   /* 1 */
   font-size: 100%;
   /* 1 */
@@ -352,14 +338,6 @@ ul,
 menu {
   list-style: none;
   margin: 0;
-  padding: 0;
-}
-
-/*
-Reset default styling for dialogs.
-*/
-
-dialog {
   padding: 0;
 }
 
@@ -548,10 +526,6 @@ video {
   position: static;
 }
 
-.ml-auto {
-  margin-left: auto;
-}
-
 .flex {
   display: flex;
 }
@@ -560,34 +534,37 @@ video {
   display: table;
 }
 
-.w-full {
-  width: 100%;
+.h-full {
+  height: 100%;
 }
 
-.items-center {
-  align-items: center;
+.max-h-full {
+  max-height: 100%;
 }
 
-.\!rounded-b {
-  border-bottom-right-radius: 0.25rem !important;
-  border-bottom-left-radius: 0.25rem !important;
+.flex-col {
+  flex-direction: column;
 }
 
-.rounded-t {
-  border-top-left-radius: 0.25rem;
-  border-top-right-radius: 0.25rem;
+.overflow-y-auto {
+  overflow-y: auto;
 }
 
-.p-1 {
-  padding: 0.25rem;
+.p-3 {
+  padding: 0.75rem;
 }
 
-.\!leading-3 {
-  line-height: .75rem !important;
+.\!font-bold {
+  font-weight: 700 !important;
 }
 
 html, body {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  max-height: calc(100% - 10px);
+  height: 100%;
+  display:flex;
+  flex-direction:column;
+  overflow-y: hidden;
 }
 
 a, .btn-link {
@@ -636,72 +613,4 @@ h1:focus {
 
 .darker-border-checkbox.form-check-input {
   border-color: #929292;
-}
-
-.\*\:mr-1 > * {
-  margin-right: 0.25rem;
-}
-
-.\[\&_\.rz-cell-filter-content\]\:\!py-0 .rz-cell-filter-content {
-  padding-top: 0px !important;
-  padding-bottom: 0px !important;
-}
-
-.\[\&_\.rz-cell-filter\]\:\!p-0 .rz-cell-filter {
-  padding: 0px !important;
-}
-
-.\[\&_rz-cell-filter-content\]\:\!py-0 rz-cell-filter-content {
-  padding-top: 0px !important;
-  padding-bottom: 0px !important;
-}
-
-.\[\&_span\>input\]\:\!h-min span>input {
-  height: -moz-min-content !important;
-  height: min-content !important;
-}
-
-.\[\&_span\>input\]\:\!p-1 span>input {
-  padding: 0.25rem !important;
-}
-
-.\[\&_span\>input\]\:\!px-1 span>input {
-  padding-left: 0.25rem !important;
-  padding-right: 0.25rem !important;
-}
-
-.\[\&_span\>input\]\:\!text-xs span>input {
-  font-size: 0.75rem !important;
-  line-height: 1rem !important;
-}
-
-.\[\&_span\>input\]\:\!leading-3 span>input {
-  line-height: .75rem !important;
-}
-
-.\[\&_td\>span\]\:\!text-xs td>span {
-  font-size: 0.75rem !important;
-  line-height: 1rem !important;
-}
-
-.\[\&_td\]\:\!p-1 td {
-  padding: 0.25rem !important;
-}
-
-.\[\&_th\>div\]\:\!p-1 th>div {
-  padding: 0.25rem !important;
-}
-
-.\[\&_th\>div\]\:\!p-0 th>div {
-  padding: 0px !important;
-}
-
-.\[\&_th\>div\]\:\!py-0 th>div {
-  padding-top: 0px !important;
-  padding-bottom: 0px !important;
-}
-
-.\[\&_th\>rz-cell-filter-content\]\:\!py-0 th>rz-cell-filter-content {
-  padding-top: 0px !important;
-  padding-bottom: 0px !important;
 }
