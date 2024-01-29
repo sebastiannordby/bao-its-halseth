@@ -1,5 +1,6 @@
 using CIS;
 using CIS.DataAccess;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,10 @@ var connectionString = builder.Configuration["ConnectionString"];
 if (string.IsNullOrWhiteSpace(connectionString))
     throw new ArgumentException("ConnectionString must be configured in user secrets or appsettings.json.");
 
-builder.Services.AddDataAccess(connectionString);
+builder.Services.AddDataAccess(opt =>
+{
+    opt.UseSqlServer(connectionString);
+});
 
 var app = builder.Build();
 
