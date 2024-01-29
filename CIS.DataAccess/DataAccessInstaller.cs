@@ -3,6 +3,7 @@ using CIS.DataAccess.Repositories;
 using CIS.DataAccess.Services;
 using CIS.Domain.Customers.Services;
 using CIS.Library.Customers.Repositories;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -24,6 +25,20 @@ namespace CIS.DataAccess
             services.AddScoped<ICustomerViewRepository, CustomerViewRepository>();
 
             return services;
+        }
+
+        public static void MigrateDataAccess(this IServiceProvider provider)
+        {
+            var appDbContext = provider.GetRequiredService<CISDbContext>();
+
+            try
+            {
+                appDbContext.Database.Migrate();
+            }
+            catch (Exception)
+            {
+
+            }
         }
     }
 }
