@@ -1,7 +1,7 @@
 using CIS;
 using CIS.DataAccess;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.FluentUI.AspNetCore.Components;
+using Radzen;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,11 +15,11 @@ if (string.IsNullOrWhiteSpace(connectionString))
 
 builder.Services.AddDataAccess(opt =>
 {
-   opt.UseSqlServer(connectionString);
+    opt.UseSqlServer(connectionString);
 });
 
-builder.Services.AddFluentUIComponents();
 builder.Services.AddRazorComponents();
+builder.Services.AddRadzenComponents();
 
 var app = builder.Build();
 

@@ -1,28 +1,25 @@
 ﻿@inherits LayoutComponentBase
 
-<FluentDesignTheme StorageName="theme" Mode="DesignThemeModes.Dark" />
 
 <RadzenComponents />
-<FluentToastProvider Timeout="2000" MaxToastCount="20"/>
-<FluentDialogProvider />
-<FluentTooltipProvider />
-<FluentMessageBarProvider />
 
-<FluentMainLayout >
-    <NavMenuContent>
+
+<RadzenLayout >
+
+    <RadzenHeader>
+        CIS
+    </RadzenHeader>
+
+    <RadzenSidebar>
         <NavMenu />
-    </NavMenuContent>
-    <Header>
-        <div class="flex">
-            <FluentLabel Class="!font-bold" Color="Color.Fill"  >CIS</FluentLabel>
-        </div>
-    </Header>
-    <Body>
-        <div class="p-3 flex flex-col max-h-full h-full">
+    </RadzenSidebar>
+    <RadzenBody>
+        
+        <RadzenContentContainer>
             @Body
-        </div>
-    </Body>
-</FluentMainLayout>
+        </RadzenContentContainer>
+    </RadzenBody>
+</RadzenLayout>
 
 <div id="blazor-error-ui">
     An unhandled error has occurred.

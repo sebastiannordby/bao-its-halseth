@@ -2,10 +2,9 @@
 using CIS.Library.Shared.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.EntityFrameworkCore.SqlServer.Design.Internal;
-using Microsoft.FluentUI.AspNetCore.Components;
 using OfficeOpenXml;
-using System.ComponentModel;
+using Radzen;
+using Radzen.Blazor;
 using LicenseContext = OfficeOpenXml.LicenseContext;
 
 namespace CIS.Pages
@@ -16,7 +15,7 @@ namespace CIS.Pages
         public IExecuteImportService<SalesOrderImportDefinition> ImportOrderService { get; set; }
 
         [Inject]
-        public IToastService ToastService { get; set; }
+        public  NotificationService NotificationService { get; set; }
 
         private List<SalesOrderImportDefinition> _ordersToImport;
         private IQueryable<SalesOrderImportDefinition> _ordersToImportQueryable => _ordersToImport?.AsQueryable();
@@ -25,7 +24,7 @@ namespace CIS.Pages
         private List<string> _importErrorMessages;
         private ImportState _importState;
 
-        private FluentDialog? _importDialog;
+        private RadzenDialog? _importDialog;
 
         private enum ImportState
         {
@@ -72,9 +71,9 @@ namespace CIS.Pages
                             {
                                 var percentage = Convert.ToInt32(((decimal)row / rowCount) * 100);
 
-                                if(percentage % 5 == 0 && lastMessagePercentage != percentage)
+                                if (percentage % 5 == 0 && lastMessagePercentage != percentage)
                                 {
-                                    ToastService.ShowInfo($"Leser fil {percentage}%..", 2000);
+                                    NotificationService.Notify(detail: $"Leser fil {percentage}%..",duration: 2000);
                                     lastMessagePercentage = percentage;
                                 }
 
@@ -177,13 +176,13 @@ namespace CIS.Pages
         private async Task ExecuteImport()
         {
             var result = await ImportOrderService.Import(_ordersToImport);
-            if(result)
+            if (result)
             {
-                ToastService.ShowSuccess("Importering velykket");
+                NotificationService.Notify(NotificationSeverity.Success, "Importering velykket");
             }
             else
             {
-                ToastService.ShowError("Importering feilet");
+                NotificationService.Notify(NotificationSeverity.Error, "Importering feilet");
             }
         }
     }

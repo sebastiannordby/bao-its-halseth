@@ -1,8 +1,11 @@
 ﻿@inject NavigationManager Navigation
 
-<FluentNavMenu>
-    
-    <FluentNavLink Icon="@(new Icons.Filled.Size24.Person())" Href="/customers" >Kunder</FluentNavLink>
+<RadzenPanelMenu>
+    <RadzenPanelMenuItem Icon="person" Click="@(()=>Navigation.NavigateTo("/customers"))" Text="Kunder"/>
+    <RadzenPanelMenuItem Icon="note" Path="/sales-orders" Text="Salgsordre" />
+
+
+
     @*<FluentNavLink Text="Bestillinger" Icon="list" Click="@(()=> Navigation.NavigateTo("/counter"))" />
     <FluentNavLink Text="Bestillings forslag" Icon="list" Click="@(()=> Navigation.NavigateTo("/counter"))" />
     <FluentNavLink Text="Produkter" Icon="inventory" Click="@(()=> Navigation.NavigateTo("/weather"))" />
@@ -10,6 +13,6 @@
     <FluentNavLink Text="Salgstall" Icon="tag" Click="@(()=> Navigation.NavigateTo("/weather"))" />
     <FluentNavLink Text="Restordre" Icon="description" Click="@(()=> Navigation.NavigateTo("/weather"))" />
     <FluentNavLink Text="Send ordre" Icon="send" Click="@(()=> Navigation.NavigateTo("/weather"))" /> *@
-</FluentNavMenu>
+</RadzenPanelMenu>
 
 

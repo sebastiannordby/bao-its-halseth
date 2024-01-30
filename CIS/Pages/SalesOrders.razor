@@ -3,61 +3,37 @@
 
 <h3>Ordre - @_importState</h3>
 
-<FluentTabs>
-    <FluentTab Label="Oversikt">
-        <FluentDataGrid 
-            Class="overflow-y-auto h-full w-full"
-            TGridItem=SalesOrderImportDefinition
-            GenerateHeader="GenerateHeaderOption.Sticky"
-            ItemSize="23"
-            ItemKey="x => x.Number"
-            ResizableColumns="true">
-            <PropertyColumn Title="#" Property="x => x.Number"  />
-            <PropertyColumn Title="Referanse" Property="x => x.Reference" />
-            <PropertyColumn Title="Kunde#" Property="x => x.CustomerNumber" />
-            <PropertyColumn Title="Kunde" Property="x => x.CustomerName" />
-        </FluentDataGrid>
-    </FluentTab>
-    <FluentTab Label="Import" >
+<RadzenTabs>
+    <RadzenTabsItem Text="Oversikt">
+        <DataGrid TItem="SalesOrderImportDefinition">
+            <RadzenGridColumn Title="#" Property="@nameof(SalesOrderImportDefinition.Number)" />
+            <RadzenGridColumn Title="Referanse" Property="@nameof(SalesOrderImportDefinition.Reference)" />
+            <RadzenGridColumn Title="Kunde#" Property="@nameof(SalesOrderImportDefinition.CustomerNumber)" />
+            <RadzenGridColumn Title="Kunde" Property="@nameof(SalesOrderImportDefinition.CustomerName)" />
+        </DataGrid>
+    </RadzenTabsItem>
+    <RadzenTabsItem Text="Import">
         <div class="flex flex-col gap-2">
             <div class="flex gap-2 h-full">
                 <div class="flex flex-col gap-2 flex-1 h-full">
-                    <FluentInputFile 
-                        Id="my-file-uploader"
-                        Mode="InputFileMode.Stream"
-                        Multiple="true"
-                        MaximumFileCount="1"
-                        MaximumFileSize="@(10*1024*1024)"
+                    <RadzenFileInput 
+                        TValue="string"
                         Accept="xlsx/*"
-                        OnInputFileChange="ImportExcelFile"
-                        ProgressPercent="@ProgressPercent"
                         Style="height: 300px; border: 1px dashed var(--accent-fill-rest);">
-                        <ChildContent>
-                            <label for="my-file-uploader">
-                                <FluentIcon Value="@(new @Icons.Regular.Size24.ArrowUpload())" />
-                            </label>
-                            <div>
-                                Dra fil du vil laste opp hit,
-                                eller <label for="my-file-uploader">let</label>
-                                etter dem<span style="color: red;">*</span>.
-                                <br />
-                                <em>Kun 1 fil er tillatt.</em>
-                            </div>
-                        </ChildContent>
-                    </FluentInputFile>
+                    </RadzenFileInput>
 
 @*                     <RadzenButton 
                         Click=@(args => OnClick("Primary button")) 
                         Text="Primary" 
                         ButtonStyle="ButtonStyle.Primary" />
  *@
-                    <FluentButton 
-                        Appearance="Appearance.Accent" 
-                        Class="mt-2 ml-auto"
-                        OnClick="ExecuteImport"
+                    <RadzenButton 
+                        ButtonStyle="ButtonStyle.Info" 
+                        class="mt-2 ml-auto"
+                        Click="ExecuteImport"
                         Disabled="_importState != ImportState.ReadingFinished">
                         <span>Kjør import</span>
-                    </FluentButton>
+                    </RadzenButton>
                 </div>
                 <div class="overflow-auto min-w-[300px]">
                     <h3>Meldinger</h3>
@@ -74,6 +50,6 @@
                 </div>
             </div>
         </div>
-    </FluentTab>
-</FluentTabs>
+    </RadzenTabsItem>
+</RadzenTabs>
 
