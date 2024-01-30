@@ -1,63 +1,58 @@
-﻿@page "/sales-orders"
+﻿@* @page "/sales-orders"
 @using CIS.Library.Orders.Models.Import
 
 <h3>Ordre - @_importState</h3>
 
 <FluentTabs>
     <FluentTab Label="Oversikt">
-        <FluentDataGrid 
-            Class="overflow-y-auto h-full w-full"
-            TGridItem=SalesOrderImportDefinition
-            GenerateHeader="GenerateHeaderOption.Sticky"
-            ItemSize="23"
-            ItemKey="x => x.Number"
-            ResizableColumns="true">
-            <PropertyColumn Title="#" Property="x => x.Number"  />
-            <PropertyColumn Title="Referanse" Property="x => x.Reference" />
-            <PropertyColumn Title="Kunde#" Property="x => x.CustomerNumber" />
-            <PropertyColumn Title="Kunde" Property="x => x.CustomerName" />
-        </FluentDataGrid>
+        <RadzenDataGrid 
+            SelectionMode="DataGridSelectionMode.Multiple"
+            KeyProperty="@nameof(SalesOrderImportDefinition.Number)" 
+            Count="_ordersToImport?.Count ?? 0" 
+            Data="@_ordersToImport"
+            FilterPopupRenderMode="PopupRenderMode.OnDemand" 
+            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+            FilterMode="FilterMode.Advanced" 
+            AllowSorting="true" 
+            AllowFiltering="true" 
+            AllowPaging="true" 
+            PageSize="4"
+            PagerHorizontalAlign="HorizontalAlign.Center" 
+            TItem="SalesOrderImportDefinition" 
+            ColumnWidth="200px">
+            <Columns>
+                <RadzenDataGridColumn 
+                    TItem="SalesOrderImportDefinition" 
+                    Property="@nameof(SalesOrderImportDefinition.Number)" 
+                    Title="#" />
+                <RadzenDataGridColumn 
+                    TItem="SalesOrderImportDefinition" 
+                    Property="@nameof(SalesOrderImportDefinition.CustomerName)" 
+                    Title="Kunde" />
+            </Columns>
+            <LoadingTemplate>
+                <RadzenProgressBarCircular 
+                    ProgressBarStyle="ProgressBarStyle.Primary" 
+                    Value="100" 
+                    ShowValue="false" 
+                    Mode="ProgressBarMode.Indeterminate" />
+            </LoadingTemplate>
+        </RadzenDataGrid>
     </FluentTab>
     <FluentTab Label="Import" >
         <div class="flex flex-col gap-2">
             <div class="flex gap-2 h-full">
                 <div class="flex flex-col gap-2 flex-1 h-full">
-                    <FluentInputFile 
-                        Id="my-file-uploader"
-                        Mode="InputFileMode.Stream"
-                        Multiple="true"
-                        MaximumFileCount="1"
-                        MaximumFileSize="@(10*1024*1024)"
-                        Accept="xlsx/*"
-                        OnInputFileChange="ImportExcelFile"
-                        ProgressPercent="@ProgressPercent"
-                        Style="height: 300px; border: 1px dashed var(--accent-fill-rest);">
-                        <ChildContent>
-                            <label for="my-file-uploader">
-                                <FluentIcon Value="@(new @Icons.Regular.Size24.ArrowUpload())" />
-                            </label>
-                            <div>
-                                Dra fil du vil laste opp hit,
-                                eller <label for="my-file-uploader">let</label>
-                                etter dem<span style="color: red;">*</span>.
-                                <br />
-                                <em>Kun 1 fil er tillatt.</em>
-                            </div>
-                        </ChildContent>
-                    </FluentInputFile>
+                    <InputFile 
+                        OnChange="@ImportExcelFile" 
+                        accept=".xlsx" 
+                        multiple="false" />
 
-@*                     <RadzenButton 
-                        Click=@(args => OnClick("Primary button")) 
-                        Text="Primary" 
+                    <RadzenButton 
+                        Click="@ExecuteImport" 
+                        Text="Kjør import" 
+                        Disabled="_importState != ImportState.ReadingFinished"
                         ButtonStyle="ButtonStyle.Primary" />
- *@
-                    <FluentButton 
-                        Appearance="Appearance.Accent" 
-                        Class="mt-2 ml-auto"
-                        OnClick="ExecuteImport"
-                        Disabled="_importState != ImportState.ReadingFinished">
-                        <span>Kjør import</span>
-                    </FluentButton>
                 </div>
                 <div class="overflow-auto min-w-[300px]">
                     <h3>Meldinger</h3>
@@ -77,3 +72,4 @@
     </FluentTab>
 </FluentTabs>
 
+ *@

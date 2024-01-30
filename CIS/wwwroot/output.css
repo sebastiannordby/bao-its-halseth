@@ -571,6 +571,10 @@ video {
   display: table;
 }
 
+.grid {
+  display: grid;
+}
+
 .h-full {
   height: 100%;
 }
