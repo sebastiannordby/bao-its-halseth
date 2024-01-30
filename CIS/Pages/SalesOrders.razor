@@ -7,65 +7,94 @@
     <FluentTab Label="Oversikt">
         <p>Under utvikling</p>
     </FluentTab>
-    <FluentTab Label="Import">
-        @if(_importState == ImportState.Reading || _importState == ImportState.ReadingFinished)
-        {
-            <div class="flex gap-2 h-full">
-                <div class="flex-1">
-                    <DataGrid
-                        TGridItem="SalesOrderImportDefinition"
-                        Items="_ordersToImport">
-                        <Columns>
-                            <PropertyColumn Title="#" Property="x => x.Number" />
-                            <PropertyColumn Title="Referanse" Property="x => x.Reference" />
-                            <PropertyColumn Title="Kunde#" Property="x => x.CustomerNumber" />
-                            <PropertyColumn Title="Kunde" Property="x => x.CustomerName" />
-                        </Columns>
-                    </DataGrid>
+    <FluentTab Label="Import" >
+        <div class="flex flex-col gap-2">
+            <FluentButton OnClick="() => _importDialog.Show()">Åpne fil</FluentButton>
 
-                    @if (_importState == ImportState.Reading)
-                    {
-                        <FluentProgressRing></FluentProgressRing>
-                    }
+            <div class="flex gap-2 h-full">
+                <div class="flex flex-col gap-2 flex-1 h-full">
+@*                     <FluentDataGrid 
+                        Class="overflow-y-auto h-full w-full"
+                        TGridItem=SalesOrderImportDefinition
+                        Items="_ordersToImportQueryable"
+                        GenerateHeader="GenerateHeaderOption.Sticky"
+                        ItemSize="23"
+                        ItemKey="x => x.Number"
+                        ResizableColumns="true">
+                        <PropertyColumn Title="#" Property="x => x.Number"  />
+                        <PropertyColumn Title="Referanse" Property="x => x.Reference" />
+                        <PropertyColumn Title="Kunde#" Property="x => x.CustomerNumber" />
+                        <PropertyColumn Title="Kunde" Property="x => x.CustomerName" />
+                    </FluentDataGrid> *@
                 </div>
                 <div class="overflow-auto min-w-[300px]">
                     <h3>Meldinger</h3>
 
-                    @if(_importErrorMessages is not null) 
+                    @if (_importErrorMessages is not null)
                     {
                         <ul>
-                            @foreach(var message in _importErrorMessages)
+                            @foreach (var message in _importErrorMessages)
                             {
                                 <li>@message</li>
-                            }    
+                            }
                         </ul>
                     }
                 </div>
             </div>
-        }
-        else if (_importState == ImportState.Importing)
-        {
-            <FluentProgressRing></FluentProgressRing>
-        }
-        else if(_importState == ImportState.Input)
-        {
-            <div class="p-2">
-                <InputFile OnChange="@ImportExcelFile" accept=".xlsx" multiple="false"></InputFile>
-
-                @if (_importErrorMessages is not null)
-                {
-                    <div>
-                        <h3>Feilmeldinger</h3>
-
-                        <ul>
-                            @foreach (var errorMessage in _importErrorMessages)
-                            {
-                                <li>@errorMessage</li>
-                            }
-                        </ul>
-                    </div>
-                }
-            </div>
-        }
+        </div>
     </FluentTab>
 </FluentTabs>
+
+
+<FluentDialog 
+    @ref="_importDialog" 
+    @bind-Hidden="@_importDialogHidden" 
+    aria-label="Simple dialog" 
+    Modal="true" 
+    PreventScroll="true">
+    <FluentDialogHeader Visible="true">
+        Import - Velg fil 
+    </FluentDialogHeader>
+
+    <FluentInputFile 
+        Id="my-file-uploader"
+        Mode="InputFileMode.Stream"
+        Multiple="true"
+        MaximumFileCount="1"
+        MaximumFileSize="@(10*1024*1024)"
+        Accept="xlsx/*"
+        OnInputFileChange="ImportExcelFile"
+        ProgressPercent="@ProgressPercent"
+        Style="height: 300px; border: 1px dashed var(--accent-fill-rest);">
+        <ChildContent>
+            <label for="my-file-uploader">
+                <FluentIcon Value="@(new @Icons.Regular.Size24.ArrowUpload())" />
+            </label>
+            <div>
+                Dra fil du vil laste opp hit,
+                eller <label for="my-file-uploader">let</label>
+                etter dem<span style="color: red;">*</span>.
+                <br />
+                <em>Kun 1 fil er tillatt.</em>
+            </div>
+        </ChildContent>
+    </FluentInputFile>
+
+
+    <FluentButton 
+        Appearance="Appearance.Accent" 
+        Class="mt-2 ml-auto"
+        Autofocus="true" 
+        @onclick="async() => await _importDialog.CloseAsync()">
+    
+        @if (_importState == ImportState.Reading)
+        {
+            <FluentProgressRing Visible="true" Color="blue" />
+        }
+        else
+        {
+            <span>Lukk</span>
+        }
+    </FluentButton>
+</FluentDialog>
+

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore.SqlServer.Design.Internal;
+using Microsoft.FluentUI.AspNetCore.Components;
 using OfficeOpenXml;
 using System.ComponentModel;
 using LicenseContext = OfficeOpenXml.LicenseContext;
@@ -11,8 +12,13 @@ namespace CIS.Pages
     public partial class SalesOrders : ComponentBase
     {
         private List<SalesOrderImportDefinition> _ordersToImport;
+        private IQueryable<SalesOrderImportDefinition> _ordersToImportQueryable => _ordersToImport?.AsQueryable();
+        private int ProgressPercent { get; set; }
+        private bool _importDialogHidden = true;
         private List<string> _importErrorMessages;
         private ImportState _importState;
+
+        private FluentDialog? _importDialog;
 
         private enum ImportState
         {
@@ -55,9 +61,12 @@ namespace CIS.Pages
                             int colCount = ws.Dimension.End.Column;
                             int rowCount = ws.Dimension.End.Row;
 
-                            try
+                            for (int row = 2; row < rowCount; row++)
                             {
-                                for (int row = 2; row < rowCount; row++)
+                                var per = ((decimal) row / rowCount);
+                                ProgressPercent = Convert.ToInt32(per * 100);
+
+                                try
                                 {
                                     var id = ws.Cells[row, 1].Value; // ID
                                     var dated = ws.Cells[row, 2].Value; // dato
@@ -125,10 +134,10 @@ namespace CIS.Pages
                                         orders.Add(order);
                                     }
                                 }
-                            }
-                            catch (Exception ex)
-                            {
-                                _importErrorMessages.Add(ex.Message);
+                                catch (Exception ex)
+                                {
+                                    _importErrorMessages.Add(ex.Message);
+                                }
                             }
 
                             _ordersToImport = orders;
@@ -139,6 +148,7 @@ namespace CIS.Pages
             finally
             {
                 await SetImportState(ImportState.ReadingFinished);
+                await _importDialog.CloseAsync();
             }
         }
 
