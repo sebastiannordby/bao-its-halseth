@@ -2,38 +2,27 @@
 
 <FluentDesignTheme StorageName="theme" Mode="DesignThemeModes.Dark" />
 
-
-<FluentToastProvider />
+<RadzenComponents />
+<FluentToastProvider Timeout="2000" MaxToastCount="20"/>
 <FluentDialogProvider />
 <FluentTooltipProvider />
 <FluentMessageBarProvider />
-
 
 <FluentMainLayout >
     <NavMenuContent>
         <NavMenu />
     </NavMenuContent>
-
     <Header>
         <div class="flex">
             <FluentLabel Class="!font-bold" Color="Color.Fill"  >CIS</FluentLabel>
         </div>
     </Header>
-    
     <Body>
-      
         <div class="p-3 flex flex-col max-h-full h-full">
             @Body
         </div>
     </Body>
-
 </FluentMainLayout>
-
-
-
-
-
-
 
 <div id="blazor-error-ui">
     An unhandled error has occurred.

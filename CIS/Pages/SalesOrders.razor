@@ -1,31 +1,63 @@
 ﻿@page "/sales-orders"
 @using CIS.Library.Orders.Models.Import
 
-<h3>Ordre</h3>
+<h3>Ordre - @_importState</h3>
 
 <FluentTabs>
     <FluentTab Label="Oversikt">
-        <p>Under utvikling</p>
+        <FluentDataGrid 
+            Class="overflow-y-auto h-full w-full"
+            TGridItem=SalesOrderImportDefinition
+            GenerateHeader="GenerateHeaderOption.Sticky"
+            ItemSize="23"
+            ItemKey="x => x.Number"
+            ResizableColumns="true">
+            <PropertyColumn Title="#" Property="x => x.Number"  />
+            <PropertyColumn Title="Referanse" Property="x => x.Reference" />
+            <PropertyColumn Title="Kunde#" Property="x => x.CustomerNumber" />
+            <PropertyColumn Title="Kunde" Property="x => x.CustomerName" />
+        </FluentDataGrid>
     </FluentTab>
     <FluentTab Label="Import" >
         <div class="flex flex-col gap-2">
-            <FluentButton OnClick="() => _importDialog.Show()">Åpne fil</FluentButton>
-
             <div class="flex gap-2 h-full">
                 <div class="flex flex-col gap-2 flex-1 h-full">
-@*                     <FluentDataGrid 
-                        Class="overflow-y-auto h-full w-full"
-                        TGridItem=SalesOrderImportDefinition
-                        Items="_ordersToImportQueryable"
-                        GenerateHeader="GenerateHeaderOption.Sticky"
-                        ItemSize="23"
-                        ItemKey="x => x.Number"
-                        ResizableColumns="true">
-                        <PropertyColumn Title="#" Property="x => x.Number"  />
-                        <PropertyColumn Title="Referanse" Property="x => x.Reference" />
-                        <PropertyColumn Title="Kunde#" Property="x => x.CustomerNumber" />
-                        <PropertyColumn Title="Kunde" Property="x => x.CustomerName" />
-                    </FluentDataGrid> *@
+                    <FluentInputFile 
+                        Id="my-file-uploader"
+                        Mode="InputFileMode.Stream"
+                        Multiple="true"
+                        MaximumFileCount="1"
+                        MaximumFileSize="@(10*1024*1024)"
+                        Accept="xlsx/*"
+                        OnInputFileChange="ImportExcelFile"
+                        ProgressPercent="@ProgressPercent"
+                        Style="height: 300px; border: 1px dashed var(--accent-fill-rest);">
+                        <ChildContent>
+                            <label for="my-file-uploader">
+                                <FluentIcon Value="@(new @Icons.Regular.Size24.ArrowUpload())" />
+                            </label>
+                            <div>
+                                Dra fil du vil laste opp hit,
+                                eller <label for="my-file-uploader">let</label>
+                                etter dem<span style="color: red;">*</span>.
+                                <br />
+                                <em>Kun 1 fil er tillatt.</em>
+                            </div>
+                        </ChildContent>
+                    </FluentInputFile>
+
+@*                     <RadzenButton 
+                        Click=@(args => OnClick("Primary button")) 
+                        Text="Primary" 
+                        ButtonStyle="ButtonStyle.Primary" />
+ *@
+                    <FluentButton 
+                        Appearance="Appearance.Accent" 
+                        Class="mt-2 ml-auto"
+                        OnClick="ExecuteImport"
+                        Disabled="_importState != ImportState.ReadingFinished">
+                        <span>Kjør import</span>
+                    </FluentButton>
                 </div>
                 <div class="overflow-auto min-w-[300px]">
                     <h3>Meldinger</h3>
@@ -44,57 +76,4 @@
         </div>
     </FluentTab>
 </FluentTabs>
-
-
-<FluentDialog 
-    @ref="_importDialog" 
-    @bind-Hidden="@_importDialogHidden" 
-    aria-label="Simple dialog" 
-    Modal="true" 
-    PreventScroll="true">
-    <FluentDialogHeader Visible="true">
-        Import - Velg fil 
-    </FluentDialogHeader>
-
-    <FluentInputFile 
-        Id="my-file-uploader"
-        Mode="InputFileMode.Stream"
-        Multiple="true"
-        MaximumFileCount="1"
-        MaximumFileSize="@(10*1024*1024)"
-        Accept="xlsx/*"
-        OnInputFileChange="ImportExcelFile"
-        ProgressPercent="@ProgressPercent"
-        Style="height: 300px; border: 1px dashed var(--accent-fill-rest);">
-        <ChildContent>
-            <label for="my-file-uploader">
-                <FluentIcon Value="@(new @Icons.Regular.Size24.ArrowUpload())" />
-            </label>
-            <div>
-                Dra fil du vil laste opp hit,
-                eller <label for="my-file-uploader">let</label>
-                etter dem<span style="color: red;">*</span>.
-                <br />
-                <em>Kun 1 fil er tillatt.</em>
-            </div>
-        </ChildContent>
-    </FluentInputFile>
-
-
-    <FluentButton 
-        Appearance="Appearance.Accent" 
-        Class="mt-2 ml-auto"
-        Autofocus="true" 
-        @onclick="async() => await _importDialog.CloseAsync()">
-    
-        @if (_importState == ImportState.Reading)
-        {
-            <FluentProgressRing Visible="true" Color="blue" />
-        }
-        else
-        {
-            <span>Lukk</span>
-        }
-    </FluentButton>
-</FluentDialog>
 

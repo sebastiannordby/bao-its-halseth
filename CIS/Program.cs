@@ -19,8 +19,7 @@ builder.Services.AddDataAccess(opt =>
 });
 
 builder.Services.AddFluentUIComponents();
-
-
+builder.Services.AddRazorComponents();
 
 var app = builder.Build();
 

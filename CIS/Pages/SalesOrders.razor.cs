@@ -1,4 +1,5 @@
 ﻿using CIS.Library.Orders.Models.Import;
+using CIS.Library.Shared.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore.SqlServer.Design.Internal;
@@ -11,6 +12,12 @@ namespace CIS.Pages
 {
     public partial class SalesOrders : ComponentBase
     {
+        [Inject]
+        public IExecuteImportService<SalesOrderImportDefinition> ImportOrderService { get; set; }
+
+        [Inject]
+        public IToastService ToastService { get; set; }
+
         private List<SalesOrderImportDefinition> _ordersToImport;
         private IQueryable<SalesOrderImportDefinition> _ordersToImportQueryable => _ordersToImport?.AsQueryable();
         private int ProgressPercent { get; set; }
@@ -37,7 +44,6 @@ namespace CIS.Pages
         public async Task ImportExcelFile(InputFileChangeEventArgs e)
         {
             await SetImportState(ImportState.Reading);
-
             try
             {
                 foreach (var file in e.GetMultipleFiles(1))
@@ -60,11 +66,17 @@ namespace CIS.Pages
                             ExcelWorksheet ws = package.Workbook.Worksheets.FirstOrDefault();
                             int colCount = ws.Dimension.End.Column;
                             int rowCount = ws.Dimension.End.Row;
+                            int lastMessagePercentage = 0;
 
                             for (int row = 2; row < rowCount; row++)
                             {
-                                var per = ((decimal) row / rowCount);
-                                ProgressPercent = Convert.ToInt32(per * 100);
+                                var percentage = Convert.ToInt32(((decimal)row / rowCount) * 100);
+
+                                if(percentage % 5 == 0 && lastMessagePercentage != percentage)
+                                {
+                                    ToastService.ShowInfo($"Leser fil {percentage}%..", 2000);
+                                    lastMessagePercentage = percentage;
+                                }
 
                                 try
                                 {
@@ -148,7 +160,6 @@ namespace CIS.Pages
             finally
             {
                 await SetImportState(ImportState.ReadingFinished);
-                await _importDialog.CloseAsync();
             }
         }
 
@@ -161,6 +172,19 @@ namespace CIS.Pages
                 return null;
 
             return Convert.ToDecimal(value);
+        }
+
+        private async Task ExecuteImport()
+        {
+            var result = await ImportOrderService.Import(_ordersToImport);
+            if(result)
+            {
+                ToastService.ShowSuccess("Importering velykket");
+            }
+            else
+            {
+                ToastService.ShowError("Importering feilet");
+            }
         }
     }
 }
