@@ -1,13 +1,19 @@
-Legg inn user secrets:
-```
-{
-  "ConnectionStrings:DefaultConnection": "Server=DITTPCNAVN;Database=CIS;User Id=sa;Password=secretPassword123;MultipleActiveResultSets=false"
-}
-```
 
-Lag en database bruker med brukernavn=sa og passord=secretPassword123 eller bytt om ovenfor.
+For å kjøre applikasjonen må følgende inn:
 
-Gjøremål:
+	Legg inn user secrets:
+	```
+	{
+	  "ConnectionStrings:DefaultConnection": "Server=DITTPCNAVN;Database=CIS;User Id=sa;Password=secretPassword123;MultipleActiveResultSets=false"
+	}
+	```
+
+	Lag en database bruker med brukernavn=sa og passord=secretPassword123 eller bytt om ovenfor.
+
+
+For å kjøre tailwind må man ta CD in i "CIS" mappen og kjøre "npm run tail"
+
+Gjøremål Andreas Halseth:
 
 Import av kunde
 - Lag en excel fil med kundedata fra 
@@ -20,3 +26,14 @@ Import av kunde
 Visning av kunde
 - Sett opp en grid imot modellen CustomerView
 - Som en test etter importen kan du bruke: ICustomerViewRepository.List
+
+Gjøremål Martin Sørensen:
+
+For å bli litt kjent med Blazor har jeg laget en liten oppgave til deg.
+
+Jeg vil at applikasjonen skal se nogenlunde slik ut:
+https://media.discordapp.net/attachments/1192916915618840729/1201457244655583262/image.png?ex=65c9e341&is=65b76e41&hm=c10f38b936a8c53e2e1edb8820b53eff089c08235df5c286c5a22cc3b965fc6b&=&format=webp&quality=lossless
+
+Jeg vil også at landingssiden/index/home skal være et dashboard:
+https://images.klipfolio.com/website/public/4d789bf2-a6d2-45ea-87e7-38e131f9d354/sales%20dashboard.png
+
