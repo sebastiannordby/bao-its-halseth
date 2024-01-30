@@ -7,7 +7,7 @@
 <DataGrid TGridItem="CustomerView">
     <Toolbar>
         <FluentSpacer/>
-        <FluentButton IconStart="new Icons.Filled.Size24.ArrowDownload()"/>
+            <FluentButton IconStart="@(new Icons.Filled.Size24.ArrowDownload())" OnClick="()=>_importDialogHidden = !_importDialogHidden"/>
     </Toolbar>
 
     <Columns>
@@ -23,9 +23,67 @@
 </DataGrid> 
 
 
+<FluentDialog @bind-Hidden=_importDialogHidden Modal="true" @ondialogdismiss="@(()=>_importDialogHidden = true)">
+    <FluentDialogHeader > 
+            <FluentHeader >
+                <span>Importer kunder</span>
+                <FluentButton class="ml-auto" IconStart="@(new Icons.Filled.Size24.Dismiss())"/>
+            </FluentHeader>
+    </FluentDialogHeader>
+    <FluentDialogBody>
+        
+
+
+        <FluentInputFile OnFileUploaded="OnFileUploaded" Mode=InputFileMode.SaveToTemporaryFolder MaximumFileCount="1">
+            <span>Importer excelfil</span>
+        </FluentInputFile>
+
+
+        @if (!_preViewHidden)
+        {
+            <DataGrid TGridItem="CustomerView"  Items="_preViewCustomers"  >
+                <Toolbar>
+                    <FluentSpacer />
+                    <FluentButton IconStart="@(new Icons.Filled.Size24.ArrowDownload())" OnClick="()=>_importDialogHidden = !_importDialogHidden" />
+                </Toolbar>
+
+                <Columns>
+                    <PropertyColumn Property="@(p=>p.Number)" Title="#" Sortable="true" Align="Align.End" />
+                    <PropertyColumn Property="@(p=>p.Name)" Title="Navn" Sortable="true" Align="Align.Start" />
+                    <PropertyColumn Property="@(p=>p.ContactPersonName)" Title="Kontakt" Sortable="true" Align="Align.Start" />
+                    <PropertyColumn Property="@(p=>p.ContactPersonEmailAddress)" Title="Email" Sortable="true" Align="Align.Start" />
+                    <PropertyColumn Property="@(p=>p.ContactPersonPhoneNumber)" Title="Telefon" Sortable="true" Align="Align.Start" />
+                    <TemplateColumn Title="Aktiv" Context="data" Tooltip=true TooltipText="@(c=> c.IsActive ? "Aktiv" : "Inaktiv")" Sortable="true" Align="Align.End">
+                        <FluentCheckbox Value="@(data.IsActive)" ReadOnly=true />
+                    </TemplateColumn>
+                </Columns>
+            </DataGrid>
+        }
+
+    </FluentDialogBody>
+</FluentDialog>
+
+
 @code {
 
+    private bool _importDialogHidden;
 
-    
+    private List<CustomerView> _preViewCustomers = new();
+
+
+    private bool _preViewHidden = true;
+
+
+
+    private void OnFileUploaded(FluentInputFileEventArgs args)
+    {
+        var path = Path.GetTempPath();
+        var fileName = args.AllFiles.First().Name;
+
+
+
+
+
+    }
 
 }

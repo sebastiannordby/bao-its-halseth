@@ -15,7 +15,7 @@ if (string.IsNullOrWhiteSpace(connectionString))
 
 builder.Services.AddDataAccess(opt =>
 {
-    //opt.UseSqlServer(connectionString);
+   opt.UseSqlServer(connectionString);
 });
 
 builder.Services.AddFluentUIComponents();
