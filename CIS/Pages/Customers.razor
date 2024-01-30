@@ -3,10 +3,15 @@
 
 
 
-<DataGrid TGridItem="CustomerView" >
+
+<DataGrid TGridItem="CustomerView">
+    <Toolbar>
+        <FluentSpacer/>
+        <FluentButton IconStart="new Icons.Filled.Size24.ArrowDownload()"/>
+    </Toolbar>
 
     <Columns>
-       <PropertyColumn Property="@(p=>p.Number)" Title="#" Sortable="true" Align="Align.End" />
+        <PropertyColumn Property="@(p=>p.Number)" Title="#" Sortable="true" Align="Align.End" />
         <PropertyColumn Property="@(p=>p.Name)" Title="Navn" Sortable="true" Align="Align.Start" />
         <PropertyColumn Property="@(p=>p.ContactPersonName)" Title="Kontakt" Sortable="true" Align="Align.Start" />
         <PropertyColumn Property="@(p=>p.ContactPersonEmailAddress)" Title="Email" Sortable="true" Align="Align.Start" />
@@ -15,10 +20,11 @@
             <FluentCheckbox Value="@(data.IsActive)" ReadOnly=true />
         </TemplateColumn>
     </Columns>
-
 </DataGrid> 
 
+
 @code {
+
 
     
 

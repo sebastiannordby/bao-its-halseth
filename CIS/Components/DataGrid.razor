@@ -5,11 +5,11 @@
 @attribute [CascadingTypeParameter(nameof(TGridItem))]
 
 <FluentLayout>
-    <FluentToolbar>
-        <FluentButton IconStart="@(new Icons.Filled.Size24.Edit())" Appearance="@(Appearance.Accent)" BackgroundColor="yellow" />
-        <FluentButton IconStart="@(new Icons.Filled.Size24.Delete())" Appearance="Appearance.Accent" BackgroundColor="red" />
-        <FluentSpacer/>
-        <FluentTextField  @bind-Value="_filter" @bind-Value:event="OnInput" @onchange=FilterChanged/>
+    <FluentToolbar >
+            <FluentButton IconStart="@(new Icons.Filled.Size24.Edit())"   />
+            <FluentButton IconStart="@(new Icons.Filled.Size24.Delete())"  />
+            @Toolbar
+        <FluentTextField Class="ml-auto" @bind-Value="_filter" @bind-Value:event="OnInput" @onchange=FilterChanged/>
     </FluentToolbar>
 
     <FluentDataGrid 
@@ -41,6 +41,9 @@
 
     [Parameter]
     public RenderFragment Columns { get; set; }
+
+    [Parameter]
+    public RenderFragment Toolbar { get; set; }
 
     [Parameter]
     public Func<string, TGridItem, bool> Filter { get; set; }
