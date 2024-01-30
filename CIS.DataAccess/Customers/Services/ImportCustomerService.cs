@@ -2,7 +2,7 @@
 using CIS.DataAccess.Stores.Models;
 using CIS.Domain.Customers.Services;
 using CIS.Library.Customers.Models.Import;
-using CIS.Library.Services;
+using CIS.Library.Shared.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

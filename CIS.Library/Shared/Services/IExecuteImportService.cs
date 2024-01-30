@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.Library.Services
+namespace CIS.Library.Shared.Services
 {
     public interface IExecuteImportService<TDefinition>
     {

@@ -4,7 +4,7 @@ using CIS.DataAccess.Customers.Services;
 using CIS.Domain.Customers.Services;
 using CIS.Library.Customers.Models.Import;
 using CIS.Library.Customers.Repositories;
-using CIS.Library.Services;
+using CIS.Library.Shared.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;

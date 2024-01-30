@@ -2,7 +2,7 @@
 using CIS.DataAccess.Products.Services;
 using CIS.Domain.Products.Models.Import;
 using CIS.Library.Products.Repositories;
-using CIS.Library.Services;
+using CIS.Library.Shared.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

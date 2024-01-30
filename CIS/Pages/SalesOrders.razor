@@ -1,0 +1,71 @@
+﻿@page "/sales-orders"
+@using CIS.Library.Orders.Models.Import
+
+<h3>Ordre</h3>
+
+<FluentTabs>
+    <FluentTab Label="Oversikt">
+        <p>Under utvikling</p>
+    </FluentTab>
+    <FluentTab Label="Import">
+        @if(_importState == ImportState.Reading || _importState == ImportState.ReadingFinished)
+        {
+            <div class="flex gap-2 h-full">
+                <div class="flex-1">
+                    <DataGrid
+                        TGridItem="SalesOrderImportDefinition"
+                        Items="_ordersToImport">
+                        <Columns>
+                            <PropertyColumn Title="#" Property="x => x.Number" />
+                            <PropertyColumn Title="Referanse" Property="x => x.Reference" />
+                            <PropertyColumn Title="Kunde#" Property="x => x.CustomerNumber" />
+                            <PropertyColumn Title="Kunde" Property="x => x.CustomerName" />
+                        </Columns>
+                    </DataGrid>
+
+                    @if (_importState == ImportState.Reading)
+                    {
+                        <FluentProgressRing></FluentProgressRing>
+                    }
+                </div>
+                <div class="overflow-auto min-w-[300px]">
+                    <h3>Meldinger</h3>
+
+                    @if(_importErrorMessages is not null) 
+                    {
+                        <ul>
+                            @foreach(var message in _importErrorMessages)
+                            {
+                                <li>@message</li>
+                            }    
+                        </ul>
+                    }
+                </div>
+            </div>
+        }
+        else if (_importState == ImportState.Importing)
+        {
+            <FluentProgressRing></FluentProgressRing>
+        }
+        else if(_importState == ImportState.Input)
+        {
+            <div class="p-2">
+                <InputFile OnChange="@ImportExcelFile" accept=".xlsx" multiple="false"></InputFile>
+
+                @if (_importErrorMessages is not null)
+                {
+                    <div>
+                        <h3>Feilmeldinger</h3>
+
+                        <ul>
+                            @foreach (var errorMessage in _importErrorMessages)
+                            {
+                                <li>@errorMessage</li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+        }
+    </FluentTab>
+</FluentTabs>

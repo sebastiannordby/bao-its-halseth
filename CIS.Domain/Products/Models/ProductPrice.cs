@@ -18,12 +18,12 @@ namespace CIS.Domain.Products.Models
         /// <summary>
         /// What the Store has to pay for a product.
         /// </summary>
-        public decimal? PurchasePrice { get; set; }
+        public decimal? PurchasePrice { get; set; } // Innpris
 
         /// <summary>
         /// What the Store makes on a product.
         /// </summary>
-        public decimal? StorePrice { get; set; }
+        public decimal? StorePrice { get; set; } // Utpris
 
         /// <summary>
         /// Currency code in like NOK, SEK, DKK.

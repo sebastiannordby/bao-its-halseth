@@ -1,6 +1,6 @@
 ﻿using CIS.DataAccess.Products.Models;
 using CIS.Domain.Products.Models.Import;
-using CIS.Library.Services;
+using CIS.Library.Shared.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
