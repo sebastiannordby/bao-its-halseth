@@ -1,20 +1,21 @@
 ﻿@inherits LayoutComponentBase
 
-
 <RadzenComponents />
 
-
-<RadzenLayout >
-
-    <RadzenHeader>
-        CIS
+<RadzenLayout>
+    <RadzenHeader style="background-color: #4CAF50; color: white;">
+        <div class="flex items-center justify-between px-4 h-full">
+            <div class="text-xl font-semibold">CIS - Custom Install Software</div>
+            <div class="flex items-center space-x-4">
+                <!-- Add user profile dropdown or any other header elements here -->
+                <!-- Example: <UserProfileDropdown /> -->
+            </div>
+        </div>
     </RadzenHeader>
-
     <RadzenSidebar>
         <NavMenu />
     </RadzenSidebar>
     <RadzenBody>
-        
         <RadzenContentContainer>
             @Body
         </RadzenContentContainer>
