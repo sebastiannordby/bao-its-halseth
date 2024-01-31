@@ -1,4 +1,4 @@
-﻿@page "/sales-orders"
+@page "/sales-orders"
 @using CIS.Library.Orders.Models.Import
 
 <h3>Ordre - @_importState</h3>
@@ -13,43 +13,76 @@
         </DataGrid>
     </RadzenTabsItem>
     <RadzenTabsItem Text="Import">
-        <div class="flex flex-col gap-2">
-            <div class="flex gap-2 h-full">
-                <div class="flex flex-col gap-2 flex-1 h-full">
-                    <RadzenFileInput 
-                        TValue="string"
-                        Accept="xlsx/*"
-                        Style="height: 300px; border: 1px dashed var(--accent-fill-rest);">
-                    </RadzenFileInput>
 
-@*                     <RadzenButton 
-                        Click=@(args => OnClick("Primary button")) 
-                        Text="Primary" 
-                        ButtonStyle="ButtonStyle.Primary" />
- *@
-                    <RadzenButton 
-                        ButtonStyle="ButtonStyle.Info" 
-                        class="mt-2 ml-auto"
-                        Click="ExecuteImport"
-                        Disabled="_importState != ImportState.ReadingFinished">
-                        <span>Kjør import</span>
-                    </RadzenButton>
-                </div>
-                <div class="overflow-auto min-w-[300px]">
-                    <h3>Meldinger</h3>
+      <div class="flex flex-col gap-2">
+        <div class="flex gap-2 h-full">
+            <div class="flex flex-col gap-2 flex-1 h-full">
+                  <RadzenFileInput 
+                      TValue="string"
+                      Accept="xlsx/*"
+                      Style="height: 300px; border: 1px dashed var(--accent-fill-rest);">
+                  </RadzenFileInput>
+                  <InputFile 
+                      OnChange="@ImportExcelFile" 
+                      accept=".xlsx" 
+                      multiple="false" />
 
-                    @if (_importErrorMessages is not null)
-                    {
-                        <ul>
-                            @foreach (var message in _importErrorMessages)
-                            {
-                                <li>@message</li>
-                            }
-                        </ul>
-                    }
-                </div>
+                  <RadzenButton 
+                      ButtonStyle="ButtonStyle.Info" 
+                      class="mt-2 ml-auto"
+                      Click="ExecuteImport"
+                      Disabled="_importState != ImportState.ReadingFinished">
+                      <span>Kjør import</span>
+                  </RadzenButton>                  
+                  <RadzenDataGrid 
+                      SelectionMode="DataGridSelectionMode.Multiple"
+                      KeyProperty="@nameof(SalesOrderImportDefinition.Number)" 
+                      Count="_ordersToImport?.Count ?? 0" 
+                      Data="@_ordersToImport"
+                      FilterPopupRenderMode="PopupRenderMode.OnDemand" 
+                      FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                      FilterMode="FilterMode.Advanced" 
+                      AllowSorting="true" 
+                      AllowFiltering="true" 
+                      AllowPaging="true" 
+                      PageSize="4"
+                      PagerHorizontalAlign="HorizontalAlign.Center" 
+                      TItem="SalesOrderImportDefinition" 
+                      ColumnWidth="200px">
+                      <Columns>
+                          <RadzenDataGridColumn 
+                              TItem="SalesOrderImportDefinition" 
+                              Property="@nameof(SalesOrderImportDefinition.Number)" 
+                              Title="#" />
+                          <RadzenDataGridColumn 
+                              TItem="SalesOrderImportDefinition" 
+                              Property="@nameof(SalesOrderImportDefinition.CustomerName)" 
+                              Title="Kunde" />
+                      </Columns>
+                      <LoadingTemplate>
+                          <RadzenProgressBarCircular 
+                              ProgressBarStyle="ProgressBarStyle.Primary" 
+                              Value="100" 
+                              ShowValue="false" 
+                              Mode="ProgressBarMode.Indeterminate" />
+                      </LoadingTemplate>
+                  </RadzenDataGrid>
+            </div>
+            <div class="overflow-auto min-w-[300px]">
+                <h3>Meldinger</h3>
+
+                @if (_importErrorMessages is not null)
+                {
+                    <ul>
+                        @foreach (var message in _importErrorMessages)
+                        {
+                            <li>@message</li>
+                        }
+                    </ul>
+                }
             </div>
         </div>
+    </div>
+
     </RadzenTabsItem>
 </RadzenTabs>
-
