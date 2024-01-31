@@ -3,23 +3,50 @@
 
 
 
-<DataGrid TGridItem="CustomerView" >
+
+<DataGrid TItem="CustomerView">
+    <Toolbar>
+        <RadzenButton Icon="arrowdownload" Click="()=>_importDialogHidden = !_importDialogHidden"/>
+    </Toolbar>
 
     <Columns>
-       <PropertyColumn Property="@(p=>p.Number)" Title="#" Sortable="true" Align="Align.End" />
-        <PropertyColumn Property="@(p=>p.Name)" Title="Navn" Sortable="true" Align="Align.Start" />
-        <PropertyColumn Property="@(p=>p.ContactPersonName)" Title="Kontakt" Sortable="true" Align="Align.Start" />
-        <PropertyColumn Property="@(p=>p.ContactPersonEmailAddress)" Title="Email" Sortable="true" Align="Align.Start" />
-        <PropertyColumn Property="@(p=>p.ContactPersonPhoneNumber)" Title="Telefon" Sortable="true" Align="Align.Start" />
-        <TemplateColumn Title="Aktiv" Context="data" Tooltip=true TooltipText="@(c=> c.IsActive ? "Aktiv" : "Inaktiv")" Sortable="true" Align="Align.End">
-            <FluentCheckbox Value="@(data.IsActive)" ReadOnly=true />
-        </TemplateColumn>
+        <RadzenGridColumn Property="@nameof(CustomerView.Number)" Title="#" Sortable="true" />
+        <RadzenGridColumn Property="@nameof(CustomerView.Name)" Title="Navn" Sortable="true" />
+        <RadzenGridColumn Property="@nameof(CustomerView.ContactPersonName)" Title="Kontakt" Sortable="true" />
+        <RadzenGridColumn Property="@nameof(CustomerView.ContactPersonEmailAddress)" Title="Email" Sortable="true" />
+        <RadzenGridColumn Property="@nameof(CustomerView.ContactPersonPhoneNumber)" Title="Telefon" Sortable="true" />
+        <RadzenGridColumn Title="Aktiv" Context="data" Sortable="true" >
+            <Template>
+               <RadzenCheckBox Value="@(data.IsActive)" ReadOnly=true />
+            </Template>
+        </RadzenGridColumn>
     </Columns>
-
 </DataGrid> 
+
+
 
 @code {
 
-    
+    private bool _importDialogHidden;
+
+    private List<CustomerView> _preViewCustomers = new();
+
+
+    private bool _preViewHidden = true;
+
+
+
+    private void OnFileUploaded()
+    {
+        // var path = Path.GetTempPath();
+        // var fileName = args.AllFiles.First().Name;
+
+        // var filePath = $"{path}/{fileName}";
+
+        // // var data = 
+
+
+
+    }
 
 }

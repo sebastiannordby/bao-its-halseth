@@ -3,18 +3,8 @@ using CIS.DataAccess.Customers.Repositories;
 using CIS.DataAccess.Orders;
 using CIS.DataAccess.Products;
 using CIS.DataAccess.Stores;
-using CIS.DataAccess.Stores.Repositories;
-using CIS.Domain.Customers.Services;
-using CIS.Library.Customers.Repositories;
-using CIS.Library.Stores.Repositories;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CIS.DataAccess
 {

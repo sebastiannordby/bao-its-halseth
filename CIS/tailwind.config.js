@@ -1,6 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./**/*.razor"],
+    content: [
+        "./Layout/*.razor",
+        "./Components/*.razor",
+        "./Pages/*.razor",
+        "./*.razor"
+    ],
   theme: {
     extend: {},
   },

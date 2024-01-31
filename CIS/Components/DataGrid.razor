@@ -1,46 +1,46 @@
 ﻿@using CIS.Domain.Customers.Models
 @using CIS.Domain.Customers
 @using CIS.Library.Customers.Models
-@typeparam TGridItem
-@attribute [CascadingTypeParameter(nameof(TGridItem))]
+@typeparam TItem
+@attribute [CascadingTypeParameter(nameof(TItem))]
 
-<FluentLayout>
-    <FluentToolbar>
-        <FluentButton IconStart="@(new Icons.Filled.Size24.Edit())" Appearance="@(Appearance.Accent)" BackgroundColor="yellow" />
-        <FluentButton IconStart="@(new Icons.Filled.Size24.Delete())" Appearance="Appearance.Accent" BackgroundColor="red" />
-    </FluentToolbar>
+<RadzenLayout>
+    <div class="flex ">
+        <RadzenButton Icon="edit"   />
+        <RadzenButton Icon="delete"  />
+        @Toolbar
+        <RadzenTextBox class="ml-auto" @bind-Value="_filter" @bind-Value:event="OnInput" @onchange=FilterChanged/>
+    </div>
 
-    <FluentDataGrid 
-        Class="overflow-y-auto"
-        TGridItem=TGridItem
-        Items="_displayData"
-        GenerateHeader="GenerateHeaderOption.Sticky"
-        OnRowFocus="(s)=>ItemSelected_Changed((TGridItem)s.Data)"
-        ItemSize="23"
-        Virtualize=true
-        GridTemplateColumns="@(GridTemplateColumns ?? string.Empty)"
-        ResizableColumns=true>
-        <ChildContent>
+    <RadzenDataGrid 
+        TItem="TItem"
+        
+    >
+        <Columns>
             @Columns
-        </ChildContent>
-    </FluentDataGrid>
-</FluentLayout>
+        </Columns>
+    </RadzenDataGrid>
+</RadzenLayout>
 
 @code{
-    [Parameter]
-    public List<TGridItem> Items { get; set; }
 
     [Parameter]
-    public TGridItem ItemSelected { get; set; }
+    public List<TItem> Items { get; set; }
 
     [Parameter]
-    public EventCallback<TGridItem> ItemSelectedChanged { get; set; }
+    public TItem ItemSelected { get; set; }
+
+    [Parameter]
+    public EventCallback<TItem> ItemSelectedChanged { get; set; }
 
     [Parameter]
     public RenderFragment Columns { get; set; }
 
     [Parameter]
-    public Func<string, TGridItem, bool> Filter { get; set; }
+    public RenderFragment Toolbar { get; set; }
+
+    [Parameter]
+    public Func<string, TItem, bool> Filter { get; set; }
 
     /// <summary>
     /// Sets column width "1fr 2fr 1fr" etc
@@ -48,18 +48,22 @@
     [Parameter]
     public string GridTemplateColumns { get; set; }
 
-    private IQueryable<TGridItem> _displayData;
 
-    private async void ItemSelected_Changed(TGridItem itemSelected)
+    private string _filter;
+
+    private IQueryable<TItem> _displayData;
+
+    private async void ItemSelected_Changed(TItem itemSelected)
     {
-        var test = new FluentDataGrid<CustomerView>();
         ItemSelected = itemSelected;
         await ItemSelectedChanged.InvokeAsync(ItemSelected);
     }
 
-    private void SearchChanged(string input)
+    private void FilterChanged()
     {
-        input = input.ToLower();
-        _displayData = Items.Where(s => Filter.Invoke(input, s)).AsQueryable();
+        if (string.IsNullOrEmpty(_filter)) return;
+
+        var filter = _filter.ToLower();
+        _displayData = Items.Where(s => Filter.Invoke(filter, s)).AsQueryable();
     }
 }
