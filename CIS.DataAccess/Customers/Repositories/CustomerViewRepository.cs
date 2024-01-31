@@ -22,16 +22,17 @@ namespace CIS.DataAccess.Customers.Repositories
         {
             var customerList = await _dbContext.Customers
                 .AsNoTracking()
-                .Select(x => new CustomerView(
-                    x.Number,
-                    x.Name,
-                    x.ContactPersonName,
-                    x.ContactPersonEmailAddress,
-                    x.ContactPersonPhoneNumber,
-                    x.CustomerGroupNumber,
-                    null,
-                    x.IsActive
-                )).ToListAsync();
+                .Select(x => new CustomerView
+                {
+                    Number = x.Number,
+                    Name =  x.Name,
+                    ContactPersonName =  x.ContactPersonName,
+                    ContactPersonEmailAddress = x.ContactPersonEmailAddress,
+                    ContactPersonPhoneNumber = x.ContactPersonPhoneNumber,
+                    CustomerGroupNumber = x.CustomerGroupNumber,
+                    IsActive = x.IsActive
+                }
+                ).ToListAsync();
 
             return customerList.AsReadOnly();
         }
