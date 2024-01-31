@@ -19,9 +19,10 @@ namespace CIS.Pages
 
         private List<SalesOrderImportDefinition> _ordersToImport;
         private IQueryable<SalesOrderImportDefinition> _ordersToImportQueryable => _ordersToImport?.AsQueryable();
+        private string _importMessages;
+
         private int ProgressPercent { get; set; }
         private bool _importDialogHidden = true;
-        private List<string> _importErrorMessages;
         private ImportState _importState;
 
         private RadzenDialog? _importDialog;
@@ -48,7 +49,7 @@ namespace CIS.Pages
                 foreach (var file in e.GetMultipleFiles(1))
                 {
                     var orders = new List<SalesOrderImportDefinition>();
-                    _importErrorMessages = new List<string>();
+                    _importMessages = string.Empty;
 
                     using (MemoryStream ms = new MemoryStream())
                     {
@@ -102,6 +103,8 @@ namespace CIS.Pages
                                     var parsedCostPrice = StringDecimalToDecimal(costPriceStr as string);
                                     var parsedProductNumber = Convert.ToInt32((double)productNumber);
 
+                                    _importMessages += $"\r\nLeser - Ordre #{idInt} - Produkt: {productNumber}\r\n";
+
                                     var orderLine = new SalesOrderImportDefinition.Line()
                                     {
                                         CostPrice = parsedCostPrice,
@@ -147,7 +150,7 @@ namespace CIS.Pages
                                 }
                                 catch (Exception ex)
                                 {
-                                    _importErrorMessages.Add(ex.Message);
+                                    _importMessages += $"Error: {ex.Message}";
                                 }
                             }
 

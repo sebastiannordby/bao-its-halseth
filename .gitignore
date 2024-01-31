@@ -32,3 +32,4 @@
 /CIS.DataAccess/bin/Debug/net8.0
 
 /CIS/Shared/Import
+/CIS/appsettings.Development.json

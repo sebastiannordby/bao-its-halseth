@@ -4,8 +4,8 @@
 @typeparam TItem
 @attribute [CascadingTypeParameter(nameof(TItem))]
 
-<RadzenLayout>
-    <div class="flex ">
+<div class="flex flex-col gap-2 h-full" >
+    <div class="flex gap-2">
         <RadzenButton Icon="edit"   />
         <RadzenButton Icon="delete"  />
         @Toolbar
@@ -14,13 +14,18 @@
 
     <RadzenDataGrid 
         TItem="TItem"
-        
-    >
-        <Columns>
-            @Columns
-        </Columns>
+        Data="Items"
+        Columns="Columns"
+        FilterMode="FilterMode.Advanced"
+        AllowFiltering="true"
+        AllowPaging="true"
+        AllowSorting="true"
+        AllowMultiColumnSorting="true"
+        AllowColumnPicking="true"
+        AllowGrouping="true"
+        Style="height: 100%">
     </RadzenDataGrid>
-</RadzenLayout>
+</div>
 
 @code{
 
