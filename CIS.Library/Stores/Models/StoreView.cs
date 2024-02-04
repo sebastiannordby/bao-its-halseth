@@ -16,12 +16,10 @@ namespace CIS.Library.Stores.Models
         public string? CustomerContactPersonName { get; set; }
         public string? CustomerContactPersonEmailAddress { get; set; }
         public string? CustomerContactPersonPhoneNumber { get; set; }
-        public int? CustomerCustomerGroupNumber { get; set; }
+        public int? CustomerGroupNumber { get; set; }
         public string? CustomerGroupName { get; set; }
-        public string ? StreetAddress { get; set; }
-        public string? PostalName{ get; set; }
+        public string? AddressLine { get; set; }
+        public string? PostalOffice { get; set; }
         public string? PostalCode { get; set; }
-        public string? Location { get; set; }
     }
-
 }

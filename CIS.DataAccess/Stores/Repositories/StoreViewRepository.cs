@@ -20,7 +20,7 @@ namespace CIS.DataAccess.Stores.Repositories
 
         public async Task<IReadOnlyCollection<StoreView>> List()
         {
-            var storesQuery = (
+            var storesList = await (
                 from store in _dbContext.Stores
                     .AsNoTracking()
                 join customer in _dbContext.Customers
@@ -36,19 +36,22 @@ namespace CIS.DataAccess.Stores.Repositories
                     Number = store.Number,
                     Name = store.Name,
                     IsActive = store.IsActive,
+                    AddressLine = store.AddressLine,
+                    PostalOffice = store.AddressPostalOffice,
+                    PostalCode = store.AddressPostalCode,
                     CustomerNumber = customer.Number,
                     CustomerName = customer.Name,
                     CustomerContactPersonName = customer.ContactPersonName,
                     CustomerContactPersonEmailAddress = customer.ContactPersonEmailAddress,
                     CustomerContactPersonPhoneNumber = customer.ContactPersonPhoneNumber,
-                    CustomerCustomerGroupNumber = customerGroup != null ? customerGroup.Number : null,
-                    CustomerGroupName = customerGroup != null ? customerGroup.Name : null
+                    CustomerGroupNumber = customerGroup != null ? 
+                        customerGroup.Number : null,
+                    CustomerGroupName = customerGroup != null ? 
+                        customerGroup.Name : null,
                 }
-            );
+            ).ToListAsync();
 
-            var result = await storesQuery.ToListAsync();
-
-            return result;
+            return storesList.AsReadOnly();
         }
     }
 }

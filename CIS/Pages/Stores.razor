@@ -1,0 +1,94 @@
+﻿@page "/stores"
+@using CIS.Library.Stores.Models
+
+<PageTitle>Butikker</PageTitle>
+
+<h1 class="text-xl">Butikker</h1>
+
+<RadzenTabs 
+    Style="height: 100%" 
+    RenderMode="TabRenderMode.Server">
+    <Tabs>
+        <RadzenTabsItem Text="Oversikt">
+            <RadzenDataGrid 
+                TItem="StoreView" 
+                Data="_stores"
+                FilterMode="FilterMode.Advanced"
+                AllowFiltering="true"
+                AllowPaging="true"
+                AllowSorting="true"
+                AllowMultiColumnSorting="true"
+                AllowColumnPicking="true"
+                AllowGrouping="true"
+                PageSize="1000"
+                Style="height: 100%">
+
+                <Columns>
+                    <RadzenDataGridColumn 
+                        TItem="StoreView"
+                        Property="@nameof(StoreView.Number)" 
+                        Title="#"
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="StoreView"
+                        Property="@nameof(StoreView.Name)" 
+                        Title="Navn" 
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="StoreView"
+                        Property="@nameof(StoreView.AddressLine)"
+                        Title="Adresse" 
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="StoreView"
+                        Property="@nameof(StoreView.PostalCode)" 
+                        Title="Postnummer"
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="StoreView"
+                        Property="@nameof(StoreView.PostalOffice)"
+                        Title="Poststed" 
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="StoreView"
+                        Property="@nameof(StoreView.CustomerGroupNumber)"
+                        Title="Kundegruppe#" 
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="StoreView"
+                        Property="@nameof(StoreView.CustomerGroupName)"
+                        Title="Kundegruppe" 
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="StoreView"
+                        Property="@nameof(StoreView.CustomerContactPersonName)"
+                        Title="Kunde - Kontaktperson" 
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="StoreView"
+                        Property="@nameof(StoreView.CustomerContactPersonEmailAddress)"
+                        Title="Kunde - E-post" 
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="StoreView"
+                        Property="@nameof(StoreView.CustomerContactPersonPhoneNumber)"
+                        Title="Kunde - Telefon" 
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="StoreView"
+                        Property="@nameof(StoreView.IsActive)"
+                        Title="Aktiv"
+                        Context="data" 
+                        Sortable="true">
+                        <Template>
+                            <RadzenCheckBox Value="@(data.IsActive)" ReadOnly=true />
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>
+
+
+
