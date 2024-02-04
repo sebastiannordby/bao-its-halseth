@@ -8,7 +8,7 @@ namespace CIS.DataAccess.Products.Models
 {
     public sealed class ProductPriceDao
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public decimal? CostPrice { get; set; } // our_price
         public decimal? PurchasePrice { get; set; }
         public decimal? StorePrice { get; set; }

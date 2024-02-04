@@ -25,6 +25,8 @@ namespace CIS.Library.Customers.Models.Import
             public required string? AddressLine { get; set; }
             public required string? AddressPostalCode { get; set; }
             public required string? AddressPostalOffice { get; set; }
+            public required int? RegionNumber { get; set; }
+            public required string? RegionName { get; set; }
         }
     }
 }

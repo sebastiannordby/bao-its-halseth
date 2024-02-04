@@ -19,11 +19,12 @@ namespace CIS.Services
 
         public Action<(int columnIndex, object cellValue)> CellRead { get; set; }
 
-        public async Task StartImportAsync(IBrowserFile file, Action<(int currentRow , ExcelWorksheet workSheet)> columnIndexMapping) 
+        public async Task StartImportAsync(
+            IBrowserFile file, 
+            Action<(int currentRow , ExcelWorksheet workSheet)> columnIndexMapping) 
         {
-
-
             ImportStateChanged?.Invoke(ImportState.Reading);
+
             try
             {
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -40,10 +41,17 @@ namespace CIS.Services
 
                 int colCount = ws.Dimension.End.Column;
                 int rowCount = ws.Dimension.End.Row;
+                int startRow = 2; // Array starts at 1 and we want to skip the header in the excel file
+                int lastMessagePercentage = 0;
 
-
-                for (int row = 2; row < rowCount; row++)
+                for (int row = startRow; row < rowCount; row++)
                 {
+                    var percentage = Convert.ToInt32(((decimal)row / rowCount) * 100);
+                    if (percentage % 5 == 0 && lastMessagePercentage != percentage)
+                    {
+                        _notificationService.Notify(detail: $"Leser fil {percentage}%..", duration: 2000);
+                        lastMessagePercentage = percentage;
+                    }
 
                     columnIndexMapping.Invoke((row, ws));
                 }
@@ -53,7 +61,6 @@ namespace CIS.Services
             {
                 _notificationService.Notify(NotificationSeverity.Error, detail: ex.Message);
             }
-
         }
     }
 

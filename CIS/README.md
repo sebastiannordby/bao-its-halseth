@@ -4,7 +4,7 @@ For å kjøre applikasjonen må følgende inn:
 	Legg inn user secrets:
 	```
 	{
-	  "ConnectionStrings:DefaultConnection": "Server=DITTPCNAVN;Database=CIS;User Id=sa;Password=secretPassword123;MultipleActiveResultSets=false"
+	  "ConnectionStrings:DefaultConnection": "Server=DITTPCNAVN;Database=CIS;User Id=sa;Password=secretPassword123;MultipleActiveResultSets=True;TrustServerCertificate=True;Connection Timeout=120"
 	}
 	```
 

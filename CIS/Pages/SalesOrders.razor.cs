@@ -92,14 +92,14 @@ namespace CIS.Pages
                                     var reference = ws.Cells[row, 9].Value; // ordreref
                                     var deliveredDated = ws.Cells[row, 10].Value; // levertDato
                                     var costPriceStr = ws.Cells[row, 11].Value; // our_price
-                                    var purchasePrice = ws.Cells[row, 12].Value; // innpris
+                                    var purchasePrice = ws.Cells[row, 12].Value as string; // innpris
                                     var shopifyOrderRefd = ws.Cells[row, 13].Value; // nettOrdreRef
 
                                     var idDec = (double)id;
                                     var idInt = Convert.ToInt32(idDec);
 
                                     var parsedQuantityDelivered = Convert.ToDecimal((double)quantityDelivered);
-                                    var parsedPurchasePrice = (purchasePrice as string).StringDecimalToDecimal();
+                                    var parsedPurchasePrice = purchasePrice.StringDecimalToDecimal();
                                     var parsedQuantity = Convert.ToDecimal((double)quantity);
                                     var parsedCostPrice = (costPriceStr as string).StringDecimalToDecimal();
                                     var parsedProductNumber = Convert.ToInt32((double)productNumber);

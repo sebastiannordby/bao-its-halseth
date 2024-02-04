@@ -61,7 +61,7 @@ namespace CIS.DataAccess.Products.Services
                     Name = definition.Name,
                     AlternateName = definition.AlternateName,
                     ProductPriceId = productPrice.Id,
-                    ProductGroupNumber = productGroup?.Number,
+                    ProductGroupId = productGroup?.Id,
                 };
 
                 await _dbContext.Products.AddAsync(product);
