@@ -1,15 +1,39 @@
 ﻿@inject NavigationManager Navigation
 
-<FluentNavMenu>
-    
-    <FluentNavLink Icon="@(new Icons.Filled.Size24.Person())" Href="/customers" >Kunder</FluentNavLink>
-    @*<FluentNavLink Text="Bestillinger" Icon="list" Click="@(()=> Navigation.NavigateTo("/counter"))" />
-    <FluentNavLink Text="Bestillings forslag" Icon="list" Click="@(()=> Navigation.NavigateTo("/counter"))" />
-    <FluentNavLink Text="Produkter" Icon="inventory" Click="@(()=> Navigation.NavigateTo("/weather"))" />
-    <FluentNavLink Text="Historikk" Icon="inbox" Click="@(()=> Navigation.NavigateTo("/weather"))" />
-    <FluentNavLink Text="Salgstall" Icon="tag" Click="@(()=> Navigation.NavigateTo("/weather"))" />
-    <FluentNavLink Text="Restordre" Icon="description" Click="@(()=> Navigation.NavigateTo("/weather"))" />
-    <FluentNavLink Text="Send ordre" Icon="send" Click="@(()=> Navigation.NavigateTo("/weather"))" /> *@
-</FluentNavMenu>
+<div class="bg-gray-800 w-full h-full overflow-y-auto">
+    <!-- Sales Section -->
+    <div class="text-white font-bold text-lg p-4">Salg</div>
+    <ul>
+        <li>
+            <a href="/" class="block text-gray-200 hover:bg-gray-700 px-4 py-2 flex items-center">
+                <i class="material-symbols-sharp mr-2">bar_chart_4_bars</i>
+                Dashboard/Salgstall
+            </a>
+        </li>
+        <li>
+            <a href="/sales-orders" class="block text-gray-200 hover:bg-gray-700 px-4 py-2 flex items-center">
+                <i class="material-symbols-sharp mr-2">note</i>
+                Bestillinger
+            </a>
+        </li>
+        <!-- Add other menu items in the Sales section similarly -->
+    </ul>
 
-
+    <!-- Main Data Section -->
+    <div class="text-white font-bold text-lg p-4">Grunndata</div>
+    <ul>
+        <li>
+            <a href="/customers" class="block text-gray-200 hover:bg-gray-700 px-4 py-2 flex items-center">
+                <i class="material-symbols-sharp mr-2">person</i>
+                Kunder
+            </a>
+        </li>
+        <li>
+            <a href="/products" class="block text-gray-200 hover:bg-gray-700 px-4 py-2 flex items-center">
+                <i class="material-symbols-sharp mr-2">category</i>
+                Varer
+            </a>
+        </li>
+        <!-- Add other menu items in the Main Data section similarly -->
+    </ul>
+</div>

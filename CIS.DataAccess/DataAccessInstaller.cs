@@ -1,19 +1,10 @@
 ﻿using CIS.DataAccess.Customers;
 using CIS.DataAccess.Customers.Repositories;
+using CIS.DataAccess.Orders;
 using CIS.DataAccess.Products;
 using CIS.DataAccess.Stores;
-using CIS.DataAccess.Stores.Repositories;
-using CIS.Domain.Customers.Services;
-using CIS.Library.Customers.Repositories;
-using CIS.Library.Stores.Repositories;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CIS.DataAccess
 {
@@ -26,7 +17,8 @@ namespace CIS.DataAccess
                 .AddDbContext<CISDbContext>(factory)
                 .AddCustomerServices()
                 .AddStoreServices()
-                .AddProductServices();
+                .AddProductServices()
+                .AddOrderServices();
         }
 
         public static void MigrateDataAccess(this IServiceProvider provider)
@@ -34,14 +26,7 @@ namespace CIS.DataAccess
             var appDbContext = provider
                 .GetRequiredService<CISDbContext>();
 
-            try
-            {
-                appDbContext.Database.Migrate();
-            }
-            catch (Exception)
-            {
-
-            }
+            appDbContext.Database.Migrate();
         }
     }
 }

@@ -39,12 +39,12 @@ namespace CIS.DataAccess
 
             modelBuilder.Entity<ProductDao>(entity =>
             {
-                entity.HasKey(x => x.Number);
+                entity.HasKey(x => x.Id);
             });
 
             modelBuilder.Entity<ProductGroupDao>(entity =>
             {
-                entity.HasKey(x => x.Number);
+                entity.HasKey(x => x.Id);
             });
 
             modelBuilder.Entity<ProductPriceDao>(entity =>
@@ -57,12 +57,12 @@ namespace CIS.DataAccess
 
             modelBuilder.Entity<RegionDao>(entity =>
             {
-                entity.HasKey(x => x.Number);
+                entity.HasKey(x => x.Id);
             });
 
             modelBuilder.Entity<StoreDao>(entity =>
             {
-                entity.HasKey(x => x.Number);
+                entity.HasKey(x => x.Id);
             });
         }
     }

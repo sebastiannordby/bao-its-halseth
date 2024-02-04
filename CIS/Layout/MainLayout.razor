@@ -1,39 +1,26 @@
 ﻿@inherits LayoutComponentBase
 
-<FluentDesignTheme StorageName="theme" Mode="DesignThemeModes.Dark" />
+<RadzenComponents />
 
-
-<FluentToastProvider />
-<FluentDialogProvider />
-<FluentTooltipProvider />
-<FluentMessageBarProvider />
-
-
-<FluentMainLayout >
-    <NavMenuContent>
+<RadzenLayout>
+    <RadzenHeader style="background-color: #4CAF50; color: white;">
+        <div class="flex items-center justify-between px-4 h-full">
+            <div class="text-xl font-semibold">CIS - Custom Install Software</div>
+            <div class="flex items-center space-x-4">
+                <!-- Add user profile dropdown or any other header elements here -->
+                <!-- Example: <UserProfileDropdown /> -->
+            </div>
+        </div>
+    </RadzenHeader>
+    <RadzenSidebar>
         <NavMenu />
-    </NavMenuContent>
-
-    <Header>
-        <div class="flex">
-            <FluentLabel Class="!font-bold" Color="Color.Fill"  >CIS</FluentLabel>
-        </div>
-    </Header>
-    
-    <Body>
-      
-        <div class="p-3 flex flex-col max-h-full h-full">
+    </RadzenSidebar>
+    <RadzenBody>
+        <RadzenContentContainer>
             @Body
-        </div>
-    </Body>
-
-</FluentMainLayout>
-
-
-
-
-
-
+        </RadzenContentContainer>
+    </RadzenBody>
+</RadzenLayout>
 
 <div id="blazor-error-ui">
     An unhandled error has occurred.

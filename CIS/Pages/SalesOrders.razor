@@ -1,0 +1,110 @@
+@page "/sales-orders"
+@using CIS.Library.Orders.Models.Import
+
+<h3>Ordre - @_importState</h3>
+
+<RadzenTabs Style="height: 100%" RenderMode="TabRenderMode.Server">
+    <Tabs>
+        <RadzenTabsItem Text="Oversikt">
+            <RadzenDataGrid 
+                TItem="SalesOrderImportDefinition"
+                FilterMode="FilterMode.Advanced"
+                AllowFiltering="true"
+                AllowPaging="true"
+                AllowSorting="true"
+                AllowMultiColumnSorting="true"
+                AllowColumnPicking="true"
+                AllowGrouping="true"
+                PageSize="1000"
+                Style="height: 100%">
+                <Columns>
+                    <RadzenDataGridColumn TItem="SalesOrderImportDefinition" Title="#" Property="@nameof(SalesOrderImportDefinition.Number)" />
+                    <RadzenDataGridColumn TItem="SalesOrderImportDefinition" Title="Referanse" Property="@nameof(SalesOrderImportDefinition.Reference)" />
+                    <RadzenDataGridColumn TItem="SalesOrderImportDefinition" Title="Kunde#" Property="@nameof(SalesOrderImportDefinition.CustomerNumber)" />
+                    <RadzenDataGridColumn TItem="SalesOrderImportDefinition" Title="Kunde" Property="@nameof(SalesOrderImportDefinition.CustomerName)" />
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Import">
+
+            <RadzenSplitter Orientation="Orientation.Vertical" style="height: 100%; border: 1px solid rgba(0,0,0,.08);">
+            <RadzenSplitterPane Min="300px" Size="75%">
+                <RadzenSplitter>
+                    <RadzenSplitterPane Size="50%" Min="30px" Max="70%">
+                        <div class="flex flex-col gap-2 flex-1 h-full bg-white">
+                            <div class="flex gap-2 p-2 bg-white items-center justify-between">
+                                <InputFile 
+                                    OnChange="@ImportExcelFile" 
+                                    accept=".xlsx" 
+                                    multiple="false" />
+                                <RadzenButton 
+                                    ButtonStyle="ButtonStyle.Info" 
+                                    class="mt-2 ml-auto"
+                                    Click="ExecuteImport"
+                                    Text="Kjør import"
+                                    Disabled="_importState != ImportState.ReadingFinished" />
+                            </div>
+                            <RadzenDataGrid 
+                                SelectionMode="DataGridSelectionMode.Multiple"
+                                KeyProperty="@nameof(SalesOrderImportDefinition.Number)" 
+                                Count="_ordersToImport?.Count ?? 0" 
+                                Data="@_ordersToImport"
+                                FilterPopupRenderMode="PopupRenderMode.OnDemand" 
+                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                FilterMode="FilterMode.Advanced"
+                                AllowFiltering="true"
+                                AllowPaging="true"
+                                AllowSorting="true"
+                                AllowMultiColumnSorting="true"
+                                AllowColumnPicking="true"
+                                AllowGrouping="true"
+                                PageSize="1000"
+                                PagerHorizontalAlign="HorizontalAlign.Center" 
+                                TItem="SalesOrderImportDefinition" 
+                                ColumnWidth="100px"
+                                Style="height: 100%">
+                                <Columns>
+                                    <RadzenDataGridColumn 
+                                        TItem="SalesOrderImportDefinition" 
+                                        Property="@nameof(SalesOrderImportDefinition.Number)" 
+                                        Title="#" />
+                                    <RadzenDataGridColumn 
+                                        TItem="SalesOrderImportDefinition" 
+                                        Property="@nameof(SalesOrderImportDefinition.StoreNumber)" 
+                                        Title="Butikk#" />
+                                    <RadzenDataGridColumn 
+                                        TItem="SalesOrderImportDefinition" 
+                                        Property="@nameof(SalesOrderImportDefinition.CustomerNumber)" 
+                                        Title="Kunde#" />
+                                    <RadzenDataGridColumn 
+                                        TItem="SalesOrderImportDefinition" 
+                                        Property="@nameof(SalesOrderImportDefinition.CustomerName)" 
+                                        Title="Kunde" />
+                                </Columns>
+                                <LoadingTemplate>
+                                    <RadzenProgressBarCircular 
+                                        ProgressBarStyle="ProgressBarStyle.Primary" 
+                                        Value="100" 
+                                        ShowValue="false" 
+                                        Mode="ProgressBarMode.Indeterminate" />
+                                </LoadingTemplate>
+                            </RadzenDataGrid>
+                        </div>
+                    </RadzenSplitterPane>
+                    <RadzenSplitterPane Size="25%" Min="300px">
+                        <div class="overflow-auto w-full h-full flex flex-col gap-2 p-4 bg-white">
+                            <h3>Meldinger</h3>
+                            <RadzenTextArea 
+                                Value="@_importMessages" 
+                                ReadOnly="true" 
+                                Style="height: 100%; resize: none;" 
+                                class="w-full h-full" 
+                                aria-label="TextArea" />
+                        </div>
+                    </RadzenSplitterPane>
+                </RadzenSplitter>
+            </RadzenSplitterPane>
+    </RadzenSplitter>
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>

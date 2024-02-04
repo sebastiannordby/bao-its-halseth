@@ -8,16 +8,17 @@ namespace CIS.DataAccess.Stores.Models
 {
     public sealed class StoreDao
     {
+        public Guid Id { get; set; }
         public int Number { get; set; }
         public required string Name { get; set; }
 
-        public int OwnerCustomerNumber { get; set; }
+        public Guid OwnerCustomerId { get; set; }
 
         public string? AddressLine { get; set; }
         public string? AddressPostalCode { get; set; }
         public string? AddressPostalOffice { get; set; }
 
-        public int? RegionId { get; set; }
+        public Guid? RegionId { get; set; }
         public bool IsActive { get; set; } = true;
     }
 }

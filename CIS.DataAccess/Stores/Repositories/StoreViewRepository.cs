@@ -24,25 +24,26 @@ namespace CIS.DataAccess.Stores.Repositories
                 from store in _dbContext.Stores
                     .AsNoTracking()
                 join customer in _dbContext.Customers
-                    on store.OwnerCustomerNumber equals customer.Number
+                    on store.OwnerCustomerId equals customer.Id
                 from customerGroup in _dbContext.CustomerGroups
                     .Where(x =>
-                        customer.CustomerGroupNumber.HasValue &&
-                        customer.CustomerGroupNumber == customer.CustomerGroupNumber)
+                        customer.CustomerGroupId.HasValue &&
+                        customer.CustomerGroupId == customer.CustomerGroupId)
                     .DefaultIfEmpty()
 
-                select new StoreView(
-                    store.Number,
-                    store.Name,
-                    store.IsActive,
-                    customer.Number,
-                    customer.Name,
-                    customer.ContactPersonName,
-                    customer.ContactPersonEmailAddress,
-                    customer.ContactPersonPhoneNumber,
-                    customerGroup != null ? customerGroup.Number : null,
-                    customerGroup != null ? customerGroup.Name : null
-                )
+                select new StoreView
+                {
+                    Number = store.Number,
+                    Name = store.Name,
+                    IsActive = store.IsActive,
+                    CustomerNumber = customer.Number,
+                    CustomerName = customer.Name,
+                    CustomerContactPersonName = customer.ContactPersonName,
+                    CustomerContactPersonEmailAddress = customer.ContactPersonEmailAddress,
+                    CustomerContactPersonPhoneNumber = customer.ContactPersonPhoneNumber,
+                    CustomerCustomerGroupNumber = customerGroup != null ? customerGroup.Number : null,
+                    CustomerGroupName = customerGroup != null ? customerGroup.Name : null
+                }
             );
 
             var result = await storesQuery.ToListAsync();

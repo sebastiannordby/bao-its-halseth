@@ -30,8 +30,8 @@ namespace CIS.DataAccess.Products.Repositories
                     .DefaultIfEmpty()
                 from productGroup in _dbContext.ProductGroups
                     .Where(x =>
-                        product.ProductGroupNumber.HasValue &&
-                        product.ProductGroupNumber == x.Number)
+                        product.ProductGroupId.HasValue &&
+                        product.ProductGroupId == x.Id)
                     .DefaultIfEmpty()
 
                 select new ProductView(

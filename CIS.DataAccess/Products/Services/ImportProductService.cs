@@ -1,6 +1,6 @@
 ﻿using CIS.DataAccess.Products.Models;
 using CIS.Domain.Products.Models.Import;
-using CIS.Library.Services;
+using CIS.Library.Shared.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -61,7 +61,7 @@ namespace CIS.DataAccess.Products.Services
                     Name = definition.Name,
                     AlternateName = definition.AlternateName,
                     ProductPriceId = productPrice.Id,
-                    ProductGroupNumber = productGroup?.Number,
+                    ProductGroupId = productGroup?.Id,
                 };
 
                 await _dbContext.Products.AddAsync(product);
