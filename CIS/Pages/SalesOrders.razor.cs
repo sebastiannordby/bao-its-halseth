@@ -85,13 +85,15 @@ namespace CIS.Pages
                 var reference = ws.Cells[row, 9].Value; // ordreref
                 var isSentToExternal = ws.Cells[row, 10].Value; // ordreref
                 var transferedDateExternal = ws.Cells[row, 11].Value; // ordreref
-                var type = ws.Cells[row, 12].Value; // ordreref
+                var type = ws.Cells[row, 12].Value as string; // ordreref
                 var deliveredDated = ws.Cells[row, 13].Value; // levertDato
                 var costPrice = ws.Cells[row, 14].Value.ToDecimal(); // our_price
                 var purchasePrice = ws.Cells[row, 14].Value.ToDecimal(); // innpris
                 var shopifyOrderRefd = ws.Cells[row, 16].Value; // nettOrdreRef
                 if (!productNumber.HasValue)
                     return;
+
+                var isDeleted = (type ?? "") == "slettet";
 
                 _importMessages += $"\r\nLeser - Ordre #{orderNumber} - Produkt: {productNumber}\r\n";
 
@@ -130,7 +132,7 @@ namespace CIS.Pages
                         DeliveredDate = DateOnly.FromDateTime(DateTime.Now),
                         OrderDate = DateOnly.FromDateTime(DateTime.Now),
                         Reference = reference as string,
-                        IsDeleted = false
+                        IsDeleted = isDeleted
                     };
 
                     order.Lines.Add(orderLine);
