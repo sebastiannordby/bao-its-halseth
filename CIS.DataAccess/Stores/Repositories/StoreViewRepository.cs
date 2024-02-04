@@ -31,18 +31,19 @@ namespace CIS.DataAccess.Stores.Repositories
                         customer.CustomerGroupNumber == customer.CustomerGroupNumber)
                     .DefaultIfEmpty()
 
-                select new StoreView(
-                    store.Number,
-                    store.Name,
-                    store.IsActive,
-                    customer.Number,
-                    customer.Name,
-                    customer.ContactPersonName,
-                    customer.ContactPersonEmailAddress,
-                    customer.ContactPersonPhoneNumber,
-                    customerGroup != null ? customerGroup.Number : null,
-                    customerGroup != null ? customerGroup.Name : null
-                )
+                select new StoreView
+                {
+                    Number = store.Number,
+                    Name = store.Name,
+                    IsActive = store.IsActive,
+                    CustomerNumber = customer.Number,
+                    CustomerName = customer.Name,
+                    CustomerContactPersonName = customer.ContactPersonName,
+                    CustomerContactPersonEmailAddress = customer.ContactPersonEmailAddress,
+                    CustomerContactPersonPhoneNumber = customer.ContactPersonPhoneNumber,
+                    CustomerCustomerGroupNumber = customerGroup != null ? customerGroup.Number : null,
+                    CustomerGroupName = customerGroup != null ? customerGroup.Name : null
+                }
             );
 
             var result = await storesQuery.ToListAsync();

@@ -6,6 +6,7 @@ using OfficeOpenXml;
 using Radzen;
 using Radzen.Blazor;
 using LicenseContext = OfficeOpenXml.LicenseContext;
+using CIS.Extensions;
 
 namespace CIS.Pages
 {
@@ -98,9 +99,9 @@ namespace CIS.Pages
                                     var idInt = Convert.ToInt32(idDec);
 
                                     var parsedQuantityDelivered = Convert.ToDecimal((double)quantityDelivered);
-                                    var parsedPurchasePrice = StringDecimalToDecimal(purchasePrice as string);
+                                    var parsedPurchasePrice = (purchasePrice as string).StringDecimalToDecimal();
                                     var parsedQuantity = Convert.ToDecimal((double)quantity);
-                                    var parsedCostPrice = StringDecimalToDecimal(costPriceStr as string);
+                                    var parsedCostPrice = (costPriceStr as string).StringDecimalToDecimal();
                                     var parsedProductNumber = Convert.ToInt32((double)productNumber);
 
                                     _importMessages += $"\r\nLeser - Ordre #{idInt} - Produkt: {productNumber}\r\n";
@@ -165,16 +166,7 @@ namespace CIS.Pages
             }
         }
 
-        private decimal? StringDecimalToDecimal(string value)
-        {
-            if (value is null)
-                return null;
-
-            if (value == "NULL")
-                return null;
-
-            return Convert.ToDecimal(value);
-        }
+     
 
         private async Task ExecuteImport()
         {

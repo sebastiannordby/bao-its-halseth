@@ -1,50 +1,122 @@
 ﻿@page "/customers"
+@using CIS.Extensions
+@using CIS.Library.Stores.Models
+@using CIS.Services
+@using OfficeOpenXml
 
 
 
-<DataGrid TItem="CustomerView">
+<DataGrid TItem="CustomerView" Items="_preViewCustomers">
     <Toolbar>
-        <RadzenButton Icon="arrowdownload" Click="()=>_importDialogHidden = !_importDialogHidden"/>
+        <InputFile OnChange="@ImportExcelFile"
+                   accept=".xlsx"
+                   multiple="false" />
+        <RadzenButton Icon="download" Click="()=>_importDialogHidden = !_importDialogHidden" />
     </Toolbar>
 
-    <Columns>
+    <DataColumns>
         <RadzenGridColumn Property="@nameof(CustomerView.Number)" Title="#" Sortable="true" />
         <RadzenGridColumn Property="@nameof(CustomerView.Name)" Title="Navn" Sortable="true" />
         <RadzenGridColumn Property="@nameof(CustomerView.ContactPersonName)" Title="Kontakt" Sortable="true" />
         <RadzenGridColumn Property="@nameof(CustomerView.ContactPersonEmailAddress)" Title="Email" Sortable="true" />
         <RadzenGridColumn Property="@nameof(CustomerView.ContactPersonPhoneNumber)" Title="Telefon" Sortable="true" />
-        <RadzenGridColumn Title="Aktiv" Context="data" Sortable="true" >
+        <RadzenGridColumn Title="Aktiv" Context="data" Sortable="true">
             <Template>
-               <RadzenCheckBox Value="@(data.IsActive)" ReadOnly=true />
+                <RadzenCheckBox Value="@(data.IsActive)" ReadOnly=true />
             </Template>
         </RadzenGridColumn>
-    </Columns>
-</DataGrid> 
+    </DataColumns>
+</DataGrid>
 
 
 
 @code {
+    [Inject] NotificationService NotificationService { get; set; }
+    [Inject] ImportService ImportService { get; set; }
 
     private bool _importDialogHidden;
-
+    private string _importMessages;
     private List<CustomerView> _preViewCustomers = new();
-
-
+    private ImportState _importState = ImportState.Input;
     private bool _preViewHidden = true;
 
+    private CustomerView _customerImporting;
 
-
-    private void OnFileUploaded()
+    protected override void OnInitialized()
     {
-        // var path = Path.GetTempPath();
-        // var fileName = args.AllFiles.First().Name;
+        base.OnInitialized();
 
-        // var filePath = $"{path}/{fileName}";
+        ImportService.ImportStateChanged = (state) =>
+        {
+            _importState = state;
+        };
 
-        // // var data = 
+    }
 
 
 
+
+
+    private async Task SetImportState(ImportState importState)
+    {
+        _importState = importState;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task ImportExcelFile(InputFileChangeEventArgs e)
+    {
+
+        var importedCustomers = new List<CustomerView>();
+        var importedStores = new List<StoreView>();
+
+        var file = e.GetMultipleFiles(1).FirstOrDefault();
+
+        int currentRowIndex = 0;
+
+        CustomerView currentCustomer = new();
+        StoreView currentStore = new();
+
+
+
+        await ImportService.StartImportAsync(file, (cellData) =>
+        {
+            var (rowIndex, workSheet) = cellData;
+
+            if (currentRowIndex != rowIndex)
+            {
+                currentCustomer = new();
+                currentStore = new();
+            }
+
+            currentStore.Number = workSheet.Cells[rowIndex, 1].Value.ToInt32();
+            currentStore.Name = (string)workSheet.Cells[rowIndex, 2].Value;
+            currentStore.StreetAddress = (string)workSheet.Cells[rowIndex, 3].Value;
+            currentStore.PostalCode = (string)workSheet.Cells[rowIndex, 4].Value.ToString();
+            currentStore.PostalName = (string)workSheet.Cells[rowIndex, 5].Value;
+
+            currentCustomer.ContactPersonEmailAddress = (string)workSheet.Cells[rowIndex, 6].Value;
+
+            currentStore.Location = (string)workSheet.Cells[rowIndex, 7].Value;
+
+            currentCustomer.ContactPersonPhoneNumber = (string)workSheet.Cells[rowIndex, 10].Value.ToString();
+
+            importedCustomers.Add(currentCustomer);
+            importedStores.Add(currentStore);
+            Console.WriteLine("Created customer");
+        });
+
+        _preViewCustomers = importedCustomers;
+    }
+
+    private decimal? StringDecimalToDecimal(string value)
+    {
+        if (value is null)
+            return null;
+
+        if (value == "NULL")
+            return null;
+
+        return Convert.ToDecimal(value);
     }
 
 }

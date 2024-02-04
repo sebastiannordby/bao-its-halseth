@@ -1,5 +1,6 @@
 using CIS;
 using CIS.DataAccess;
+using CIS.Services;
 using Microsoft.EntityFrameworkCore;
 using Radzen;
 
@@ -20,6 +21,11 @@ builder.Services.AddDataAccess(opt =>
 
 builder.Services.AddRazorComponents();
 builder.Services.AddRadzenComponents();
+
+//client services
+
+builder.Services.AddTransient<ImportService>();
+
 
 var app = builder.Build();
 
