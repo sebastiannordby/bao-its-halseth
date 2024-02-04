@@ -26,7 +26,14 @@ namespace CIS.DataAccess
             var appDbContext = provider
                 .GetRequiredService<CISDbContext>();
 
-            appDbContext.Database.Migrate();
+            try
+            {
+                appDbContext.Database.Migrate();
+            }
+            catch(Exception e)
+            {
+
+            }
         }
     }
 }
