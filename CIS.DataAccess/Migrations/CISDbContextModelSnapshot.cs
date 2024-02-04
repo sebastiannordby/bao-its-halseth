@@ -29,13 +29,16 @@ namespace CIS.DataAccess.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ContactPersonEmailAddress")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ContactPersonName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("ContactPersonPhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<Guid?>("CustomerGroupId")
                         .HasColumnType("uniqueidentifier");
@@ -45,7 +48,8 @@ namespace CIS.DataAccess.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<int>("Number")
                         .HasColumnType("int");
@@ -65,7 +69,8 @@ namespace CIS.DataAccess.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Number")
                         .HasColumnType("int");
@@ -84,9 +89,18 @@ namespace CIS.DataAccess.Migrations
                     b.Property<string>("AlternateName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("EAN")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.Property<int>("Number")
                         .HasColumnType("int");
@@ -96,6 +110,10 @@ namespace CIS.DataAccess.Migrations
 
                     b.Property<Guid?>("ProductPriceId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SuppliersProductNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
@@ -110,7 +128,8 @@ namespace CIS.DataAccess.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Number")
                         .HasColumnType("int");
@@ -152,7 +171,8 @@ namespace CIS.DataAccess.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Number")
                         .HasColumnType("int");
@@ -182,7 +202,8 @@ namespace CIS.DataAccess.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<int>("Number")
                         .HasColumnType("int");

@@ -63,6 +63,16 @@ namespace CIS.Pages
             }
         }
 
+        private async Task ClearImportData()
+        {
+            _customerImportDefinitions = new();
+
+            if (_importDataGrid is not null)
+            {
+                await _importDataGrid.RefreshDataAsync();
+            }
+        }
+
         private async Task ExecuteImport()
         {
             var res = await ImportCustomerService.Import(_customerImportDefinitions);
@@ -73,26 +83,10 @@ namespace CIS.Pages
                     NotificationSeverity.Success, "Importering vellykket");
                 _selectedTabIndex = OVERVIEW_TAB_INDEX;
                 await LoadOverviewData();
+                await ClearImportData();
             }
         }
 
-        /*
-             SELECT
-	           [Butikknr]
-              ,[Butikknavn]
-              ,[Gateadresse]
-              ,[Postnr]
-              ,[Poststed]
-              ,[Epost]
-              ,[RegionNr]
-              ,[RegionNavn]
-              ,[Lokasjon]
-              ,[Aktiv]
-              ,[KredittSperre]
-              ,[kundenr]
-              ,[telefon]
-          FROM [swn_distro].[dbo].[Butikkliste]
-         */
         private async Task ImportExcelFile(InputFileChangeEventArgs e)
         {
             _customerImportDefinitions = new();
@@ -152,17 +146,6 @@ namespace CIS.Pages
 
             await InvokeAsync(StateHasChanged);
             await _importDataGrid.RefreshDataAsync();
-        }
-
-        private decimal? StringDecimalToDecimal(string value)
-        {
-            if (value is null)
-                return null;
-
-            if (value == "NULL")
-                return null;
-
-            return Convert.ToDecimal(value);
         }
     }
 }

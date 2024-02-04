@@ -12,6 +12,9 @@ namespace CIS.DataAccess.Products.Models
         public int Number { get; set; }
         public required string Name { get; set; }
         public string? AlternateName { get; set; }
+        public string? SuppliersProductNumber { get; set; }
+        public required string EAN { get; set; }
+        public bool IsActive { get; set; }
         public Guid? ProductGroupId { get; set; }
         public Guid? ProductPriceId { get; set; }
     }

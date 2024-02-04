@@ -1,5 +1,5 @@
 ﻿using CIS.DataAccess.Products.Models;
-using CIS.Domain.Products.Models.Import;
+using CIS.Library.Products.Import;
 using CIS.Library.Shared.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -60,6 +60,9 @@ namespace CIS.DataAccess.Products.Services
                     Number = definition.Number,
                     Name = definition.Name,
                     AlternateName = definition.AlternateName,
+                    SuppliersProductNumber = definition.SuppliersProductNumber,
+                    EAN = definition.EAN ?? "IKKE DEFINERT",
+                    IsActive = definition.IsActive,
                     ProductPriceId = productPrice.Id,
                     ProductGroupId = productGroup?.Id,
                 };

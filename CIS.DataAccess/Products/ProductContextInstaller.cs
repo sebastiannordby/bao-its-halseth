@@ -1,6 +1,6 @@
 ﻿using CIS.DataAccess.Products.Repositories;
 using CIS.DataAccess.Products.Services;
-using CIS.Domain.Products.Models.Import;
+using CIS.Library.Products.Import;
 using CIS.Library.Products.Repositories;
 using CIS.Library.Shared.Services;
 using Microsoft.Extensions.DependencyInjection;

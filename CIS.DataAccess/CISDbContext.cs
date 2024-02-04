@@ -40,11 +40,19 @@ namespace CIS.DataAccess
             modelBuilder.Entity<ProductDao>(entity =>
             {
                 entity.HasKey(x => x.Id);
+                entity.Property(x => x.Name)
+                    .HasMaxLength(300);
+                entity.Property(x => x.SuppliersProductNumber)
+                    .HasMaxLength(20);
+                entity.Property(x => x.EAN)
+                    .HasMaxLength(30);
             });
 
             modelBuilder.Entity<ProductGroupDao>(entity =>
             {
                 entity.HasKey(x => x.Id);
+                entity.Property(x => x.Name)
+                    .HasMaxLength(100);
             });
 
             modelBuilder.Entity<ProductPriceDao>(entity =>
@@ -58,11 +66,15 @@ namespace CIS.DataAccess
             modelBuilder.Entity<RegionDao>(entity =>
             {
                 entity.HasKey(x => x.Id);
+                entity.Property(x => x.Name)
+                    .HasMaxLength(100);
             });
 
             modelBuilder.Entity<StoreDao>(entity =>
             {
                 entity.HasKey(x => x.Id);
+                entity.Property(x => x.Name)
+                    .HasMaxLength(150);
             });
         }
     }

@@ -4,9 +4,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
-using CIS.Domain.Products.Models.Import;
 using CIS.DataAccess;
 using CIS.Library.Shared.Services;
+using CIS.Library.Products.Import;
 
 namespace CIS.UnitTesting.DataAccess.Products.Services
 {

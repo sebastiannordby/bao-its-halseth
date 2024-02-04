@@ -31,6 +31,14 @@ namespace CIS.DataAccess.Customers
             modelBuilder.Entity<CustomerDao>(entity =>
             {
                 entity.HasKey(x => x.Id);
+                entity.Property(x => x.Name)
+                    .HasMaxLength(150);
+                entity.Property(x => x.ContactPersonName)
+                    .HasMaxLength(150);
+                entity.Property(x => x.ContactPersonEmailAddress)
+                    .HasMaxLength(100);
+                entity.Property(x => x.ContactPersonPhoneNumber)
+                    .HasMaxLength(20);
 
                 entity.HasOne<CustomerGroupDao>()
                   .WithMany()
@@ -40,6 +48,8 @@ namespace CIS.DataAccess.Customers
             modelBuilder.Entity<CustomerGroupDao>(entity =>
             {
                 entity.HasKey(x => x.Id);
+                entity.Property(x => x.Name)
+                    .HasMaxLength(100);
             });
 
             return modelBuilder;

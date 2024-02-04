@@ -17,7 +17,7 @@ namespace CIS.DataAccess.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Number = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -30,7 +30,7 @@ namespace CIS.DataAccess.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Number = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -58,8 +58,11 @@ namespace CIS.DataAccess.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Number = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     AlternateName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SuppliersProductNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    EAN = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     ProductGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ProductPriceId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
@@ -74,7 +77,7 @@ namespace CIS.DataAccess.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Number = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -87,7 +90,7 @@ namespace CIS.DataAccess.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Number = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     OwnerCustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AddressLine = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AddressPostalCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -106,10 +109,10 @@ namespace CIS.DataAccess.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Number = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ContactPersonName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ContactPersonEmailAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ContactPersonPhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    ContactPersonName = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
+                    ContactPersonEmailAddress = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    ContactPersonPhoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     CustomerGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
