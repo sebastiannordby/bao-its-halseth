@@ -26,7 +26,7 @@ namespace CIS.UnitTesting.DataAccess.Services
                 ContactPersonEmailAddress = "post@sebastiannordby.no",
                 ContactPersonName = "Sebastian Nordby",
                 ContactPersonPhoneNumber = "1234567890",
-                CustomerGroupNumber = null,
+                CustomerGroupId = null,
                 IsActive = true
             });
             await _dbContext.SaveChangesAsync();

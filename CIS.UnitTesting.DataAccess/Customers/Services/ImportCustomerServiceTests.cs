@@ -57,7 +57,9 @@ namespace CIS.UnitTesting.DataAccess.Customers.Services
                         Name = "Oslo Lufthavn",
                         AddressLine = "Lørenhagen 1234",
                         AddressPostalCode = "9876",
-                        AddressPostalOffice = "Nordgata"
+                        AddressPostalOffice = "Nordgata",
+                        RegionNumber = null,
+                        RegionName = null
                     }
                 }
             };

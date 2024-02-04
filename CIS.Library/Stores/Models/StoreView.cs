@@ -9,10 +9,10 @@ namespace CIS.Library.Stores.Models
     public class StoreView
     {
         public int Number { get; set; }
-        public string Name { get; set; }
+        public required string Name { get; set; }
         public bool IsActive { get; set; }
         public int CustomerNumber { get; set; }
-        public string CustomerName { get; set; }
+        public required string CustomerName { get; set; }
         public string? CustomerContactPersonName { get; set; }
         public string? CustomerContactPersonEmailAddress { get; set; }
         public string? CustomerContactPersonPhoneNumber { get; set; }

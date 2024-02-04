@@ -24,11 +24,11 @@ namespace CIS.DataAccess.Stores.Repositories
                 from store in _dbContext.Stores
                     .AsNoTracking()
                 join customer in _dbContext.Customers
-                    on store.OwnerCustomerNumber equals customer.Number
+                    on store.OwnerCustomerId equals customer.Id
                 from customerGroup in _dbContext.CustomerGroups
                     .Where(x =>
-                        customer.CustomerGroupNumber.HasValue &&
-                        customer.CustomerGroupNumber == customer.CustomerGroupNumber)
+                        customer.CustomerGroupId.HasValue &&
+                        customer.CustomerGroupId == customer.CustomerGroupId)
                     .DefaultIfEmpty()
 
                 select new StoreView

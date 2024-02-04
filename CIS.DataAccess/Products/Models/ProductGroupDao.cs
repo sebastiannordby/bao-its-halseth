@@ -8,6 +8,7 @@ namespace CIS.DataAccess.Products.Models
 {
     public sealed class ProductGroupDao
     {
+        public Guid Id { get; set; }
         public int Number { get; set; }
         public required string Name { get; set; }
     }
