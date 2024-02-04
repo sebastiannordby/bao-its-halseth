@@ -37,3 +37,21 @@ https://media.discordapp.net/attachments/1192916915618840729/1201457244655583262
 Jeg vil også at landingssiden/index/home skal være et dashboard:
 https://images.klipfolio.com/website/public/4d789bf2-a6d2-45ea-87e7-38e131f9d354/sales%20dashboard.png
 
+## Hvordan importere eksisterende data?
+Du må ha lagt inn connectionstring til en lokal mssqlserver som vist øverst.
+Du trenger ikke å opprette en database siden dette skjer automatisk.
+
+
+Under Onedriven "BAO - Its Halseth" finnes det en mappe som heter utvikling,
+under der ligger følgende filer:
+- "Vare_Import_Definisjon.xlsx"
+- "Kunde_Import_Definisjon.xlsx"
+
+Vare-fil importeres i "Varer"-bildet også videre.
+
+Trykk på fanen import og følg stegene der.
+
+Må importeres i følgende rekkefølge:
+- Varer
+- Kunder
+- Ordre - Ikke ferdig enda
