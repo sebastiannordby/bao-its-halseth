@@ -85,6 +85,27 @@ namespace CIS.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SalesOrders",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Number = table.Column<int>(type: "int", nullable: false),
+                    AlternateNumber = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    OrderDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    Reference = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    DeliveredDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    StoreNumber = table.Column<int>(type: "int", maxLength: 150, nullable: false),
+                    StoreName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CustomerNumber = table.Column<int>(type: "int", nullable: false),
+                    CustomerName = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SalesOrders", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Stores",
                 columns: table => new
                 {
@@ -126,10 +147,42 @@ namespace CIS.DataAccess.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "SalesOrderLines",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SalesOrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductNumber = table.Column<int>(type: "int", nullable: false),
+                    ProductName = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
+                    EAN = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Quantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    QuantityDelivered = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CostPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    PurchasePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    StorePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    CurrencyCode = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SalesOrderLines", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SalesOrderLines_SalesOrders_SalesOrderId",
+                        column: x => x.SalesOrderId,
+                        principalTable: "SalesOrders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Customers_CustomerGroupId",
                 table: "Customers",
                 column: "CustomerGroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SalesOrderLines_SalesOrderId",
+                table: "SalesOrderLines",
+                column: "SalesOrderId");
         }
 
         /// <inheritdoc />
@@ -151,10 +204,16 @@ namespace CIS.DataAccess.Migrations
                 name: "Regions");
 
             migrationBuilder.DropTable(
+                name: "SalesOrderLines");
+
+            migrationBuilder.DropTable(
                 name: "Stores");
 
             migrationBuilder.DropTable(
                 name: "CustomerGroups");
+
+            migrationBuilder.DropTable(
+                name: "SalesOrders");
         }
     }
 }

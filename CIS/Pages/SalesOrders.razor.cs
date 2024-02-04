@@ -7,6 +7,10 @@ using Radzen;
 using Radzen.Blazor;
 using LicenseContext = OfficeOpenXml.LicenseContext;
 using CIS.Extensions;
+using CIS.Services;
+using OfficeOpenXml.Style;
+using CIS.Library.Orders.Repositories;
+using CIS.Library.Orders.Models;
 
 namespace CIS.Pages
 {
@@ -16,164 +20,138 @@ namespace CIS.Pages
         public IExecuteImportService<SalesOrderImportDefinition> ImportOrderService { get; set; }
 
         [Inject]
-        public  NotificationService NotificationService { get; set; }
+        public NotificationService NotificationService { get; set; }
 
-        private List<SalesOrderImportDefinition> _ordersToImport;
-        private IQueryable<SalesOrderImportDefinition> _ordersToImportQueryable => _ordersToImport?.AsQueryable();
+        [Inject]
+        public ISalesOrderViewRepository SalesOrderViewRepository { get; set; }
+
+        [Inject]
+        public ImportService ImportService { get; set; }
+
+        private List<SalesOrderImportDefinition> _orderImportDefinitions;
+        private RadzenDataGrid<SalesOrderImportDefinition> _importDataGrid;
+
+        private IReadOnlyCollection<SalesOrderView> _salesOrders;
+        private RadzenDataGrid<SalesOrderView> _overviewGrid;
+
         private string _importMessages;
 
         private int ProgressPercent { get; set; }
         private bool _importDialogHidden = true;
-        private ImportState _importState;
 
         private RadzenDialog? _importDialog;
 
-        private enum ImportState
+        public const int OVERVIEW_TAB_INDEX = 0;
+        public const int IMPORT_TAB_INDEX = 1;
+
+        private int _selectedTabIndex = OVERVIEW_TAB_INDEX;
+
+        private async Task LoadOverviewData()
         {
-            Input = 0,
-            Reading = 1,
-            ReadingFinished = 2,
-            Importing = 3
+            _salesOrders = await SalesOrderViewRepository.List(1000, 0);
+
+            if(_overviewGrid is not null)
+            {
+                await _overviewGrid.RefreshDataAsync();
+            }
         }
 
-        private async Task SetImportState(ImportState importState)
+        private async Task ClearImportData()
         {
-            _importState = importState;
-            await InvokeAsync(StateHasChanged);
+            _orderImportDefinitions = new();
+
+            if (_importDataGrid is not null)
+            {
+                await _importDataGrid.RefreshDataAsync();
+            }
         }
 
         public async Task ImportExcelFile(InputFileChangeEventArgs e)
         {
-            await SetImportState(ImportState.Reading);
-            try
+            _orderImportDefinitions = new();
+
+            await ImportService.StartImportAsync(
+                e.GetMultipleFiles().First(), (cellData) =>
             {
-                foreach (var file in e.GetMultipleFiles(1))
+                var (row, ws) = cellData;
+                var orderNumber = ws.Cells[row, 1].Value.ToInt32(); // ID
+                var orderDate = ws.Cells[row, 2].Value?.ToString(); // dato
+                var storeNumber = ws.Cells[row, 3].Value; // butikknr
+                var productNumber = ws.Cells[row, 4].Value.ToInt32(); // vareID
+                var suppliersProductNumber = ws.Cells[row, 5].Value; // varenr_lev
+                var ean = ws.Cells[row, 6].Value; // ean
+                var quantity = ws.Cells[row, 7].Value.ToDecimal(); // antall
+                var quantityDelivered = ws.Cells[row, 8].Value.ToDecimal(); // antallLevert
+                var reference = ws.Cells[row, 9].Value; // ordreref
+                var isSentToExternal = ws.Cells[row, 10].Value; // ordreref
+                var transferedDateExternal = ws.Cells[row, 11].Value; // ordreref
+                var type = ws.Cells[row, 12].Value; // ordreref
+                var deliveredDated = ws.Cells[row, 13].Value; // levertDato
+                var costPrice = ws.Cells[row, 14].Value.ToDecimal(); // our_price
+                var purchasePrice = ws.Cells[row, 14].Value.ToDecimal(); // innpris
+                var shopifyOrderRefd = ws.Cells[row, 16].Value; // nettOrdreRef
+                if (!productNumber.HasValue)
+                    return;
+
+                _importMessages += $"\r\nLeser - Ordre #{orderNumber} - Produkt: {productNumber}\r\n";
+
+                var orderLine = new SalesOrderImportDefinition.Line()
                 {
-                    var orders = new List<SalesOrderImportDefinition>();
-                    _importMessages = string.Empty;
+                    CostPrice = costPrice,
+                    ProductNumber = productNumber.Value,
+                    ProductName = null,
+                    EAN = ean as string,
+                    Quantity = quantity ?? 0,
+                    PurchasePrice = purchasePrice,
+                    QuantityDelivered = quantityDelivered ?? 0,
+                    StorePrice = null,
+                    CurrencyCode = "NOK"
+                };
 
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-                        // copy data from file to memory stream
-                        await file.OpenReadStream(20 * 500 * 1024).CopyToAsync(ms);
-                        // positions the cursor at the beginning of the memory stream
-                        ms.Position = 0;
-
-                        // create ExcelPackage from memory stream
-                        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-
-                        using (ExcelPackage package = new ExcelPackage(ms))
-                        {
-                            ExcelWorksheet ws = package.Workbook.Worksheets.FirstOrDefault();
-                            int colCount = ws.Dimension.End.Column;
-                            int rowCount = ws.Dimension.End.Row;
-                            int lastMessagePercentage = 0;
-
-                            for (int row = 2; row < rowCount; row++)
-                            {
-                                var percentage = Convert.ToInt32(((decimal)row / rowCount) * 100);
-
-                                if (percentage % 5 == 0 && lastMessagePercentage != percentage)
-                                {
-                                    NotificationService.Notify(detail: $"Leser fil {percentage}%..",duration: 2000);
-                                    lastMessagePercentage = percentage;
-                                }
-
-                                try
-                                {
-                                    var id = ws.Cells[row, 1].Value; // ID
-                                    var dated = ws.Cells[row, 2].Value; // dato
-                                    var storeNumber = ws.Cells[row, 3].Value; // butikknr
-                                    var productNumber = ws.Cells[row, 4].Value; // vareID
-                                    var suppliersProductNumberd = ws.Cells[row, 5].Value; // varenr_lev
-                                    var ean = ws.Cells[row, 6].Value; // ean
-                                    var quantity = ws.Cells[row, 7].Value; // antall
-                                    var quantityDelivered = ws.Cells[row, 8].Value; // antallLevert
-                                    var reference = ws.Cells[row, 9].Value; // ordreref
-                                    var deliveredDated = ws.Cells[row, 10].Value; // levertDato
-                                    var costPriceStr = ws.Cells[row, 11].Value; // our_price
-                                    var purchasePrice = ws.Cells[row, 12].Value as string; // innpris
-                                    var shopifyOrderRefd = ws.Cells[row, 13].Value; // nettOrdreRef
-
-                                    var idDec = (double)id;
-                                    var idInt = Convert.ToInt32(idDec);
-
-                                    var parsedQuantityDelivered = Convert.ToDecimal((double)quantityDelivered);
-                                    var parsedPurchasePrice = purchasePrice.StringDecimalToDecimal();
-                                    var parsedQuantity = Convert.ToDecimal((double)quantity);
-                                    var parsedCostPrice = (costPriceStr as string).StringDecimalToDecimal();
-                                    var parsedProductNumber = Convert.ToInt32((double)productNumber);
-
-                                    _importMessages += $"\r\nLeser - Ordre #{idInt} - Produkt: {productNumber}\r\n";
-
-                                    var orderLine = new SalesOrderImportDefinition.Line()
-                                    {
-                                        CostPrice = parsedCostPrice,
-                                        ProductNumber = parsedProductNumber,
-                                        ProductName = null,
-                                        EAN = ean as string,
-                                        Quantity = parsedQuantity,
-                                        PurchasePrice = parsedPurchasePrice,
-                                        QuantityDelivered = parsedQuantityDelivered,
-                                        StorePrice = null,
-                                        CurrencyCode = "NOK"
-                                    };
-
-                                    var existingOrder = orders
-                                        .FirstOrDefault(x => x.Number == idInt);
-                                    if (existingOrder is not null)
-                                    {
-                                        existingOrder.Lines.Add(orderLine);
-                                    }
-                                    else
-                                    {
-                                        var parsedStoreNumber =
-                                            Convert.ToInt32((double)storeNumber);
-
-                                        var order = new SalesOrderImportDefinition()
-                                        {
-                                            Number = idInt,
-                                            AlternateNumber = shopifyOrderRefd as string,
-                                            StoreNumber = parsedStoreNumber,
-                                            StoreName = "Johansen",
-                                            CustomerNumber = parsedStoreNumber,
-                                            CustomerName = null,
-                                            DeliveredDate = DateOnly.FromDateTime(DateTime.Now),
-                                            OrderDate = DateOnly.FromDateTime(DateTime.Now),
-                                            Reference = reference as string,
-                                            IsDeleted = false
-                                        };
-
-                                        order.Lines.Add(orderLine);
-
-                                        orders.Add(order);
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    _importMessages += $"Error: {ex.Message}";
-                                }
-                            }
-
-                            _ordersToImport = orders;
-                        }
-                    }
+                var existingOrder = _orderImportDefinitions
+                    .FirstOrDefault(x => x.Number == orderNumber);
+                if (existingOrder is not null)
+                {
+                    existingOrder.Lines.Add(orderLine);
                 }
-            }
-            finally
-            {
-                await SetImportState(ImportState.ReadingFinished);
-            }
-        }
+                else
+                {
+                    var parsedStoreNumber =
+                        Convert.ToInt32((double)storeNumber);
 
-     
+                    var order = new SalesOrderImportDefinition()
+                    {
+                        Number = orderNumber.Value,
+                        AlternateNumber = shopifyOrderRefd as string,
+                        StoreNumber = parsedStoreNumber,
+                        StoreName = "Johansen",
+                        CustomerNumber = parsedStoreNumber,
+                        CustomerName = null,
+                        DeliveredDate = DateOnly.FromDateTime(DateTime.Now),
+                        OrderDate = DateOnly.FromDateTime(DateTime.Now),
+                        Reference = reference as string,
+                        IsDeleted = false
+                    };
+
+                    order.Lines.Add(orderLine);
+
+                    _orderImportDefinitions.Add(order);
+                }
+            });
+
+            await _importDataGrid.RefreshDataAsync();
+        }
 
         private async Task ExecuteImport()
         {
-            var result = await ImportOrderService.Import(_ordersToImport);
+            var result = await ImportOrderService.Import(_orderImportDefinitions);
             if (result)
             {
-                NotificationService.Notify(NotificationSeverity.Success, "Importering velykket");
+                NotificationService.Notify(
+                    NotificationSeverity.Success, "Importering vellykket");
+                _selectedTabIndex = OVERVIEW_TAB_INDEX;
+                await LoadOverviewData();
+                await ClearImportData();
             }
             else
             {

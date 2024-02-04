@@ -80,6 +80,102 @@ namespace CIS.DataAccess.Migrations
                     b.ToTable("CustomerGroups");
                 });
 
+            modelBuilder.Entity("CIS.DataAccess.Orders.Models.SalesOrderDao", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AlternateNumber")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("CustomerName")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<int>("CustomerNumber")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly>("DeliveredDate")
+                        .HasColumnType("date");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly>("OrderDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Reference")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("StoreName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StoreNumber")
+                        .HasMaxLength(150)
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SalesOrders");
+                });
+
+            modelBuilder.Entity("CIS.DataAccess.Orders.Models.SalesOrderLineDao", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("CostPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("CurrencyCode")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
+                    b.Property<string>("EAN")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<int>("ProductNumber")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("PurchasePrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("QuantityDelivered")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("SalesOrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("StorePrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SalesOrderId");
+
+                    b.ToTable("SalesOrderLines");
+                });
+
             modelBuilder.Entity("CIS.DataAccess.Products.Models.ProductDao", b =>
                 {
                     b.Property<Guid>("Id")
@@ -224,6 +320,15 @@ namespace CIS.DataAccess.Migrations
                     b.HasOne("CIS.DataAccess.Customers.Models.CustomerGroupDao", null)
                         .WithMany()
                         .HasForeignKey("CustomerGroupId");
+                });
+
+            modelBuilder.Entity("CIS.DataAccess.Orders.Models.SalesOrderLineDao", b =>
+                {
+                    b.HasOne("CIS.DataAccess.Orders.Models.SalesOrderDao", null)
+                        .WithMany()
+                        .HasForeignKey("SalesOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

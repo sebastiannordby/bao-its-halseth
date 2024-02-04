@@ -1,7 +1,12 @@
 ﻿using CIS.DataAccess.Customers;
 using CIS.DataAccess.Customers.Models;
+using CIS.DataAccess.Orders;
+using CIS.DataAccess.Orders.Models;
+using CIS.DataAccess.Products;
 using CIS.DataAccess.Products.Models;
+using CIS.DataAccess.Stores;
 using CIS.DataAccess.Stores.Models;
+using CIS.Domain.Orders.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -23,6 +28,9 @@ namespace CIS.DataAccess
         public required DbSet<StoreDao> Stores { get; set; }
         public required DbSet<RegionDao> Regions { get; set; }
 
+        public required DbSet<SalesOrderDao> SalesOrders { get; set; }
+        public required DbSet<SalesOrderLineDao> SalesOrderLines { get; set; }
+
         public CISDbContext() : base()
         {
         
@@ -36,46 +44,9 @@ namespace CIS.DataAccess
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.SetupCustomerModels();
-
-            modelBuilder.Entity<ProductDao>(entity =>
-            {
-                entity.HasKey(x => x.Id);
-                entity.Property(x => x.Name)
-                    .HasMaxLength(300);
-                entity.Property(x => x.SuppliersProductNumber)
-                    .HasMaxLength(20);
-                entity.Property(x => x.EAN)
-                    .HasMaxLength(30);
-            });
-
-            modelBuilder.Entity<ProductGroupDao>(entity =>
-            {
-                entity.HasKey(x => x.Id);
-                entity.Property(x => x.Name)
-                    .HasMaxLength(100);
-            });
-
-            modelBuilder.Entity<ProductPriceDao>(entity =>
-            {
-                entity.HasKey(x => x.Id);
-                entity.Property(x => x.PurchasePrice).HasColumnType("decimal(18, 5)");
-                entity.Property(x => x.CostPrice).HasColumnType("decimal(18, 5)");
-                entity.Property(x => x.StorePrice).HasColumnType("decimal(18, 5)");
-            });
-
-            modelBuilder.Entity<RegionDao>(entity =>
-            {
-                entity.HasKey(x => x.Id);
-                entity.Property(x => x.Name)
-                    .HasMaxLength(100);
-            });
-
-            modelBuilder.Entity<StoreDao>(entity =>
-            {
-                entity.HasKey(x => x.Id);
-                entity.Property(x => x.Name)
-                    .HasMaxLength(150);
-            });
+            modelBuilder.SetupOrderModels();
+            modelBuilder.SetupProductModels();
+            modelBuilder.SetupStoreModels();
         }
     }
 }

@@ -1,13 +1,16 @@
 @page "/sales-orders"
+@using CIS.Library.Orders.Models
 @using CIS.Library.Orders.Models.Import
 
-<h3>Ordre - @_importState</h3>
+<h3>Ordre</h3>
 
 <RadzenTabs Style="height: 100%" RenderMode="TabRenderMode.Server">
     <Tabs>
         <RadzenTabsItem Text="Oversikt">
             <RadzenDataGrid 
-                TItem="SalesOrderImportDefinition"
+                @ref="_overviewGrid"
+                TItem="SalesOrderView"
+                Data="_salesOrders"
                 FilterMode="FilterMode.Advanced"
                 AllowFiltering="true"
                 AllowPaging="true"
@@ -18,10 +21,10 @@
                 PageSize="1000"
                 Style="height: 100%">
                 <Columns>
-                    <RadzenDataGridColumn TItem="SalesOrderImportDefinition" Title="#" Property="@nameof(SalesOrderImportDefinition.Number)" />
-                    <RadzenDataGridColumn TItem="SalesOrderImportDefinition" Title="Referanse" Property="@nameof(SalesOrderImportDefinition.Reference)" />
-                    <RadzenDataGridColumn TItem="SalesOrderImportDefinition" Title="Kunde#" Property="@nameof(SalesOrderImportDefinition.CustomerNumber)" />
-                    <RadzenDataGridColumn TItem="SalesOrderImportDefinition" Title="Kunde" Property="@nameof(SalesOrderImportDefinition.CustomerName)" />
+                    <RadzenDataGridColumn TItem="SalesOrderView" Title="#" Property="@nameof(SalesOrderView.Number)" />
+                    <RadzenDataGridColumn TItem="SalesOrderView" Title="Referanse" Property="@nameof(SalesOrderView.Reference)" />
+                    <RadzenDataGridColumn TItem="SalesOrderView" Title="Kunde#" Property="@nameof(SalesOrderView.CustomerNumber)" />
+                    <RadzenDataGridColumn TItem="SalesOrderView" Title="Kunde" Property="@nameof(SalesOrderView.CustomerName)" />
                 </Columns>
             </RadzenDataGrid>
         </RadzenTabsItem>
@@ -41,14 +44,14 @@
                                     ButtonStyle="ButtonStyle.Info" 
                                     class="mt-2 ml-auto"
                                     Click="ExecuteImport"
-                                    Text="Kjør import"
-                                    Disabled="_importState != ImportState.ReadingFinished" />
+                                    Text="Kjør import" />
                             </div>
                             <RadzenDataGrid 
+                                @ref="_importDataGrid"
                                 SelectionMode="DataGridSelectionMode.Multiple"
                                 KeyProperty="@nameof(SalesOrderImportDefinition.Number)" 
-                                Count="_ordersToImport?.Count ?? 0" 
-                                Data="@_ordersToImport"
+                                Count="_orderImportDefinitions?.Count ?? 0" 
+                                Data="@_orderImportDefinitions"
                                 FilterPopupRenderMode="PopupRenderMode.OnDemand" 
                                 FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                                 FilterMode="FilterMode.Advanced"
