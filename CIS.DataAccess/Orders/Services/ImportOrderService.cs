@@ -1,6 +1,7 @@
 ﻿using CIS.DataAccess.Orders.Models;
 using CIS.Library.Orders.Models.Import;
 using CIS.Library.Shared.Services;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,15 @@ namespace CIS.DataAccess.Orders.Services
                     IsDeleted = orderDefinition.IsDeleted
                 };
 
+                if(string.IsNullOrWhiteSpace(orderDao.StoreName))
+                {
+                    orderDao.StoreName = await _dbContext.Products
+                        .Where(x =>
+                            x.Number == orderDao.StoreNumber)
+                        .Select(x => x.Name)
+                        .FirstOrDefaultAsync() ?? string.Empty;
+                }
+
                 await _dbContext.AddAsync(orderDao);
 
                 foreach(var lineDefinition in orderDefinition.Lines)
@@ -53,6 +63,16 @@ namespace CIS.DataAccess.Orders.Services
                         StorePrice = lineDefinition.StorePrice,
                         CurrencyCode = "NOK"
                     };
+
+                    if(string.IsNullOrWhiteSpace(orderLineDao.ProductName)) 
+                    {
+                        orderLineDao.ProductName = await _dbContext.Products
+                            .Where(x =>
+                                x.Number == orderLineDao.ProductNumber ||
+                                x.EAN == orderLineDao.EAN)
+                            .Select(x => x.Name)
+                            .FirstOrDefaultAsync() ?? string.Empty;
+                    }
 
                     await _dbContext.SalesOrderLines.AddAsync(orderLineDao);
                 }

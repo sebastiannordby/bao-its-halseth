@@ -36,6 +36,11 @@ namespace CIS.Pages
         private List<ProductImportDefinition> _productImportDefinitions;
         private RadzenDataGrid<ProductImportDefinition> _importDataGrid;
 
+        protected override async Task OnInitializedAsync()
+        {
+            await LoadOverviewData();
+        }
+
         private async Task LoadOverviewData()
         {
             _products = await ProductViewRepository.List();

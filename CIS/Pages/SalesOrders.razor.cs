@@ -46,6 +46,11 @@ namespace CIS.Pages
 
         private int _selectedTabIndex = OVERVIEW_TAB_INDEX;
 
+        protected override async Task OnInitializedAsync()
+        {
+            await LoadOverviewData();
+        }
+
         private async Task LoadOverviewData()
         {
             _salesOrders = await SalesOrderViewRepository.List(1000, 0);
@@ -79,17 +84,17 @@ namespace CIS.Pages
                 var storeNumber = ws.Cells[row, 3].Value; // butikknr
                 var productNumber = ws.Cells[row, 4].Value.ToInt32(); // vareID
                 var suppliersProductNumber = ws.Cells[row, 5].Value; // varenr_lev
-                var ean = ws.Cells[row, 6].Value; // ean
+                var ean = ws.Cells[row, 6].Value.AsExcelString(); // ean
                 var quantity = ws.Cells[row, 7].Value.ToDecimal(); // antall
                 var quantityDelivered = ws.Cells[row, 8].Value.ToDecimal(); // antallLevert
                 var reference = ws.Cells[row, 9].Value; // ordreref
                 var isSentToExternal = ws.Cells[row, 10].Value; // ordreref
                 var transferedDateExternal = ws.Cells[row, 11].Value; // ordreref
-                var type = ws.Cells[row, 12].Value as string; // ordreref
+                var type = ws.Cells[row, 12].Value.AsExcelString(); // ordreref
                 var deliveredDated = ws.Cells[row, 13].Value; // levertDato
                 var costPrice = ws.Cells[row, 14].Value.ToDecimal(); // our_price
                 var purchasePrice = ws.Cells[row, 14].Value.ToDecimal(); // innpris
-                var shopifyOrderRefd = ws.Cells[row, 16].Value; // nettOrdreRef
+                var shopifyOrderRefd = ws.Cells[row, 16].Value.AsExcelString(); // nettOrdreRef
                 if (!productNumber.HasValue)
                     return;
 
@@ -124,9 +129,9 @@ namespace CIS.Pages
                     var order = new SalesOrderImportDefinition()
                     {
                         Number = orderNumber.Value,
-                        AlternateNumber = shopifyOrderRefd as string,
+                        AlternateNumber = shopifyOrderRefd,
                         StoreNumber = parsedStoreNumber,
-                        StoreName = "Johansen",
+                        StoreName = null,
                         CustomerNumber = parsedStoreNumber,
                         CustomerName = null,
                         DeliveredDate = DateOnly.FromDateTime(DateTime.Now),

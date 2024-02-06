@@ -37,8 +37,16 @@
             return Convert.ToDecimal(obj);
         }
 
-        public static string ToString(this object obj)
+        public static string AsExcelString(this object obj)
         {
+            if(obj is string str)
+            {
+                if(str == "" || str == "NULL")
+                {
+                    return null;
+                }
+            }
+
             return Convert.ToString(obj);
         }
     }
