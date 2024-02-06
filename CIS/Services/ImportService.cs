@@ -74,6 +74,24 @@ namespace CIS.Services
             }
         }
 
+        public async Task UploadFileAsync(IBrowserFile file)
+        {
+            try
+            {
+                var filePath = Path.Combine("wwwroot", "uploads", file.Name);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.OpenReadStream().CopyToAsync(stream);
+                }
+
+                // BackgroundTaskService.Enqueue(() => ProcessFileAsync(filePath));
+                _notificationService.Notify(NotificationSeverity.Success, detail: "Hei");
+            }
+            catch (Exception ex)
+            {
+                _notificationService.Notify(NotificationSeverity.Error, detail: ex.Message);
+            }
+        }
     }
 
     public enum ImportState

@@ -3,6 +3,9 @@
 ################################################################################
 
 /CIS/.vs/CIS
+/.idea
+/CIS/.idea
+
 /CIS/obj/Debug/net8.0
 /CIS/obj
 /CIS.Domain/obj

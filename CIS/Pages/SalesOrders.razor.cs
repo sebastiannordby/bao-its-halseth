@@ -75,6 +75,8 @@ namespace CIS.Pages
         {
             _orderImportDefinitions = new();
 
+            await ImportService.UploadFileAsync(e.GetMultipleFiles().First());
+
             await ImportService.StartImportAsync(
                 e.GetMultipleFiles().First(), (cellData) =>
             {

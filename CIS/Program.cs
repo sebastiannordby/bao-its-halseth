@@ -7,8 +7,9 @@ using Radzen;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorComponents()
-.AddInteractiveServerComponents();
+builder.Services
+    .AddRazorComponents()
+    .AddInteractiveServerComponents();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 if (string.IsNullOrWhiteSpace(connectionString))
@@ -19,13 +20,15 @@ builder.Services.AddDataAccess(opt =>
     opt.UseSqlServer(connectionString);
 });
 
-builder.Services.AddRazorComponents();
-builder.Services.AddRadzenComponents();
+builder.Services
+    .AddRazorComponents();
+builder.Services
+    .AddRadzenComponents();
 
-//client services
-
-builder.Services.AddTransient<ImportService>();
-
+builder.Services
+    .AddTransient<ImportService>();
+builder.Services
+    .AddHostedService<FileProcessingBackgroundService>();
 
 var app = builder.Build();
 
@@ -47,5 +50,3 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
 app.Run();
-
-
