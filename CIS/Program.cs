@@ -1,6 +1,8 @@
 using CIS;
 using CIS.DataAccess;
+using CIS.Pages;
 using CIS.Services;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Radzen;
 
@@ -35,9 +37,15 @@ builder.Services
     .AddRadzenComponents();
 
 builder.Services
+    .AddSignalR();
+builder.Services
+    .AddSingleton<ImportLegacyDataHub>();
+builder.Services
+    .AddSingleton<ImportLegacyDataBackgroundService>();
+builder.Services
     .AddTransient<ImportService>();
 builder.Services
-    .AddHostedService<FileProcessingBackgroundService>();
+    .AddHostedService<ImportLegacyDataBackgroundService>();
 
 var app = builder.Build();
 
@@ -53,7 +61,12 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseRouting();
 app.UseAntiforgery();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<ImportLegacyDataHub>("/import-legacy-hub");
+});
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();

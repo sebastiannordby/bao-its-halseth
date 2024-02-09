@@ -11,6 +11,7 @@
     <PackageReference Include="EPPlus" Version="7.0.8" />
     <PackageReference Include="ExcelDataReader" Version="3.6.0" />
     <PackageReference Include="Radzen.Blazor" Version="4.24.4" />
+	<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.0" />	  
   </ItemGroup>
 
   <ItemGroup>
