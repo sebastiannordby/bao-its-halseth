@@ -4,10 +4,15 @@ For å kjøre applikasjonen må følgende inn:
 	Legg inn user secrets:
 	```
 	{
-	  "ConnectionStrings:DefaultConnection": "Server=DITTPCNAVN;Database=CIS;User Id=sa;Password=secretPassword123;MultipleActiveResultSets=True;TrustServerCertificate=True;Connection Timeout=120"
+	  "ConnectionStrings": {
+		"DefaultConnection": "Server=DITTPCNAVN;Database=CIS;User Id=sa;Password=adminPassord123;MultipleActiveResultSets=True;TrustServerCertificate=True;Connection Timeout=120",
+		"LegacyConnection": "Data Source=DITTPCNAVN;Database=swn_distro;User Id=sa;Password=adminPassord123;Integrated Security=True;Encrypt=False"
+	  }
 	}
+
 	```
 
+	Importer database backup fra onedrive - Legacy Databasen.
 	Lag en database bruker med brukernavn=sa og passord=secretPassword123 eller bytt om ovenfor.
 
 

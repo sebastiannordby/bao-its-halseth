@@ -11,14 +11,23 @@ builder.Services
     .AddRazorComponents()
     .AddInteractiveServerComponents();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration
+    .GetConnectionString("DefaultConnection");
 if (string.IsNullOrWhiteSpace(connectionString))
-    throw new ArgumentException("ConnectionString must be configured in user secrets or appsettings.json.");
+    throw new ArgumentException("ConnectionStrings:DefaultConnection must be configured in user secrets or appsettings.json.");
+
+var legacyConnectionString = builder.Configuration
+    .GetConnectionString("LegacyConnection");
+if (string.IsNullOrWhiteSpace(legacyConnectionString))
+    throw new ArgumentException("ConnectionStrings:LegacyConnection must be configured in user secrets or appsettings.json.");
 
 builder.Services.AddDataAccess(opt =>
 {
     opt.UseSqlServer(connectionString);
 });
+
+builder.Services
+    .AddLegacyDatabase(legacyConnectionString);
 
 builder.Services
     .AddRazorComponents();

@@ -1,0 +1,297 @@
+﻿{
+   "CodeGenerationMode": 4,
+   "ContextClassName": "SWNDistro",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Legacy",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "CIS.DataAccess",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[dbo].[bestillingsforslag]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Butikk_temp]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Butikkliste]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Konsept]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[KonseptAntall]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[KonseptAntall_temp]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Kundenr]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[kundenrdato]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Lager]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Ordre]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ordreFraNett]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Pakkseddel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Reklamasjon]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Salg]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[swsg_tooltips]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tbl_check_automate]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tbl_login_log]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tbl_postnr]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tbl_varegr1]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tbl_varegr2]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[temp_bestilling]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[temp_import_1]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Varegruppe]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Vareinfo]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Vareinfo_backup]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Vareinfo_Temp]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Vareinfo_temp2]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[varetelling]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[beregnetLager]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[beregnlager]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[FilExport_Distro_2020_EnkeltOrdre]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[FilExport_Distro_2020]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[hentButikkOrdre]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[hentVaretellingsDiffer]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[ImportLager]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[ImportPakkseddel]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[ImportSalgstall]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[lagerberegning]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[Lagerstatus]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[leggtilnyevarer]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[LeggtilNyOrdre]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[leggtilNyttKundenr]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[LesInnOrdrefilerFraButikk]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[oppdaterLagerdata]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[oppdaterLiggendeOrdre]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[ordreFordelingÅpningsordre]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[ordreFraNettButikk]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[ordreFraNettRC_NY]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[ordreFraNettRC]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[proc_login_log]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[proc_restordre_linje]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[proc_restordre]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[proc_vareinfo]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[rc_salgstall]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[ReturImportFiler_VTFILER_RC]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[Salgsprognose]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[salgstall]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[SendFakturaFil_2020]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[swsg_regnskap_trigger_flytting]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[Vareinfo_FasteData]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[vareinfo_update]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[Vareinfo_Vedlikehold]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[varetellingImportFiler_VTFILER_RC]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[varetellingImportFiler]",
+         "ObjectType": 1
+      }
+   ],
+   "UiHint": "sebnor.swn_distro.dbo",
+   "UncountableWords": null,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDateOnlyTimeOnly": true,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false
+}

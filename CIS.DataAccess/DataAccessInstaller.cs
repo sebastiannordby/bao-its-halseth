@@ -1,5 +1,6 @@
 ﻿using CIS.DataAccess.Customers;
 using CIS.DataAccess.Customers.Repositories;
+using CIS.DataAccess.Legacy;
 using CIS.DataAccess.Orders;
 using CIS.DataAccess.Products;
 using CIS.DataAccess.Stores;
@@ -19,6 +20,15 @@ namespace CIS.DataAccess
                 .AddStoreServices()
                 .AddProductServices()
                 .AddOrderServices();
+        }
+
+        public static IServiceCollection AddLegacyDatabase(
+            this IServiceCollection services, string connectionString)
+        {
+            services.AddDbContext<SWNDistro>(
+                options => options.UseSqlServer(connectionString));
+
+            return services;
         }
 
         public static void MigrateDataAccess(this IServiceProvider provider)

@@ -36,7 +36,7 @@ namespace CIS.DataAccess
         
         } 
 
-        public CISDbContext(DbContextOptions options) : base(options)
+        public CISDbContext(DbContextOptions<CISDbContext> options) : base(options)
         {
 
         }

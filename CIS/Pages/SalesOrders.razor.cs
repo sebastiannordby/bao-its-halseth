@@ -11,6 +11,10 @@ using CIS.Services;
 using OfficeOpenXml.Style;
 using CIS.Library.Orders.Repositories;
 using CIS.Library.Orders.Models;
+using CIS.DataAccess.Legacy;
+using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Linq.Dynamic.Core;
 
 namespace CIS.Pages
 {
@@ -28,11 +32,17 @@ namespace CIS.Pages
         [Inject]
         public ImportService ImportService { get; set; }
 
+        [Inject]
+        public SWNDistro LegacyDbContext { get; set; }
+
         private List<SalesOrderImportDefinition> _orderImportDefinitions;
         private RadzenDataGrid<SalesOrderImportDefinition> _importDataGrid;
 
         private IReadOnlyCollection<SalesOrderView> _salesOrders;
         private RadzenDataGrid<SalesOrderView> _overviewGrid;
+
+        private int _legacyOrdersCount;
+        private IEnumerable<Ordre> _legacyOrders;
 
         private string _importMessages;
 
@@ -59,6 +69,28 @@ namespace CIS.Pages
             {
                 await _overviewGrid.RefreshDataAsync();
             }
+        }
+
+        private async Task LoadLegacyOrders(LoadDataArgs args)
+        {
+            var query = LegacyDbContext.Ordres
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(args.Filter))
+            {
+                query = query.Where(args.Filter);
+            }
+
+            if (!string.IsNullOrEmpty(args.OrderBy))
+            {
+                query = query.OrderBy(args.OrderBy);
+            }
+
+            _legacyOrdersCount = query.Count();
+            _legacyOrders = await query
+                .Skip(args.Skip ?? 0)
+                .Take(args.Top ?? 100)
+                .ToListAsync();
         }
 
         private async Task ClearImportData()

@@ -1,4 +1,5 @@
 @page "/sales-orders"
+@using CIS.DataAccess.Legacy
 @using CIS.Library.Orders.Models
 @using CIS.Library.Orders.Models.Import
 
@@ -27,6 +28,46 @@
                     <RadzenDataGridColumn TItem="SalesOrderView" Title="Referanse" Property="@nameof(SalesOrderView.Reference)" />
                     <RadzenDataGridColumn TItem="SalesOrderView" Title="Kunde#" Property="@nameof(SalesOrderView.CustomerNumber)" />
                     <RadzenDataGridColumn TItem="SalesOrderView" Title="Kunde" Property="@nameof(SalesOrderView.CustomerName)" />
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Legacy">
+            <RadzenDataGrid 
+                TItem="Ordre"
+                Data="_legacyOrders"
+                Count="_legacyOrdersCount"
+                LoadData="LoadLegacyOrders"
+                FilterMode="FilterMode.Advanced"
+                AllowFiltering="true"
+                AllowPaging="true"
+                AllowSorting="true"
+                AllowMultiColumnSorting="true"
+                AllowColumnPicking="true"
+                AllowGrouping="true"
+                AllowColumnResize="true"
+                PageSize="1000"
+                ColumnWidth="175px"
+                Style="height: 100%">
+                <Columns>
+                    <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.Id)" Property="@nameof(Ordre.Id)" />
+                    <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.Dato)" Property="@nameof(Ordre.Dato)" />
+                    <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.Butikknr)" Property="@nameof(Ordre.Butikknr)" />
+                    <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.VareId)" Property="@nameof(Ordre.VareId)" />
+                    <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.VarenrLev)" Property="@nameof(Ordre.VarenrLev)" />
+                    <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.VarenrSwn)" Property="@nameof(Ordre.VarenrSwn)" />
+                    <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.Ean)" Property="@nameof(Ordre.Ean)" />
+                    <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.Antall)" Property="@nameof(Ordre.Antall)" />
+                    <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.AntallLevert)" Property="@nameof(Ordre.AntallLevert)" />
+                    <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.Ordreref)" Property="@nameof(Ordre.Ordreref)" />
+                    <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.SendtLev)" Property="@nameof(Ordre.SendtLev)" />
+                    <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.Inserted)" Property="@nameof(Ordre.Inserted)" />
+                    <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.LevId)" Property="@nameof(Ordre.LevId)" />
+                    <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.Ordretype)" Property="@nameof(Ordre.Ordretype)" />
+                    <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.LevertDato)" Property="@nameof(Ordre.LevertDato)" />
+                    <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.OurPrice)" Property="@nameof(Ordre.OurPrice)" />
+                    <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.Innpris)" Property="@nameof(Ordre.Innpris)" />
+                    <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.NettOrdreRef)" Property="@nameof(Ordre.NettOrdreRef)" />
+                    <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.Bedriftspakke)" Property="@nameof(Ordre.Bedriftspakke)" />
                 </Columns>
             </RadzenDataGrid>
         </RadzenTabsItem>
