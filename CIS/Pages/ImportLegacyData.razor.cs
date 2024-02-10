@@ -26,6 +26,7 @@ namespace CIS.Pages
         private int _orderCount;
         private int _customerCount;
         private int _productCount;
+        private int _salesStatisticsCount;
 
         private int _legacyOrdersCount;
         private IEnumerable<Ordre> _legacyOrders;
@@ -35,6 +36,7 @@ namespace CIS.Pages
 
         private int _legacyProductCount;
         private IEnumerable<Vareinfo> _legacyProducts;
+
 
         private bool _isImporting = false;
         private IEnumerable<string> _logMessages = new List<string>();
@@ -47,6 +49,7 @@ namespace CIS.Pages
             _orderCount = await LegacyDbContext.Ordres.CountAsync();
             _customerCount = await LegacyDbContext.Butikklistes.CountAsync();
             _productCount = await LegacyDbContext.Vareinfos.CountAsync();
+            _salesStatisticsCount = await LegacyDbContext.Salgs.CountAsync();
 
             _hubConnection = new HubConnectionBuilder()
                 .WithUrl(NavigationManager.ToAbsoluteUri("/import-legacy-hub")) // Replace "/myHub" with the appropriate endpoint URL

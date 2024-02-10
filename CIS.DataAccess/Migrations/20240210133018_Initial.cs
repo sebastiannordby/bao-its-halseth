@@ -119,6 +119,25 @@ namespace CIS.Application.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SalesStatistics",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Number = table.Column<int>(type: "int", nullable: false),
+                    StoreNumber = table.Column<int>(type: "int", nullable: false),
+                    ProductNumber = table.Column<int>(type: "int", nullable: false),
+                    CustomerNumber = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    CostPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PurchasePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    StorePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SalesStatistics", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Stores",
                 columns: table => new
                 {
@@ -221,6 +240,9 @@ namespace CIS.Application.Migrations
 
             migrationBuilder.DropTable(
                 name: "SalesOrderLines");
+
+            migrationBuilder.DropTable(
+                name: "SalesStatistics");
 
             migrationBuilder.DropTable(
                 name: "Stores");

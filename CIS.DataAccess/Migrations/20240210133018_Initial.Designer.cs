@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CIS.Application.Migrations
 {
     [DbContext(typeof(CISDbContext))]
-    [Migration("20240210124916_Initial")]
+    [Migration("20240210133018_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -176,6 +176,41 @@ namespace CIS.Application.Migrations
                     b.HasIndex("SalesOrderId");
 
                     b.ToTable("SalesOrderLines");
+                });
+
+            modelBuilder.Entity("CIS.Application.Orders.Models.SalesStatisticsDao", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("CostPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("CustomerNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductNumber")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("PurchasePrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StoreNumber")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("StorePrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SalesStatistics");
                 });
 
             modelBuilder.Entity("CIS.Application.Products.Models.ProductDao", b =>

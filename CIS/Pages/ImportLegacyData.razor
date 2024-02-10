@@ -6,7 +6,7 @@
     <RadzenProgressBar 
         ProgressBarStyle="ProgressBarStyle.Primary" 
         Value="100" 
-        Visible="true" 
+        Visible="_isImporting" 
         ShowValue="false" 
         Mode="ProgressBarMode.Indeterminate" />
     
@@ -38,27 +38,19 @@
             </RadzenCard>
             <RadzenCard>
                 <h3 class="h5">Ordre</h3>
-                <div class="d-flex flex-row">
-                    <div>
-                        <div>Antall: @_orderCount</div>
-                    </div>
-                </div>
+                <div>Antall: @_orderCount</div>
             </RadzenCard>
             <RadzenCard>
                 <h3 class="h5">Kunder/Butikker</h3>
-                <div class="d-flex flex-row">
-                    <div>
-                        <div>Antall: @_customerCount</div>
-                    </div>
-                </div>
+                <div>Antall: @_customerCount</div>
             </RadzenCard>
             <RadzenCard>
                 <h3 class="h5">Varer</h3>
-                <div class="d-flex flex-row">
-                    <div>
-                        <div>Antall: @_productCount</div>
-                    </div>
-                </div>
+                <div>Antall: @_productCount</div>
+            </RadzenCard>
+            <RadzenCard>
+                <h3 class="h5">Salgstall</h3>
+                <div>Antall: @_salesStatisticsCount</div>
             </RadzenCard>
         </div>
 

@@ -1,4 +1,5 @@
 using CIS.Application.Legacy;
+using CIS.Application.Orders.Models.Import;
 using CIS.Application.Shared.Models;
 using CIS.Application.Shared.Repositories;
 using CIS.Library.Customers.Models.Import;
@@ -71,7 +72,55 @@ namespace CIS.Services
                 await migrationTaskRepo.Complete(MigrationTask.TaskType.SalesOrders);
             }
 
+
+            if (uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.SalesOrderStatistics))
+            {
+                await ImportSalesOrderStatistics(legacyDbContext, scope);
+                await migrationTaskRepo.Complete(MigrationTask.TaskType.SalesOrderStatistics);
+            }
+
             await _hubContext.Clients.All.SendAsync(Finished);
+        }
+
+        private async Task ImportSalesOrderStatistics(SWNDistro legacyDbContext, IServiceScope scope)
+        {
+            var importService = scope.ServiceProvider
+                .GetRequiredService<IExecuteImportService<SalesStatisticsImportDefinition>>();
+
+            await _hubContext.Clients.All.SendAsync(ReceiveMessage, "Importering av salgstall påbegynt.");
+
+            await legacyDbContext.Salgs.ProcessEntitiesInBatches(async(sales) =>
+            {
+                var importDefinitions = new List<SalesStatisticsImportDefinition>();
+
+                foreach(var sale in sales)
+                {
+                    var definition = new SalesStatisticsImportDefinition()
+                    {
+                        Number = (int) sale.Id,
+                        ProductNumber = sale.VareId ?? 0,
+                        CostPrice = sale.OurPrice ?? 0,
+                        PurchasePrice = sale.Innpris ?? 0,
+                        Quantity = sale.Antall ?? 0,
+                        StoreNumber = sale.Butikknr ?? 0,
+                        StorePrice = sale.Utpris ?? 0,
+                        CustomerNumber = sale.Kundenr ?? 0,
+                    };
+
+                    importDefinitions.Add(definition);
+                }
+
+                var success = await importService.Import(importDefinitions);
+                var textLines = importDefinitions
+                    .Select(x => $"Vare({x.ProductNumber})");
+                var text = string.Join("\n", textLines);
+                var successMsg = success ? "Vellykket" : "Feilet";
+                var message = $"({successMsg}) Salgstall:\n{text}\n";
+
+                await _hubContext.Clients.All.SendAsync(ReceiveMessage, message);
+            });
+
+            await _hubContext.Clients.All.SendAsync(ReceiveMessage, "Importering av salgstall vellykket.");
         }
 
         private async Task ImportOrders(SWNDistro legacyDbContext, IServiceScope scope)
@@ -257,7 +306,7 @@ namespace CIS.Services
             where T : class
         {
             var totalRecords = await dbSet.CountAsync();
-            var batchSize = totalRecords > 2000 ? 100 : 50;
+            var batchSize = totalRecords > 2000 ? 200 : 50;
             var currentPercentage = 0;
             var offset = 0;
 

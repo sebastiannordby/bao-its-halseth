@@ -30,7 +30,7 @@ namespace CIS.Application
 
         public required DbSet<SalesOrderDao> SalesOrders { get; set; }
         public required DbSet<SalesOrderLineDao> SalesOrderLines { get; set; }
-
+        public required DbSet<SalesStatisticsDao> SalesStatistics { get; set; }
         public required DbSet<MigrationTask> MigrationsTasks { get; set; }
 
         public CISDbContext() : base()

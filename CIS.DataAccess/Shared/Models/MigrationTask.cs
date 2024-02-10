@@ -16,7 +16,8 @@ namespace CIS.Application.Shared.Models
         {
             Customers = 0,
             Products = 1,
-            SalesOrders = 2
+            SalesOrders = 2,
+            SalesOrderStatistics = 3
         }
     }
 }

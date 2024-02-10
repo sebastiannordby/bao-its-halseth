@@ -1,5 +1,6 @@
 ﻿using CIS.Application.Customers.Models;
 using CIS.Application.Orders.Models;
+using CIS.Application.Orders.Models.Import;
 using CIS.Application.Orders.Repositories;
 using CIS.Application.Orders.Services;
 using CIS.Library.Orders.Models.Import;
@@ -21,7 +22,8 @@ namespace CIS.Application.Orders
         {
             return services
                 .AddScoped<ISalesOrderViewRepository, SalesOrderViewRepository>()
-                .AddScoped<IExecuteImportService<SalesOrderImportDefinition>, ImportOrderService>();
+                .AddScoped<IExecuteImportService<SalesOrderImportDefinition>, ImportOrderService>()
+                .AddScoped<IExecuteImportService<SalesStatisticsImportDefinition>, ImportSalesStatisticsService>();
         }
 
         internal static ModelBuilder SetupOrderModels(this ModelBuilder modelBuilder)
