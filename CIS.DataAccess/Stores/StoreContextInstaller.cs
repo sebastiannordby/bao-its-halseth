@@ -1,5 +1,5 @@
-﻿using CIS.DataAccess.Stores.Models;
-using CIS.DataAccess.Stores.Repositories;
+﻿using CIS.Application.Stores.Models;
+using CIS.Application.Stores.Repositories;
 using CIS.Library.Stores.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.DataAccess.Stores
+namespace CIS.Application.Stores
 {
     internal static class StoreContextInstaller
     {

@@ -1,12 +1,12 @@
-﻿using CIS.DataAccess.Customers;
-using CIS.DataAccess.Customers.Models;
-using CIS.DataAccess.Orders;
-using CIS.DataAccess.Orders.Models;
-using CIS.DataAccess.Products;
-using CIS.DataAccess.Products.Models;
-using CIS.DataAccess.Stores;
-using CIS.DataAccess.Stores.Models;
-using CIS.Domain.Orders.Models;
+﻿using CIS.Application.Customers;
+using CIS.Application.Customers.Models;
+using CIS.Application.Orders;
+using CIS.Application.Orders.Models;
+using CIS.Application.Products;
+using CIS.Application.Products.Models;
+using CIS.Application.Shared.Models;
+using CIS.Application.Stores;
+using CIS.Application.Stores.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.DataAccess
+namespace CIS.Application
 {
     internal sealed class CISDbContext : DbContext
     {
@@ -30,6 +30,8 @@ namespace CIS.DataAccess
 
         public required DbSet<SalesOrderDao> SalesOrders { get; set; }
         public required DbSet<SalesOrderLineDao> SalesOrderLines { get; set; }
+
+        public required DbSet<MigrationTask> MigrationsTasks { get; set; }
 
         public CISDbContext() : base()
         {

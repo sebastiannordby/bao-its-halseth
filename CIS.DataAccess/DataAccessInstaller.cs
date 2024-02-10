@@ -1,13 +1,15 @@
-﻿using CIS.DataAccess.Customers;
-using CIS.DataAccess.Customers.Repositories;
-using CIS.DataAccess.Legacy;
-using CIS.DataAccess.Orders;
-using CIS.DataAccess.Products;
-using CIS.DataAccess.Stores;
+﻿using CIS.Application.Customers;
+using CIS.Application.Customers.Repositories;
+using CIS.Application.Legacy;
+using CIS.Application.Orders;
+using CIS.Application.Products;
+using CIS.Application.Shared.Models;
+using CIS.Application.Shared.Repositories;
+using CIS.Application.Stores;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CIS.DataAccess
+namespace CIS.Application
 {
     public static class DataAccessInstaller
     {
@@ -16,6 +18,7 @@ namespace CIS.DataAccess
         {
             return services
                 .AddDbContext<CISDbContext>(factory)
+                .AddScoped<IMigrationTaskRepo, MigrationTaskRepo>()
                 .AddCustomerServices()
                 .AddStoreServices()
                 .AddProductServices()
@@ -31,7 +34,8 @@ namespace CIS.DataAccess
             return services;
         }
 
-        public static void MigrateDataAccess(this IServiceProvider provider)
+        public static void MigrateDataAccess(
+            this IServiceProvider provider, bool requiresMigrationFromLegacy)
         {
             var appDbContext = provider
                 .GetRequiredService<CISDbContext>();
@@ -39,6 +43,25 @@ namespace CIS.DataAccess
             try
             {
                 appDbContext.Database.Migrate();
+
+                if(requiresMigrationFromLegacy)
+                {
+                    if(!appDbContext.MigrationsTasks.Any())
+                    {
+                        var migrationTaskTypes = Enum.GetValues<MigrationTask.TaskType>();
+
+                        foreach(var type in migrationTaskTypes)
+                        {
+                            appDbContext.MigrationsTasks.Add(new()
+                            {
+                                Type = type,
+                                Executed = false
+                            });
+                        }
+
+                        appDbContext.SaveChanges();
+                    }
+                }
             }
             catch(Exception e)
             {

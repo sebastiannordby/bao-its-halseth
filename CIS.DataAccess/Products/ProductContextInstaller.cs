@@ -1,6 +1,6 @@
-﻿using CIS.DataAccess.Products.Models;
-using CIS.DataAccess.Products.Repositories;
-using CIS.DataAccess.Products.Services;
+﻿using CIS.Application.Products.Models;
+using CIS.Application.Products.Repositories;
+using CIS.Application.Products.Services;
 using CIS.Library.Products.Import;
 using CIS.Library.Products.Repositories;
 using CIS.Library.Shared.Services;
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.DataAccess.Products
+namespace CIS.Application.Products
 {
     internal static class ProductContextInstaller
     {

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace CIS.DataAccess.Legacy;
+namespace CIS.Application.Legacy;
 
 public partial class SWNDistro : DbContext
 {

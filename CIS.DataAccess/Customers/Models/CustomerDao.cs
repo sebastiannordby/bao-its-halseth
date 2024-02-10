@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.DataAccess.Customers.Models
+namespace CIS.Application.Customers.Models
 {
     public sealed class CustomerDao
     {

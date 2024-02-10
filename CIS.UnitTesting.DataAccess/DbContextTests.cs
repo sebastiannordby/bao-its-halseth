@@ -1,7 +1,7 @@
-﻿using CIS.DataAccess;
+﻿using CIS.Application;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CIS.UnitTesting.DataAccess
+namespace CIS.UnitTesting.Application
 {
     public class DbContextTests : DataAccessTest
     {

@@ -1,6 +1,5 @@
-﻿using CIS.Domain.Customers.Services;
-using CIS.Library.Customers.Repositories;
-using CIS.UnitTesting.DataAccess.Services;
+﻿using CIS.Library.Customers.Repositories;
+using CIS.UnitTesting.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -8,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.UnitTesting.DataAccess.Customers.Repositories
+namespace CIS.UnitTesting.Application.Customers.Repositories
 {
     public sealed class CustomerViewRepositoryTests : DataAccessTest
     {

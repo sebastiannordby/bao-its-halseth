@@ -1,4 +1,4 @@
-﻿using CIS.DataAccess.Legacy;
+﻿using CIS.Application.Legacy;
 using CIS.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -37,9 +37,10 @@ namespace CIS.Pages
         private IEnumerable<Vareinfo> _legacyProducts;
 
         private bool _isImporting = false;
-        private List<string> _logMessages = new();
+        private IEnumerable<string> _logMessages = new List<string>();
 
         private HubConnection _hubConnection;
+        private bool _importDone;
 
         protected override async Task OnInitializedAsync()
         {
@@ -53,8 +54,18 @@ namespace CIS.Pages
 
             _hubConnection.On<string>("ReceiveMessage", async msg =>
             {
-                _logMessages.Add(msg);
+                _logMessages = _logMessages.Prepend(msg);
                 await InvokeAsync(StateHasChanged);
+            });
+
+            _hubConnection.On("Finished", () =>
+            {
+                NotificationService.Notify(NotificationSeverity.Info, "Import ferdig",
+                    "Importering av data ferdig.");
+                _importDone = true;
+                _logMessages = _logMessages.Prepend("Importering av data ferdig!");
+                _logMessages = _logMessages.Prepend("Naviger deg via side menyen for å se de nylige importerte dataene.");
+                _logMessages = _logMessages.Prepend("🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳");
             });
 
             await _hubConnection.StartAsync();

@@ -1,7 +1,6 @@
-﻿using CIS.DataAccess.Customers.Models;
-using CIS.DataAccess.Customers.Repositories;
-using CIS.DataAccess.Customers.Services;
-using CIS.Domain.Customers.Services;
+﻿using CIS.Application.Customers.Models;
+using CIS.Application.Customers.Repositories;
+using CIS.Application.Customers.Services;
 using CIS.Library.Customers.Models.Import;
 using CIS.Library.Customers.Repositories;
 using CIS.Library.Shared.Services;
@@ -14,7 +13,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.DataAccess.Customers
+namespace CIS.Application.Customers
 {
     internal static class CustomerContextInstaller
     {

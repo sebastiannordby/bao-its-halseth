@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CIS.DataAccess.Legacy
+namespace CIS.Application.Legacy
 {
     public partial class ReturImportFiler_VTFILER_RCResult
     {

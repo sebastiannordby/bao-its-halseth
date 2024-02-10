@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CIS.DataAccess.Legacy
+namespace CIS.Application.Legacy
 {
     public static class DbContextExtensions
     {

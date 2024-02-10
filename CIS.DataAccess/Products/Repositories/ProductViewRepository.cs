@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.DataAccess.Products.Repositories
+namespace CIS.Application.Products.Repositories
 {
     internal class ProductViewRepository : IProductViewRepository
     {

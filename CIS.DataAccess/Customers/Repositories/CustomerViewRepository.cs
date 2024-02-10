@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.DataAccess.Customers.Repositories
+namespace CIS.Application.Customers.Repositories
 {
     internal class CustomerViewRepository : ICustomerViewRepository
     {

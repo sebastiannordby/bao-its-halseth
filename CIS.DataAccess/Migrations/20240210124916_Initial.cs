@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace CIS.DataAccess.Migrations
+namespace CIS.Application.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -22,6 +22,19 @@ namespace CIS.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CustomerGroups", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MigrationsTasks",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    Executed = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MigrationsTasks", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -155,7 +168,7 @@ namespace CIS.DataAccess.Migrations
                     SalesOrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductNumber = table.Column<int>(type: "int", nullable: false),
                     ProductName = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
-                    EAN = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    EAN = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     Quantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     QuantityDelivered = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CostPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
@@ -190,6 +203,9 @@ namespace CIS.DataAccess.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Customers");
+
+            migrationBuilder.DropTable(
+                name: "MigrationsTasks");
 
             migrationBuilder.DropTable(
                 name: "ProductGroups");

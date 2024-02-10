@@ -9,12 +9,12 @@ using LicenseContext = OfficeOpenXml.LicenseContext;
 using CIS.Extensions;
 using CIS.Services;
 using OfficeOpenXml.Style;
-using CIS.Library.Orders.Repositories;
 using CIS.Library.Orders.Models;
-using CIS.DataAccess.Legacy;
+using CIS.Application.Legacy;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Linq.Dynamic.Core;
+using CIS.Application.Orders.Repositories;
 
 namespace CIS.Pages
 {
@@ -35,6 +35,7 @@ namespace CIS.Pages
         private List<SalesOrderImportDefinition> _orderImportDefinitions;
         private RadzenDataGrid<SalesOrderImportDefinition> _importDataGrid;
 
+        private int _salesOrderCount;
         private IReadOnlyCollection<SalesOrderView> _salesOrders;
         private RadzenDataGrid<SalesOrderView> _overviewGrid;
 
@@ -53,6 +54,27 @@ namespace CIS.Pages
         protected override async Task OnInitializedAsync()
         {
             await LoadOverviewData();
+        }
+
+        private async Task LoadSalesOrders(LoadDataArgs args)
+        {
+            var query = SalesOrderViewRepository.Query();
+
+            if (!string.IsNullOrEmpty(args.Filter))
+            {
+                query = query.Where(args.Filter);
+            }
+
+            if (!string.IsNullOrEmpty(args.OrderBy))
+            {
+                query = query.OrderBy(args.OrderBy);
+            }
+
+            _salesOrderCount = query.Count();
+            _salesOrders = await query
+                .Skip(args.Skip ?? 0)
+                .Take(args.Top ?? 100)
+                .ToListAsync();
         }
 
         private async Task LoadOverviewData()

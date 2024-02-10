@@ -1,5 +1,4 @@
-﻿using CIS.DataAccess;
-using CIS.Domain.Customers.Services;
+﻿using CIS.Application;
 using CIS.Library.Customers.Models.Import;
 using CIS.Library.Customers.Repositories;
 using CIS.Library.Shared.Services;
@@ -11,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.UnitTesting.DataAccess.Customers.Services
+namespace CIS.UnitTesting.Application.Customers.Services
 {
     public sealed class ImportCustomerServiceTests : DataAccessTest
     {

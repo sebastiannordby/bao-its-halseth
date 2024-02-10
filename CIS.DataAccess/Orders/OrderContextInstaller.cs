@@ -1,9 +1,8 @@
-﻿using CIS.DataAccess.Customers.Models;
-using CIS.DataAccess.Orders.Models;
-using CIS.DataAccess.Orders.Repositories;
-using CIS.DataAccess.Orders.Services;
+﻿using CIS.Application.Customers.Models;
+using CIS.Application.Orders.Models;
+using CIS.Application.Orders.Repositories;
+using CIS.Application.Orders.Services;
 using CIS.Library.Orders.Models.Import;
-using CIS.Library.Orders.Repositories;
 using CIS.Library.Shared.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.DataAccess.Orders
+namespace CIS.Application.Orders
 {
     internal static class OrderContextInstaller
     {

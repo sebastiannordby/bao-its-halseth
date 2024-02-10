@@ -1,5 +1,5 @@
 using CIS;
-using CIS.DataAccess;
+using CIS.Application;
 using CIS.Pages;
 using CIS.Services;
 using Microsoft.AspNetCore.SignalR;
@@ -44,12 +44,12 @@ builder.Services
     .AddSingleton<ImportLegacyDataBackgroundService>();
 builder.Services
     .AddTransient<ImportService>();
-builder.Services
-    .AddHostedService<ImportLegacyDataBackgroundService>();
 
 var app = builder.Build();
 
-app.InitializeDatabase();
+// requiresMigrationFromLegacy - read from config?
+app.InitializeDatabase(
+    requiresMigrationFromLegacy: true);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

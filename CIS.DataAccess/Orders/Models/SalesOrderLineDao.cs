@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.DataAccess.Orders.Models
+namespace CIS.Application.Orders.Models
 {
     internal class SalesOrderLineDao
     {
@@ -12,7 +12,7 @@ namespace CIS.DataAccess.Orders.Models
         public Guid SalesOrderId { get; set; }
         public int ProductNumber { get; set; }
         public required string ProductName { get; set; }
-        public required string EAN { get; set; }
+        public string? EAN { get; set; }
         public decimal Quantity { get; set; }
         public decimal QuantityDelivered { get; set; }
         public decimal? CostPrice { get; set; }

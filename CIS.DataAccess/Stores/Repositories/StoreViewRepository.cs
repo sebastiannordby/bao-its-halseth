@@ -7,7 +7,7 @@ using CIS.Library.Stores.Models;
 using CIS.Library.Stores.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace CIS.DataAccess.Stores.Repositories
+namespace CIS.Application.Stores.Repositories
 {
     internal class StoreViewRepository : IStoreViewRepository
     {

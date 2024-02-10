@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CIS.DataAccess\CIS.DataAccess.csproj" />
+    <ProjectReference Include="..\CIS.DataAccess\CIS.Application.csproj" />
     <ProjectReference Include="..\CIS.UnitTesting\CIS.UnitTesting.csproj" />
   </ItemGroup>
 

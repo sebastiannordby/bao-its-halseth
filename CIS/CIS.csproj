@@ -14,17 +14,14 @@
 	<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.0" />	  
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\CIS.DataAccess\CIS.DataAccess.csproj" />
-    <ProjectReference Include="..\CIS.Domain\CIS.Domain.csproj" />
-    <ProjectReference Include="..\CIS.Library\CIS.Library.csproj" />
-    <ProjectReference Include="..\CIS.UnitTesting.DataAccess\CIS.UnitTesting.DataAccess.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">
+	        <PrivateAssets>all</PrivateAssets>
+	        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\CIS.DataAccess\CIS.Application.csproj" />
+    </ItemGroup>
 </Project>

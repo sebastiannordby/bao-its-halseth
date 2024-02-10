@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.DataAccess.Products.Models
+namespace CIS.Application.Products.Models
 {
     public sealed class ProductDao
     {

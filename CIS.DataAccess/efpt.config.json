@@ -9,7 +9,7 @@
    "OutputContextPath": null,
    "OutputPath": "Legacy",
    "PreserveCasingWithRegex": true,
-   "ProjectRootNamespace": "CIS.DataAccess",
+   "ProjectRootNamespace": "CIS.Application",
    "Schemas": null,
    "SelectedHandlebarsLanguage": 2,
    "SelectedToBeGenerated": 0,

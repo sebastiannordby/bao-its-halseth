@@ -32,7 +32,7 @@ namespace CIS.Services
 
         public async Task StopBackgroundService()
         {
-            await _backgroundService.StopAsync(CancellationToken.None);
+            //await _backgroundService.StopAsync(CancellationToken.None);
         }
     }
 }

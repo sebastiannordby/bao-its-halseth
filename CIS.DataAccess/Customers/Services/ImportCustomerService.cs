@@ -1,6 +1,5 @@
-﻿using CIS.DataAccess.Customers.Models;
-using CIS.DataAccess.Stores.Models;
-using CIS.Domain.Customers.Services;
+﻿using CIS.Application.Customers.Models;
+using CIS.Application.Stores.Models;
 using CIS.Library.Customers.Models.Import;
 using CIS.Library.Shared.Services;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.DataAccess.Customers.Services
+namespace CIS.Application.Customers.Services
 {
     internal class ImportCustomerService : IExecuteImportService<CustomerImportDefinition>
     {

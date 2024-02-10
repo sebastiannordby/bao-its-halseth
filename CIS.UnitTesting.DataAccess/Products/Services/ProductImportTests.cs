@@ -4,11 +4,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
-using CIS.DataAccess;
+using CIS.Application;
 using CIS.Library.Shared.Services;
 using CIS.Library.Products.Import;
 
-namespace CIS.UnitTesting.DataAccess.Products.Services
+namespace CIS.UnitTesting.Application.Products.Services
 {
     public class ProductImportTests : DataAccessTest
     {

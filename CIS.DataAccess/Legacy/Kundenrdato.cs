@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace CIS.DataAccess.Legacy;
+namespace CIS.Application.Legacy;
 
 public partial class Kundenrdato
 {

@@ -1,11 +1,11 @@
-using CIS.DataAccess;
-using CIS.UnitTesting.DataAccess.Services;
+using CIS.Application;
+using CIS.UnitTesting.Application.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace CIS.UnitTesting.DataAccess
+namespace CIS.UnitTesting.Application
 {
     public abstract class DataAccessTest
     {

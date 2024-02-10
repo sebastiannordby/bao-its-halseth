@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.UnitTesting.DataAccess.Orders.Services
+namespace CIS.UnitTesting.Application.Orders.Services
 {
     public class ImportSalesOrderServiceTests : DataAccessTest
     {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.UnitTesting.DataAccess.Stores.Repositories
+namespace CIS.UnitTesting.Application.Stores.Repositories
 {
     public class StoreRepositoryTests : DataAccessTest
     {

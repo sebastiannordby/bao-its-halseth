@@ -1,4 +1,4 @@
-﻿using CIS.DataAccess.Products.Models;
+﻿using CIS.Application.Products.Models;
 using CIS.Library.Products.Import;
 using CIS.Library.Shared.Services;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.DataAccess.Products.Services
+namespace CIS.Application.Products.Services
 {
     internal class ImportProductService : IExecuteImportService<ProductImportDefinition>
     {

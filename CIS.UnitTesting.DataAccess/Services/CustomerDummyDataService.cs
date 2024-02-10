@@ -1,12 +1,12 @@
-﻿using CIS.DataAccess;
-using CIS.DataAccess.Customers.Models;
+﻿using CIS.Application;
+using CIS.Application.Customers.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.UnitTesting.DataAccess.Services
+namespace CIS.UnitTesting.Application.Services
 {
     internal class CustomerDummyDataService
     {

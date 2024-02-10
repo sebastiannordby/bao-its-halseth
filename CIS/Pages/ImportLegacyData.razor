@@ -1,18 +1,19 @@
 ﻿@page "/import-legacy"
-@using CIS.DataAccess.Legacy
+@using CIS.Application.Legacy
 
 
-<div class="flex flex-col gap-2">
+<div class="flex flex-col gap-2 bg-white">
     <RadzenProgressBar 
         ProgressBarStyle="ProgressBarStyle.Primary" 
         Value="100" 
-        Visible="_isImporting" 
+        Visible="true" 
         ShowValue="false" 
         Mode="ProgressBarMode.Indeterminate" />
     
     @if (_isImporting) 
     {
         <div class="flex flex-col justify-center items-center bg-white ">
+
             <p class="text-2xl text-center m-2 text-sky-500">Import - Legacy Data</p>
 
             <div class="w-full">
