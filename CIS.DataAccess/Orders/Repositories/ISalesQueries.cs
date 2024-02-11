@@ -11,22 +11,76 @@ using System.Threading.Tasks;
 
 namespace CIS.Application.Orders.Repositories
 {
-    public interface ISalesOrderViewRepository
+    public interface ISalesQueries
     {
         Task<IReadOnlyCollection<SalesOrderView>> List(int pageSize, int pageIndex);
         IQueryable<SalesOrderView> Query();
         Task<IReadOnlyCollection<MostSoldProductView>> GetMostSoldProduct(int count);
         Task<IReadOnlyCollection<StoreMostBoughtView>> GetMostBoughtViews(int count);
+        Task<SeasonalityAnalysisResult> AnalyzeSeasonality(int year);
     }
 
-    internal class SalesOrderViewRepository : ISalesOrderViewRepository
+    internal class SalesQueries : ISalesQueries
     {
         private readonly CISDbContext _dbContext;
 
-        public SalesOrderViewRepository(CISDbContext dbContext)
+        public SalesQueries(CISDbContext dbContext)
         {
             _dbContext = dbContext;
         }
+
+        public async Task<SeasonalityAnalysisResult> AnalyzeSeasonality(int year)
+        {
+            // Initialize the result object
+            var seasonalityResult = new SeasonalityAnalysisResult();
+
+            // Query sales data grouped by month for the specified year
+            var monthlySalesData = await _dbContext.SalesStatistics
+                .AsNoTracking()
+                .Where(sale => sale.Date.Year == year)  // Filter by the specified year
+                .GroupBy(sale => sale.Date.Month)       // Group by month
+                .Select(group => new
+                {
+                    Month = group.Key,
+                    TotalQuantity = group.Sum(sale => sale.Quantity)
+                })
+                .ToListAsync();
+
+            // Add monthly sales data to the result object
+            foreach (var monthlyData in monthlySalesData)
+            {
+                seasonalityResult.MonthlySales.Add(new MonthlySalesData
+                {
+                    Month = monthlyData.Month,
+                    TotalQuantity = monthlyData.TotalQuantity
+                });
+            }
+
+            // Calculate the average monthly sales
+            var averageMonthlySales = seasonalityResult.MonthlySales.Average(data => data.TotalQuantity);
+
+            // Calculate the percentage deviation from the average for each month
+            foreach (var monthlyData in seasonalityResult.MonthlySales)
+            {
+                monthlyData.DeviationFromAverage = ((monthlyData.TotalQuantity - averageMonthlySales) / averageMonthlySales) * 100;
+            }
+
+            // Identify peak and off-peak months based on deviation from average
+            foreach (var monthlyData in seasonalityResult.MonthlySales)
+            {
+                if (monthlyData.DeviationFromAverage >= 20)  // Threshold for peak months
+                {
+                    seasonalityResult.PeakMonths.Add(monthlyData.Month);
+                }
+                else if (monthlyData.DeviationFromAverage <= -20)  // Threshold for off-peak months
+                {
+                    seasonalityResult.OffPeakMonths.Add(monthlyData.Month);
+                }
+            }
+
+            return seasonalityResult;
+        }
+
 
         public async Task<IReadOnlyCollection<StoreMostBoughtView>> GetMostBoughtViews(int count)
         {

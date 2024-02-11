@@ -187,6 +187,9 @@ namespace CIS.Application.Migrations
                     b.Property<int>("CustomerNumber")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("Number")
                         .HasColumnType("int");
 

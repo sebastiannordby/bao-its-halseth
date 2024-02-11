@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CIS.Application.Migrations
 {
     [DbContext(typeof(CISDbContext))]
-    [Migration("20240211092413_Initial")]
+    [Migration("20240211165934_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -189,6 +189,9 @@ namespace CIS.Application.Migrations
 
                     b.Property<int>("CustomerNumber")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Number")
                         .HasColumnType("int");

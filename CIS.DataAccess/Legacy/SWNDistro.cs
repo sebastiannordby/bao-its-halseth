@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CIS.Application.Legacy;
 
-public partial class SWNDistro : DbContext
+public partial class SWNDistroContext : DbContext
 {
-    public SWNDistro(DbContextOptions<SWNDistro> options)
+    public SWNDistroContext(DbContextOptions<SWNDistroContext> options)
         : base(options)
     {
     }

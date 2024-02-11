@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CIS.Application.Legacy
 {
-    public partial class SWNDistro
+    public partial class SWNDistroContext
     {
         private ISWNDistroProcedures _procedures;
 
@@ -70,9 +70,9 @@ namespace CIS.Application.Legacy
 
     public partial class SWNDistroProcedures : ISWNDistroProcedures
     {
-        private readonly SWNDistro _context;
+        private readonly SWNDistroContext _context;
 
-        public SWNDistroProcedures(SWNDistro context)
+        public SWNDistroProcedures(SWNDistroContext context)
         {
             _context = context;
         }

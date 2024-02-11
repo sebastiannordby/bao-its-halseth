@@ -14,7 +14,7 @@ namespace CIS.Pages
     public partial class ImportLegacyData : ComponentBase, IDisposable
     {
         [Inject]
-        public SWNDistro LegacyDbContext { get; set; }
+        public SWNDistroContext LegacyDbContext { get; set; }
 
         [Inject]
         public ImportLegacyDataBackgroundService BackgroundImportService { get; set; }

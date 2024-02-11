@@ -10,6 +10,7 @@ namespace CIS.Application.Orders.Models
     {
         public Guid Id { get; set; }
         public int Number { get; set; }
+        public DateTime Date { get; set; }
         public int StoreNumber { get; set; }
         public int ProductNumber { get; set; }
         public int CustomerNumber { get; set; }

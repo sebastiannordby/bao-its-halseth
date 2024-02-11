@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CIS.Services 
 {
@@ -48,7 +49,7 @@ namespace CIS.Services
             using var scope = _scopeFactory.CreateScope();
 
             var legacyDbContext = scope.ServiceProvider
-                .GetRequiredService<SWNDistro>();
+                .GetRequiredService<SWNDistroContext>();
 
             var migrationTaskRepo = scope.ServiceProvider
                 .GetRequiredService<IMigrationTaskRepo>();
@@ -84,7 +85,7 @@ namespace CIS.Services
             await _hubContext.Clients.All.SendAsync(Finished);
         }
 
-        private async Task ImportSalesOrderStatistics(SWNDistro legacyDbContext, IServiceScope scope)
+        private async Task ImportSalesOrderStatistics(SWNDistroContext legacyDbContext, IServiceScope scope)
         {
             var importService = scope.ServiceProvider
                 .GetRequiredService<IExecuteImportService<SalesStatisticsImportDefinition>>();
@@ -100,6 +101,7 @@ namespace CIS.Services
                     var definition = new SalesStatisticsImportDefinition()
                     {
                         Number = (int) sale.Id,
+                        Date = sale.Dato.Value,
                         ProductNumber = sale.VareId ?? 0,
                         CostPrice = sale.OurPrice ?? 0,
                         PurchasePrice = sale.Innpris ?? 0,
@@ -125,7 +127,7 @@ namespace CIS.Services
             await _hubContext.Clients.All.SendAsync(ReceiveMessage, "Importering av salgstall vellykket.");
         }
 
-        private async Task ImportOrders(SWNDistro legacyDbContext, IServiceScope scope)
+        private async Task ImportOrders(SWNDistroContext legacyDbContext, IServiceScope scope)
         {
             var importService = scope.ServiceProvider
                 .GetRequiredService<IExecuteImportService<SalesOrderImportDefinition>>();
@@ -204,7 +206,7 @@ namespace CIS.Services
             await _hubContext.Clients.All.SendAsync(ReceiveMessage, "Importering av ordre/bestillinger vellykket.");
         } 
 
-        private async Task ImportProducts(SWNDistro legacyDbContext, IServiceScope scope)
+        private async Task ImportProducts(SWNDistroContext legacyDbContext, IServiceScope scope)
         {
             var importService = scope.ServiceProvider
                 .GetRequiredService<IExecuteImportService<ProductImportDefinition>>();
@@ -250,7 +252,7 @@ namespace CIS.Services
             await _hubContext.Clients.All.SendAsync(ReceiveMessage, "Importering av varer vellykket.");
         }
 
-        private async Task ImportCustomers(SWNDistro legacyDbContext, IServiceScope scope)
+        private async Task ImportCustomers(SWNDistroContext legacyDbContext, IServiceScope scope)
         {
             var importService = scope.ServiceProvider
                 .GetRequiredService<IExecuteImportService<CustomerImportDefinition>>();
@@ -309,11 +311,7 @@ namespace CIS.Services
             where T : class
         {
             var totalRecords = await dbSet.CountAsync();
-            var batchSize = totalRecords > 2000 ? 400 : 50;
-            if(totalRecords >= 100000)
-            {
-                batchSize = 5000;
-            }
+            var batchSize = totalRecords > 2000 ? 500 : 50;
 
             var currentPercentage = 0;
             var offset = 0;

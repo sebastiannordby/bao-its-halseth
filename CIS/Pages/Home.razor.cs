@@ -12,12 +12,14 @@ namespace CIS.Pages
         public IMigrationTaskRepo MigrationTaskRepo { get; set; }
 
         [Inject]
-        public ISalesOrderViewRepository SalesOrderViewRepository { get; set; }
+        public ISalesQueries SalesQueries { get; set; }
 
         private IEnumerable<MigrationTask> _migrationTasks;
         private IEnumerable<MigrationTask> _uncompletedMigrationTasks;
         private IReadOnlyCollection<MostSoldProductView> _mostSoldProducts;
         private IReadOnlyCollection<StoreMostBoughtView> _bestCustomerStores;
+        private DateTime _currentSeasonDate;
+        private SeasonalityAnalysisResult _seasonalAnalysis;
         private readonly Dictionary<MigrationTask.TaskType, string> _migrationTaskTypeNames = new()
         {
             { MigrationTask.TaskType.Customers, "Kunde" },
@@ -25,15 +27,26 @@ namespace CIS.Pages
             { MigrationTask.TaskType.SalesOrders, "Bestillinger" }
         };
 
+        private bool _showMigrationPage = true;
+
         protected override async Task OnInitializedAsync()
         {
             _migrationTasks = await MigrationTaskRepo.GetMigrationTasks();
             _uncompletedMigrationTasks = _migrationTasks.Where(x => !x.Executed);
 
-            _mostSoldProducts = await SalesOrderViewRepository
-                .GetMostSoldProduct(5);
-            _bestCustomerStores = await SalesOrderViewRepository
-                .GetMostBoughtViews(5);
+            _showMigrationPage = _uncompletedMigrationTasks.Count() > 1;
+
+            if(!_showMigrationPage) 
+            { 
+                _mostSoldProducts = await SalesQueries
+                    .GetMostSoldProduct(5);
+                _bestCustomerStores = await SalesQueries
+                    .GetMostBoughtViews(5);
+
+                _currentSeasonDate = DateTime.Now.AddYears(-1);
+                //_seasonalAnalysis = await SalesQueries
+                //    .AnalyzeSeasonality(_currentSeasonDate.Year);
+            }
         }
     }
 }

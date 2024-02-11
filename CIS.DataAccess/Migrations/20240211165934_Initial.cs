@@ -125,6 +125,7 @@ namespace CIS.Application.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Number = table.Column<int>(type: "int", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StoreNumber = table.Column<int>(type: "int", nullable: false),
                     ProductNumber = table.Column<int>(type: "int", nullable: false),
                     CustomerNumber = table.Column<int>(type: "int", nullable: false),

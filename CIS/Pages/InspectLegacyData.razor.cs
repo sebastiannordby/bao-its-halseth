@@ -10,7 +10,7 @@ namespace CIS.Pages
     public partial class InspectLegacyData : ComponentBase
     {
         [Inject]
-        public SWNDistro LegacyDbContext { get; set; }
+        public SWNDistroContext LegacyDbContext { get; set; }
 
         private int _legacyOrdersCount;
         private IEnumerable<Ordre> _legacyOrders;

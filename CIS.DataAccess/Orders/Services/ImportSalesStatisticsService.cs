@@ -25,6 +25,7 @@ namespace CIS.Application.Orders.Services
                 await _dbContext.SalesStatistics.AddAsync(new()
                 {
                     Number = definition.Number,
+                    Date = definition.Date,
                     CostPrice = definition.CostPrice,
                     ProductNumber = definition.ProductNumber,
                     CustomerNumber = definition.CustomerNumber,

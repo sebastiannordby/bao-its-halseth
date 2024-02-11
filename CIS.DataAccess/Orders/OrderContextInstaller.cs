@@ -21,7 +21,7 @@ namespace CIS.Application.Orders
             this IServiceCollection services)
         {
             return services
-                .AddScoped<ISalesOrderViewRepository, SalesOrderViewRepository>()
+                .AddScoped<ISalesQueries, SalesQueries>()
                 .AddScoped<IExecuteImportService<SalesOrderImportDefinition>, ImportOrderService>()
                 .AddScoped<IExecuteImportService<SalesStatisticsImportDefinition>, ImportSalesStatisticsService>();
         }

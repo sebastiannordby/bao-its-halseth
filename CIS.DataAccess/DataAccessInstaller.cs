@@ -28,7 +28,7 @@ namespace CIS.Application
         public static IServiceCollection AddLegacyDatabase(
             this IServiceCollection services, string connectionString)
         {
-            services.AddDbContext<SWNDistro>(
+            services.AddDbContext<SWNDistroContext>(
                 options => options.UseSqlServer(connectionString));
 
             return services;

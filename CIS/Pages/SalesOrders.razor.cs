@@ -27,7 +27,7 @@ namespace CIS.Pages
         public NotificationService NotificationService { get; set; }
 
         [Inject]
-        public ISalesOrderViewRepository SalesOrderViewRepository { get; set; }
+        public ISalesQueries SalesOrderViewRepository { get; set; }
 
         [Inject]
         public ImportService ImportService { get; set; }
