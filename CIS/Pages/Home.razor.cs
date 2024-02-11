@@ -34,7 +34,7 @@ namespace CIS.Pages
             _migrationTasks = await MigrationTaskRepo.GetMigrationTasks();
             _uncompletedMigrationTasks = _migrationTasks.Where(x => !x.Executed);
 
-            _showMigrationPage = _uncompletedMigrationTasks.Count() > 1;
+            _showMigrationPage = _uncompletedMigrationTasks.Any();
 
             if(!_showMigrationPage) 
             { 

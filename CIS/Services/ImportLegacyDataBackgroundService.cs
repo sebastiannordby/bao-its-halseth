@@ -83,6 +83,7 @@ namespace CIS.Services
             }
 
             await _hubContext.Clients.All.SendAsync(Finished);
+            _isRunning = false;
         }
 
         private async Task ImportSalesOrderStatistics(SWNDistroContext legacyDbContext, IServiceScope scope)
@@ -311,7 +312,7 @@ namespace CIS.Services
             where T : class
         {
             var totalRecords = await dbSet.CountAsync();
-            var batchSize = totalRecords > 2000 ? 500 : 50;
+            var batchSize = totalRecords > 2000 ? 750 : 50;
 
             var currentPercentage = 0;
             var offset = 0;

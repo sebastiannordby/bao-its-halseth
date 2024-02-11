@@ -1,4 +1,5 @@
-﻿using CIS.Application.Orders.Models.Import;
+﻿using CIS.Application.Orders.Models;
+using CIS.Application.Orders.Models.Import;
 using CIS.Library.Shared.Services;
 using System;
 using System.Collections.Generic;
@@ -20,9 +21,11 @@ namespace CIS.Application.Orders.Services
 
         public async Task<bool> Import(IEnumerable<SalesStatisticsImportDefinition> definitions)
         {
+            var statistics = new List<SalesStatisticsDao>();
+
             foreach(var definition in definitions) 
             {
-                await _dbContext.SalesStatistics.AddAsync(new()
+                statistics.Add(new()
                 {
                     Number = definition.Number,
                     Date = definition.Date,
@@ -34,9 +37,10 @@ namespace CIS.Application.Orders.Services
                     StoreNumber = definition.StoreNumber,
                     StorePrice = definition.StorePrice,
                 });
-
-                await _dbContext.SaveChangesAsync();
             }
+
+            await _dbContext.SalesStatistics.AddRangeAsync(statistics);
+            await _dbContext.SaveChangesAsync();
 
             return true;
         }
