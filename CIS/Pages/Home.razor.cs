@@ -43,9 +43,9 @@ namespace CIS.Pages
                 _bestCustomerStores = await SalesQueries
                     .GetMostBoughtViews(5);
 
-                _currentSeasonDate = DateTime.Now.AddYears(-1);
+                //_currentSeasonDate = DateTime.Now.AddYears(-2);
                 //_seasonalAnalysis = await SalesQueries
-                //    .AnalyzeSeasonality(_currentSeasonDate.Year);
+                //    .AnalyzeSeasonality(2015);
             }
         }
     }

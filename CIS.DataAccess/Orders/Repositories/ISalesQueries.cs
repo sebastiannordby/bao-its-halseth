@@ -56,6 +56,9 @@ namespace CIS.Application.Orders.Repositories
                 });
             }
 
+            if (!seasonalityResult.MonthlySales.Any())
+                return seasonalityResult;
+
             // Calculate the average monthly sales
             var averageMonthlySales = seasonalityResult.MonthlySales.Average(data => data.TotalQuantity);
 
