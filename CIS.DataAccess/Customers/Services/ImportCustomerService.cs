@@ -70,7 +70,7 @@ namespace CIS.Application.Customers.Services
 
                     var storeDao = new StoreDao()
                     {
-                        Number = customerDefinition.Number,
+                        Number = storeDefinition.Number.Value,
                         Name = customerDefinition.Name,
                         AddressLine = storeDefinition.AddressLine,
                         AddressPostalCode = storeDefinition.AddressPostalCode,

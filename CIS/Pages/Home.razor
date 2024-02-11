@@ -1,10 +1,11 @@
 ﻿@page "/"
+@using CIS.Application.Orders.Models
 
 <PageTitle>Dashboard/Salgstall</PageTitle>
 
 
-<div>
-    @if (_uncompletedMigrationTasks?.Any() == true)
+<div class="bg-white p-4">
+    @if (true == false && _uncompletedMigrationTasks?.Any() == true)
     {
         <div class="flex flex-col gap-2 text-center bg-white p-6 rounded-xl my-4">
             <h1 class="text-2xl">Hei, Ole-Hermann!</h1>
@@ -19,6 +20,38 @@
     }
     else
     {
-        <h1>Her er dashboardet vettu!</h1>
+        <h1 class="text-2xl">Hei, Ole-Hermann!</h1>
+
+        @if(_mostSoldProducts?.Any() == true)
+        {
+            <div class="bg-white p-4">
+                <h3 class="text-lg">Mest solgte produkter</h3>
+                <RadzenChart>
+                    <RadzenPieSeries 
+                        Data="@_mostSoldProducts" 
+                        Title="Mest solgte varer" 
+                        CategoryProperty="@nameof(MostSoldProductView.ProductName)" 
+                        ValueProperty="@nameof(MostSoldProductView.TotalQuantity)">
+                        <RadzenSeriesDataLabels Visible="true" />
+                    </RadzenPieSeries>
+                </RadzenChart>
+            </div>
+        }
+
+        @if(_bestCustomerStores?.Any() == true)
+        {
+            <div class="bg-white p-4">
+                <h3 class="text-lg">Butikker som kjøper for mest</h3>
+                <RadzenChart>
+                    <RadzenPieSeries 
+                        Data="@_bestCustomerStores" 
+                        Title="Butikker som kjøper for mest" 
+                        CategoryProperty="@nameof(StoreMostBoughtView.StoreName)" 
+                        ValueProperty="@nameof(StoreMostBoughtView.TotalBoughtFor)">
+                        <RadzenSeriesDataLabels Visible="true" />
+                    </RadzenPieSeries>
+                </RadzenChart>
+            </div>
+        }
     }
 </div>

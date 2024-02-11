@@ -10,6 +10,7 @@ namespace CIS.Application.Products.Models
     {
         public Guid Id { get; set; }
         public int Number { get; set; }
+        public int? AlternateNumber { get; set; }
         public required string Name { get; set; }
         public string? AlternateName { get; set; }
         public string? SuppliersProductNumber { get; set; }

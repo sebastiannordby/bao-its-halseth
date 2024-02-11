@@ -1,4 +1,6 @@
 ﻿using CIS.Application.Legacy;
+using CIS.Application.Shared.Models;
+using CIS.Application.Shared.Repositories;
 using CIS.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -23,34 +25,55 @@ namespace CIS.Pages
         [Inject]
         public NotificationService NotificationService { get; set; }
 
+        [Inject]
+        public IMigrationTaskRepo MigrationTaskRepo { get; set; }
+
         private int _orderCount;
         private int _customerCount;
         private int _productCount;
         private int _salesStatisticsCount;
 
-        private int _legacyOrdersCount;
-        private IEnumerable<Ordre> _legacyOrders;
-
-        private int _legacyStoresCount;
-        private IEnumerable<Butikkliste> _legacyStores;
-
-        private int _legacyProductCount;
-        private IEnumerable<Vareinfo> _legacyProducts;
-
-
         private bool _isImporting = false;
         private IEnumerable<string> _logMessages = new List<string>();
+
+        private IEnumerable<MigrationTask> _migrationTasks;
+        private IEnumerable<MigrationTask.TaskType> _uncompletedMigrationTasks;
+
+        private bool ShowCustomers => _uncompletedMigrationTasks
+            .Any(x => x == MigrationTask.TaskType.Customers);
+        private bool ShowProducts => _uncompletedMigrationTasks
+            .Any(x => x == MigrationTask.TaskType.Products);
+        private bool ShowSalesOrders => _uncompletedMigrationTasks
+            .Any(x => x == MigrationTask.TaskType.SalesOrders);
+        private bool ShowSalesStatistics => _uncompletedMigrationTasks
+            .Any(x => x == MigrationTask.TaskType.SalesOrderStatistics);
 
         private HubConnection _hubConnection;
         private bool _importDone;
 
         protected override async Task OnInitializedAsync()
         {
-            _orderCount = await LegacyDbContext.Ordres.CountAsync();
-            _customerCount = await LegacyDbContext.Butikklistes.CountAsync();
-            _productCount = await LegacyDbContext.Vareinfos.CountAsync();
-            _salesStatisticsCount = await LegacyDbContext.Salgs.CountAsync();
+            if(!BackgroundImportService.IsRunning)
+            {
+                _migrationTasks = await MigrationTaskRepo.GetMigrationTasks();
+                _uncompletedMigrationTasks = _migrationTasks
+                    .Where(x => !x.Executed)
+                    .Select(x => x.Type)
+                    .ToList();
 
+                _orderCount = await LegacyDbContext.Ordres.CountAsync();
+                _customerCount = await LegacyDbContext.Butikklistes.CountAsync();
+                _productCount = await LegacyDbContext.Vareinfos.CountAsync();
+                _salesStatisticsCount = await LegacyDbContext.Salgs.CountAsync();
+            }
+            else
+            {
+                await SetToImportingState();
+            }
+        }
+
+        private async Task SetToImportingState()
+        {
             _hubConnection = new HubConnectionBuilder()
                 .WithUrl(NavigationManager.ToAbsoluteUri("/import-legacy-hub")) // Replace "/myHub" with the appropriate endpoint URL
                 .Build();
@@ -72,21 +95,15 @@ namespace CIS.Pages
             });
 
             await _hubConnection.StartAsync();
-        }
-
-        private void ResetDataSources()
-        {
-            _legacyOrders = null;
-            _legacyProducts = null;
-            _legacyStores = null;
+            _logMessages = new List<string>();
+            _isImporting = true;
         }
 
         private async Task StartBackgroundService()
         {
-            _logMessages = new List<string>();
+            await SetToImportingState();
             NotificationService.Notify(
                 NotificationSeverity.Info, "Import startet");
-            _isImporting = true;
             await InvokeAsync(StateHasChanged);
             await _hubConnection.SendAsync("StartBackgroundService");
         }
@@ -96,75 +113,14 @@ namespace CIS.Pages
             await _hubConnection.SendAsync("StopBackgroundService");
         }
 
-        private async Task LoadLegacyOrders(LoadDataArgs args)
-        {
-            var query = LegacyDbContext.Ordres
-                .AsQueryable();
 
-            if (!string.IsNullOrEmpty(args.Filter))
-            {
-                query = query.Where(args.Filter);
-            }
-
-            if (!string.IsNullOrEmpty(args.OrderBy))
-            {
-                query = query.OrderBy(args.OrderBy);
-            }
-
-            _legacyOrdersCount = query.Count();
-            _legacyOrders = await query
-                .Skip(args.Skip ?? 0)
-                .Take(args.Top ?? 100)
-                .ToListAsync();
-        }
-
-        private async Task LoadLegacyStores(LoadDataArgs args)
-        {
-            var query = LegacyDbContext.Butikklistes
-                .AsQueryable();
-
-            if (!string.IsNullOrEmpty(args.Filter))
-            {
-                query = query.Where(args.Filter);
-            }
-
-            if (!string.IsNullOrEmpty(args.OrderBy))
-            {
-                query = query.OrderBy(args.OrderBy);
-            }
-
-            _legacyStoresCount = query.Count();
-            _legacyStores = await query
-                .Skip(args.Skip ?? 0)
-                .Take(args.Top ?? 100)
-                .ToListAsync();
-        }
-
-        private async Task LoadLegacyProducts(LoadDataArgs args)
-        {
-            var query = LegacyDbContext.Vareinfos
-                .AsQueryable();
-
-            if (!string.IsNullOrEmpty(args.Filter))
-            {
-                query = query.Where(args.Filter);
-            }
-
-            if (!string.IsNullOrEmpty(args.OrderBy))
-            {
-                query = query.OrderBy(args.OrderBy);
-            }
-
-            _legacyProductCount = query.Count();
-            _legacyProducts = await query
-                .Skip(args.Skip ?? 0)
-                .Take(args.Top ?? 100)
-                .ToListAsync();
-        }
 
         public void Dispose()
         {
-            _hubConnection.DisposeAsync();
+            if(_hubConnection is not null)
+            {
+                _hubConnection.DisposeAsync();
+            }
         }
     }
 }

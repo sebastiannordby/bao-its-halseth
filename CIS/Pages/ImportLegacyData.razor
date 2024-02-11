@@ -1,8 +1,7 @@
 ﻿@page "/import-legacy"
 @using CIS.Application.Legacy
 
-
-<div class="flex flex-col gap-2 bg-white">
+<div class="flex flex-col gap-2 bg-white p-4">
     <RadzenProgressBar 
         ProgressBarStyle="ProgressBarStyle.Primary" 
         Value="100" 
@@ -28,157 +27,41 @@
             </div>
         </div>
     }
-    else
+    else if(_uncompletedMigrationTasks is not null)
     {
-        <h3 class="text-xl">Importering av data</h3>
+        <h3 class="text-xl">Importering</h3>
+        <p>Importer data fra windows applikasjonen til det nye systemet</p>
 
-        <div class="flex gap-2">
-            <RadzenCard @onclick="StartBackgroundService">
-                <h3 class="h5">START</h3>
-            </RadzenCard>
-            <RadzenCard>
-                <h3 class="h5">Ordre</h3>
-                <div>Antall: @_orderCount</div>
-            </RadzenCard>
-            <RadzenCard>
-                <h3 class="h5">Kunder/Butikker</h3>
-                <div>Antall: @_customerCount</div>
-            </RadzenCard>
-            <RadzenCard>
-                <h3 class="h5">Varer</h3>
-                <div>Antall: @_productCount</div>
-            </RadzenCard>
-            <RadzenCard>
-                <h3 class="h5">Salgstall</h3>
-                <div>Antall: @_salesStatisticsCount</div>
-            </RadzenCard>
-        </div>
+        @if (_uncompletedMigrationTasks.Any())
+        {
+            <div class="flex gap-2 shadow-md p-4">
+                <RadzenCard 
+                    @onclick="StartBackgroundService" 
+                    Style="cursor: pointer; display: flex; align-items: center;"
+                    class="hover:shadow-md hover:bg-lime-400 hover:text-white">
+                    <h3 class="h5 m-auto underline ">START</h3>
+                </RadzenCard>
 
-        <div class="h-full">
-            <RadzenTabs Visible="!_isImporting" Style="height: 100%" RenderMode="TabRenderMode.Server">
-                <Tabs>
-                    <RadzenTabsItem Text="Ordre">
-                        <RadzenDataGrid 
-                            TItem="Ordre"
-                            Data="_legacyOrders"
-                            Count="_legacyOrdersCount"
-                            LoadData="LoadLegacyOrders"
-                            FilterMode="FilterMode.Advanced"
-                            AllowFiltering="true"
-                            AllowPaging="true"
-                            AllowSorting="true"
-                            AllowMultiColumnSorting="true"
-                            AllowColumnPicking="true"
-                            AllowGrouping="true"
-                            AllowColumnResize="true"
-                            PageSize="100"
-                            ColumnWidth="175px"
-                            Style="height: 100%">
-                            <Columns>
-                                <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.Id)" Property="@nameof(Ordre.Id)" />
-                                <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.Dato)" Property="@nameof(Ordre.Dato)" />
-                                <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.Butikknr)" Property="@nameof(Ordre.Butikknr)" />
-                                <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.VareId)" Property="@nameof(Ordre.VareId)" />
-                                <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.VarenrLev)" Property="@nameof(Ordre.VarenrLev)" />
-                                <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.VarenrSwn)" Property="@nameof(Ordre.VarenrSwn)" />
-                                <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.Ean)" Property="@nameof(Ordre.Ean)" />
-                                <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.Antall)" Property="@nameof(Ordre.Antall)" />
-                                <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.AntallLevert)" Property="@nameof(Ordre.AntallLevert)" />
-                                <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.Ordreref)" Property="@nameof(Ordre.Ordreref)" />
-                                <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.SendtLev)" Property="@nameof(Ordre.SendtLev)" />
-                                <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.Inserted)" Property="@nameof(Ordre.Inserted)" />
-                                <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.LevId)" Property="@nameof(Ordre.LevId)" />
-                                <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.Ordretype)" Property="@nameof(Ordre.Ordretype)" />
-                                <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.LevertDato)" Property="@nameof(Ordre.LevertDato)" />
-                                <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.OurPrice)" Property="@nameof(Ordre.OurPrice)" />
-                                <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.Innpris)" Property="@nameof(Ordre.Innpris)" />
-                                <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.NettOrdreRef)" Property="@nameof(Ordre.NettOrdreRef)" />
-                                <RadzenDataGridColumn TItem="Ordre" Title="@nameof(Ordre.Bedriftspakke)" Property="@nameof(Ordre.Bedriftspakke)" />
-                            </Columns>
-                        </RadzenDataGrid>
-                    </RadzenTabsItem>
-                    <RadzenTabsItem Text="Kunder/Butikker">
-                        <RadzenDataGrid 
-                            TItem="Butikkliste"
-                            Data="_legacyStores"
-                            Count="_legacyStoresCount"
-                            LoadData="LoadLegacyStores"
-                            FilterMode="FilterMode.Advanced"
-                            AllowFiltering="true"
-                            AllowPaging="true"
-                            AllowSorting="true"
-                            AllowMultiColumnSorting="true"
-                            AllowColumnPicking="true"
-                            AllowGrouping="true"
-                            AllowColumnResize="true"
-                            PageSize="100"
-                            ColumnWidth="175px"
-                            Style="height: 100%">
-                            <Columns>
-                                <RadzenDataGridColumn TItem="Butikkliste" Title="@nameof(Butikkliste.Butikknr)" Property="@nameof(Butikkliste.Butikknr)" />
-                                <RadzenDataGridColumn TItem="Butikkliste" Title="@nameof(Butikkliste.Butikknavn)" Property="@nameof(Butikkliste.Butikknavn)" />
-                                <RadzenDataGridColumn TItem="Butikkliste" Title="@nameof(Butikkliste.Gateadresse)" Property="@nameof(Butikkliste.Gateadresse)" />
-                                <RadzenDataGridColumn TItem="Butikkliste" Title="@nameof(Butikkliste.Postnr)" Property="@nameof(Butikkliste.Postnr)" />
-                                <RadzenDataGridColumn TItem="Butikkliste" Title="@nameof(Butikkliste.Poststed)" Property="@nameof(Butikkliste.Poststed)" />
-                                <RadzenDataGridColumn TItem="Butikkliste" Title="@nameof(Butikkliste.Epost)" Property="@nameof(Butikkliste.Epost)" />
-                                <RadzenDataGridColumn TItem="Butikkliste" Title="@nameof(Butikkliste.Kjedenr)" Property="@nameof(Butikkliste.Kjedenr)" />
-                                <RadzenDataGridColumn TItem="Butikkliste" Title="@nameof(Butikkliste.RegionNr)" Property="@nameof(Butikkliste.RegionNr)" />
-                                <RadzenDataGridColumn TItem="Butikkliste" Title="@nameof(Butikkliste.RegionNavn)" Property="@nameof(Butikkliste.RegionNavn)" />
-                                <RadzenDataGridColumn TItem="Butikkliste" Title="@nameof(Butikkliste.Lokasjon)" Property="@nameof(Butikkliste.Lokasjon)" />
-                                <RadzenDataGridColumn TItem="Butikkliste" Title="@nameof(Butikkliste.Konsept)" Property="@nameof(Butikkliste.Konsept)" />
-                                <RadzenDataGridColumn TItem="Butikkliste" Title="@nameof(Butikkliste.Aktiv)" Property="@nameof(Butikkliste.Aktiv)" />
-                                <RadzenDataGridColumn TItem="Butikkliste" Title="@nameof(Butikkliste.KredittSperre)" Property="@nameof(Butikkliste.KredittSperre)" />
-                                <RadzenDataGridColumn TItem="Butikkliste" Title="@nameof(Butikkliste.Kundenr)" Property="@nameof(Butikkliste.Kundenr)" />
-                                <RadzenDataGridColumn TItem="Butikkliste" Title="@nameof(Butikkliste.Telefon)" Property="@nameof(Butikkliste.Telefon)" />
-                                <RadzenDataGridColumn TItem="Butikkliste" Title="@nameof(Butikkliste.DatoSisteordre)" Property="@nameof(Butikkliste.DatoSisteordre)" />
-                            </Columns>
-                        </RadzenDataGrid>
-                    </RadzenTabsItem>
-                    <RadzenTabsItem Text="Varer">
-                        <RadzenDataGrid 
-                            TItem="Vareinfo"
-                            Data="_legacyProducts"
-                            Count="_legacyProductCount"
-                            LoadData="LoadLegacyProducts"
-                            FilterMode="FilterMode.Advanced"
-                            AllowFiltering="true"
-                            AllowPaging="true"
-                            AllowSorting="true"
-                            AllowMultiColumnSorting="true"
-                            AllowColumnPicking="true"
-                            AllowGrouping="true"
-                            AllowColumnResize="true"
-                            PageSize="100"
-                            ColumnWidth="175px"
-                            Style="height: 100%">
-                            <Columns>
-                                <RadzenDataGridColumn TItem="Vareinfo" Title="@nameof(Vareinfo.Id)" Property="@nameof(Vareinfo.Id)" />
-                                <RadzenDataGridColumn TItem="Vareinfo" Title="@nameof(Vareinfo.VarenrSwn)" Property="@nameof(Vareinfo.VarenrSwn)" />
-                                <RadzenDataGridColumn TItem="Vareinfo" Title="@nameof(Vareinfo.VarenrLev)" Property="@nameof(Vareinfo.VarenrLev)" />
-                                <RadzenDataGridColumn TItem="Vareinfo" Title="@nameof(Vareinfo.Ean)" Property="@nameof(Vareinfo.Ean)" />
-                                <RadzenDataGridColumn TItem="Vareinfo" Title="@nameof(Vareinfo.Varebeskrivelse2)" Property="@nameof(Vareinfo.Varebeskrivelse2)" />
-                                <RadzenDataGridColumn TItem="Vareinfo" Title="@nameof(Vareinfo.Innpris)" Property="@nameof(Vareinfo.Innpris)" />
-                                <RadzenDataGridColumn TItem="Vareinfo" Title="@nameof(Vareinfo.Utpris)" Property="@nameof(Vareinfo.Utpris)" />
-                                <RadzenDataGridColumn TItem="Vareinfo" Title="@nameof(Vareinfo.Aktiv)" Property="@nameof(Vareinfo.Aktiv)" />
-                                <RadzenDataGridColumn TItem="Vareinfo" Title="@nameof(Vareinfo.SistEndret)" Property="@nameof(Vareinfo.SistEndret)" />
-                                <RadzenDataGridColumn TItem="Vareinfo" Title="@nameof(Vareinfo.VaretekstAlternativ)" Property="@nameof(Vareinfo.VaretekstAlternativ)" />
-                                <RadzenDataGridColumn TItem="Vareinfo" Title="@nameof(Vareinfo.OurPrice)" Property="@nameof(Vareinfo.OurPrice)" />
-                                <RadzenDataGridColumn TItem="Vareinfo" Title="@nameof(Vareinfo.OurMarginKr)" Property="@nameof(Vareinfo.OurMarginKr)" />
-                                <RadzenDataGridColumn TItem="Vareinfo" Title="@nameof(Vareinfo.OurMarginP)" Property="@nameof(Vareinfo.OurMarginP)" />
-                                <RadzenDataGridColumn TItem="Vareinfo" Title="@nameof(Vareinfo.MarginP)" Property="@nameof(Vareinfo.MarginP)" />
-                                <RadzenDataGridColumn TItem="Vareinfo" Title="@nameof(Vareinfo.MarginKr)" Property="@nameof(Vareinfo.MarginKr)" />
-                                <RadzenDataGridColumn TItem="Vareinfo" Title="@nameof(Vareinfo.Utpris2)" Property="@nameof(Vareinfo.Utpris2)" />
-                                <RadzenDataGridColumn TItem="Vareinfo" Title="@nameof(Vareinfo.MarginP2)" Property="@nameof(Vareinfo.MarginP2)" />
-                                <RadzenDataGridColumn TItem="Vareinfo" Title="@nameof(Vareinfo.MarginKr2)" Property="@nameof(Vareinfo.MarginKr2)" />
-                                <RadzenDataGridColumn TItem="Vareinfo" Title="@nameof(Vareinfo.DatoInserted)" Property="@nameof(Vareinfo.DatoInserted)" />
-                                <RadzenDataGridColumn TItem="Vareinfo" Title="@nameof(Vareinfo.Vgr1)" Property="@nameof(Vareinfo.Vgr1)" />
-                                <RadzenDataGridColumn TItem="Vareinfo" Title="@nameof(Vareinfo.Vgr2)" Property="@nameof(Vareinfo.Vgr2)" />
-                            </Columns>
-                        </RadzenDataGrid>
-                    </RadzenTabsItem>
-                </Tabs>
-            </RadzenTabs>
-        </div>
+                <RadzenCard Visible="@ShowSalesOrders">
+                    <h3 class="h5">Ordre</h3>
+                    <div>Antall: @_orderCount</div>
+                </RadzenCard>
+                <RadzenCard Visible="ShowCustomers">
+                    <h3 class="h5">Kunder/Butikker</h3>
+                    <div>Antall: @_customerCount</div>
+                </RadzenCard>
+                <RadzenCard Visible="ShowProducts">
+                    <h3 class="h5">Varer</h3>
+                    <div>Antall: @_productCount</div>
+                </RadzenCard>
+                <RadzenCard Visible="ShowSalesStatistics">
+                    <h3 class="h5">Salgstall</h3>
+                    <div>Antall: @_salesStatisticsCount</div>
+                </RadzenCard>
+            </div>
+
+            <InspectLegacyData></InspectLegacyData>
+        }
     }
 </div>
 

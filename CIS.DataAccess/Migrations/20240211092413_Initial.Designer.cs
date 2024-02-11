@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CIS.Application.Migrations
 {
     [DbContext(typeof(CISDbContext))]
-    [Migration("20240210133018_Initial")]
+    [Migration("20240211092413_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -221,6 +221,9 @@ namespace CIS.Application.Migrations
 
                     b.Property<string>("AlternateName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("AlternateNumber")
+                        .HasColumnType("int");
 
                     b.Property<string>("EAN")
                         .IsRequired()

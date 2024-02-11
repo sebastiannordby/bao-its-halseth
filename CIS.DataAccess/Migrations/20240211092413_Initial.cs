@@ -71,6 +71,7 @@ namespace CIS.Application.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Number = table.Column<int>(type: "int", nullable: false),
+                    AlternateNumber = table.Column<int>(type: "int", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     AlternateName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SuppliersProductNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),

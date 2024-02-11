@@ -219,6 +219,9 @@ namespace CIS.Application.Migrations
                     b.Property<string>("AlternateName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("AlternateNumber")
+                        .HasColumnType("int");
+
                     b.Property<string>("EAN")
                         .IsRequired()
                         .HasMaxLength(30)

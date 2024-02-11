@@ -26,6 +26,8 @@ namespace CIS.Services
         private readonly IServiceScopeFactory _scopeFactory;
         private bool _isRunning;
 
+        public bool IsRunning => _isRunning;
+
         private const string ReceiveMessage = "ReceiveMessage";
         private const string Finished = "Finished";
 
@@ -217,7 +219,8 @@ namespace CIS.Services
                 {
                     var importDef = new ProductImportDefinition()
                     {
-                        Number = legProd.VarenrSwn,
+                        Number = (int) legProd.Id,
+                        AlternateNumber = legProd.VarenrSwn,
                         Name = legProd.Varebeskrivelse2,
                         AlternateName = legProd.VaretekstAlternativ,
                         SuppliersProductNumber = legProd.VarenrLev,
@@ -306,7 +309,12 @@ namespace CIS.Services
             where T : class
         {
             var totalRecords = await dbSet.CountAsync();
-            var batchSize = totalRecords > 2000 ? 200 : 50;
+            var batchSize = totalRecords > 2000 ? 400 : 50;
+            if(totalRecords >= 100000)
+            {
+                batchSize = 5000;
+            }
+
             var currentPercentage = 0;
             var offset = 0;
 

@@ -58,6 +58,7 @@ namespace CIS.Application.Products.Services
                 var product = new ProductDao() 
                 { 
                     Number = definition.Number,
+                    AlternateNumber = definition.AlternateNumber,
                     Name = definition.Name,
                     AlternateName = definition.AlternateName,
                     SuppliersProductNumber = definition.SuppliersProductNumber,
