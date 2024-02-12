@@ -22,7 +22,7 @@ namespace CIS.Application.Orders
         {
             return services
                 .AddScoped<ISalesQueries, SalesQueries>()
-                .AddScoped<IExecuteImportService<SalesOrderImportDefinition>, ImportOrderService>()
+                .AddScoped<IExecuteImportService<SalesOrderImportDefinition>, ImportSalesOrderService>()
                 .AddScoped<IExecuteImportService<SalesStatisticsImportDefinition>, ImportSalesStatisticsService>();
         }
 

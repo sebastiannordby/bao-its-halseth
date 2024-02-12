@@ -27,6 +27,7 @@ namespace CIS.Application.Orders.Services
             {
                 statistics.Add(new()
                 {
+                    Id = Guid.NewGuid(),
                     Number = definition.Number,
                     Date = definition.Date,
                     CostPrice = definition.CostPrice,

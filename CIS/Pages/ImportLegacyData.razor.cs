@@ -84,7 +84,7 @@ namespace CIS.Pages
                 await InvokeAsync(StateHasChanged);
             });
 
-            _hubConnection.On("Finished", () =>
+            _hubConnection.On("Finished", async() =>
             {
                 NotificationService.Notify(NotificationSeverity.Info, "Import ferdig",
                     "Importering av data ferdig.");
@@ -92,6 +92,7 @@ namespace CIS.Pages
                 _logMessages = _logMessages.Prepend("Importering av data ferdig!");
                 _logMessages = _logMessages.Prepend("Naviger deg via side menyen for å se de nylige importerte dataene.");
                 _logMessages = _logMessages.Prepend("🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳");
+                await InvokeAsync(StateHasChanged);
             });
 
             await _hubConnection.StartAsync();

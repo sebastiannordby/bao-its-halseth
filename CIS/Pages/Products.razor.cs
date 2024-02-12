@@ -1,4 +1,5 @@
-﻿using CIS.Extensions;
+﻿using CIS.Components;
+using CIS.Extensions;
 using CIS.Library.Products.Import;
 using CIS.Library.Products.Models;
 using CIS.Library.Products.Repositories;
@@ -25,6 +26,9 @@ namespace CIS.Pages
         [Inject]
         public NotificationService NotificationService { get; set; }
 
+        [Inject]
+        public DialogService DialogService { get; set; }
+
         public const int OVERVIEW_TAB_INDEX = 0;
         public const int IMPORT_TAB_INDEX = 1;
 
@@ -35,6 +39,9 @@ namespace CIS.Pages
 
         private List<ProductImportDefinition> _productImportDefinitions;
         private RadzenDataGrid<ProductImportDefinition> _importDataGrid;
+
+        private bool _showDetailDialog;
+        private ProductView _detailDialogProduct;
 
         protected override async Task OnInitializedAsync()
         {
@@ -49,7 +56,38 @@ namespace CIS.Pages
             {
                 await _overviewGrid.RefreshDataAsync();
             }
-        } 
+        }
+        
+        private async Task OnRowDoubleClick(DataGridRowMouseEventArgs<ProductView> args)
+        {
+            await ShowDetailDialog(args.Data);
+        }
+
+        private async Task ShowDetailDialog(ProductView product)
+        {
+            _detailDialogProduct = product;
+            _showDetailDialog = true;
+
+            var dialogOptions =
+              new DialogOptions()
+              {
+                  Width = "700px",
+                  Height = "512px",
+                  Resizable = true,
+                  Draggable = true,
+                  CloseDialogOnOverlayClick = true
+              };
+
+            var dialogParameters = new Dictionary<string, object>() 
+            {
+                { nameof(ProductDetailDialog.Product), product }
+            };
+
+            await DialogService.OpenAsync<ProductDetailDialog>(
+                $"Vare {_detailDialogProduct.Name}",
+              dialogParameters, 
+              dialogOptions);
+        }
 
         private async Task ExecuteImport()
         {

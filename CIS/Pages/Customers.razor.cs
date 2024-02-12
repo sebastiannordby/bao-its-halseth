@@ -127,7 +127,7 @@ namespace CIS.Pages
                         Store = new CustomerImportDefinition.StoreDefinition()
                         {
                             Name = storeName,
-                            Number = storeNumber,
+                            Number = storeNumber.Value,
                             AddressLine = addressLine,
                             AddressPostalCode = postalCode.ToString(),
                             AddressPostalOffice = postalOffice,

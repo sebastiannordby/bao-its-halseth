@@ -75,7 +75,6 @@ namespace CIS.Services
                 await migrationTaskRepo.Complete(MigrationTask.TaskType.SalesOrders);
             }
 
-
             if (uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.SalesOrderStatistics))
             {
                 await ImportSalesOrderStatistics(legacyDbContext, scope);
@@ -93,7 +92,7 @@ namespace CIS.Services
 
             await _hubContext.Clients.All.SendAsync(ReceiveMessage, "Importering av salgstall påbegynt.");
 
-            await legacyDbContext.Salgs.ProcessEntitiesInBatches(async(sales) =>
+            await legacyDbContext.Salgs.ProcessEntitiesInBatches(async(sales, percentage) =>
             {
                 var importDefinitions = new List<SalesStatisticsImportDefinition>();
 
@@ -116,14 +115,11 @@ namespace CIS.Services
                 }
 
                 var success = await importService.Import(importDefinitions);
-                var textLines = importDefinitions
-                    .Select(x => $"Vare({x.ProductNumber})");
-                var text = string.Join("\n", textLines);
                 var successMsg = success ? "Vellykket" : "Feilet";
-                var message = $"({successMsg}) Salgstall:\n{text}\n";
+                var message = $"({percentage}%)({successMsg}) Salgstall..\n";
 
                 await _hubContext.Clients.All.SendAsync(ReceiveMessage, message);
-            });
+            }, 500);
 
             await _hubContext.Clients.All.SendAsync(ReceiveMessage, "Importering av salgstall vellykket.");
         }
@@ -214,7 +210,7 @@ namespace CIS.Services
 
             await _hubContext.Clients.All.SendAsync(ReceiveMessage, "Importering av varer påbegynt.");
 
-            await legacyDbContext.Vareinfos.ProcessEntitiesInBatches(async(products) =>
+            await legacyDbContext.Vareinfos.ProcessEntitiesInBatches(async(products, percentage) =>
             {
                 var importDefinitions = new List<ProductImportDefinition>();
 
@@ -245,7 +241,7 @@ namespace CIS.Services
 
                 var productNamesMsg = string.Join("\n", productNames);
                 var successMsg = success ? "Vellykket" : "Feilet";
-                var message = $"({successMsg}) Varer:\n{productNamesMsg}\n";
+                var message = $"({percentage}%)({successMsg}) Varer:\n{productNamesMsg}\n";
 
                 await _hubContext.Clients.All.SendAsync(ReceiveMessage, message);
             });
@@ -260,7 +256,7 @@ namespace CIS.Services
 
             await _hubContext.Clients.All.SendAsync(ReceiveMessage, "Importering av kunder/butikker påbegynt.");
 
-            await legacyDbContext.Butikklistes.ProcessEntitiesInBatches(async (customers) =>
+            await legacyDbContext.Butikklistes.ProcessEntitiesInBatches(async (customers, percentage) =>
             {
                 var importDefinitions = new List<CustomerImportDefinition>();
 
@@ -297,7 +293,7 @@ namespace CIS.Services
 
                 var namesMsg = string.Join("\n", names);
                 var successMsg = success ? "Vellykket" : "Feilet";
-                var message = $"({successMsg}) Kunder:\n{namesMsg}\n";
+                var message = $"({percentage}%)({successMsg}) Kunder:\n{namesMsg}\n";
 
                 await _hubContext.Clients.All.SendAsync(ReceiveMessage, message);
             });
@@ -306,40 +302,35 @@ namespace CIS.Services
 
     public static class DbSetExtensions
     {
+
         public static async Task ProcessEntitiesInBatches<T>(
             this DbSet<T> dbSet,
-            Func<IEnumerable<T>, Task> processBatch)
+            Func<IEnumerable<T>, int, Task> processBatch,
+            int batchSize = 50)
             where T : class
         {
             var totalRecords = await dbSet.CountAsync();
-            var batchSize = totalRecords > 2000 ? 750 : 50;
-
-            var currentPercentage = 0;
             var offset = 0;
 
             while (true)
             {
                 // Query for the next batch of entities
-                IQueryable<T> query = dbSet;
-                var batch = await query
+                var batch = await dbSet
+                    .AsNoTracking()
                     .Skip(offset)
                     .Take(batchSize)
                     .ToListAsync();
 
-                var numberOfRecordsProcessed = offset + batch.Count;
+                var batchCount = batch.Count;
+                var numberOfRecordsProcessed = offset + batchCount;
                 var newPercentage = (int)Math.Round(
                     (double)numberOfRecordsProcessed / totalRecords * 100);
-
-                if (newPercentage >= currentPercentage + 5)
-                {
-                    currentPercentage = newPercentage;
-                }
 
                 if (batch.Count == 0)
                     break; // No more entities to process
 
                 // Process the batch
-                await processBatch(batch);
+                await processBatch(batch, newPercentage);
 
                 offset += batch.Count;
             }
@@ -352,32 +343,27 @@ namespace CIS.Services
         {
             var totalRecords = await dbSet.CountAsync();
             var batchSize = 100;
-            var currentPercentage = 0;
             var offset = 0;
 
-            while (true)
+            while (offset < totalRecords)
             {
                 // Query for the next batch of entities
-                IQueryable<T> query = dbSet;
-                var batch = await query
+                var batch = await dbSet
+                    .AsNoTracking()
                     .Skip(offset)
                     .Take(batchSize)
                     .ToListAsync();
 
-                var batchCount = batch.Count;
-
-                var numberOfRecordsProcessed = offset + batchCount;
-                var newPercentage = (int)Math.Round(
-                    (double)numberOfRecordsProcessed / totalRecords * 100);
-
-                if (batchCount == 0)
-                    break; // No more entities to process
-
                 // Process the batch
-                await processBatch(batch, newPercentage);
+                await processBatch(batch, CalculatePercentage(offset, totalRecords));
 
-                offset += batchCount;
+                offset += batch.Count;
             }
+        }
+
+        private static int CalculatePercentage(int offset, int totalRecords)
+        {
+            return (int)Math.Round((double)(offset * 100) / totalRecords);
         }
     }
 }

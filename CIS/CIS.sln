@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CIS", "CIS.csproj", "{C4D5948F-26E2-4292-8443-0DE5094F03CA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CIS.Application", "..\CIS.DataAccess\CIS.Application.csproj", "{0B5B9AB0-8ADA-4522-8B65-4EB4C44BF707}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CIS.Application", "..\CIS.Application\CIS.Application.csproj", "{0B5B9AB0-8ADA-4522-8B65-4EB4C44BF707}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTesting", "UnitTesting", "{22AA3934-405B-4F1A-A9C6-4E4441FB8601}"
 EndProject

@@ -36,3 +36,5 @@
 
 /CIS/Shared/Import
 /CIS/appsettings.Development.json
+/CIS.Application/bin/Debug/net8.0
+/CIS.Application/obj

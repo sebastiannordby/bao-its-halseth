@@ -21,18 +21,22 @@ namespace CIS.Application.Products.Services
 
         public async Task<bool> Import(IEnumerable<ProductImportDefinition> definitions)
         {
+            var products = new List<ProductDao>();
+            var productPrices = new List<ProductPriceDao>();
+            var productGroups = new List<ProductGroupDao>();
+
             foreach(var definition in definitions)
             {
                 var productPrice = new ProductPriceDao() 
                 { 
+                    Id = Guid.NewGuid(),
                     CostPrice = definition.CostPrice,
                     CurrencyCode = definition.CurrencyCode,
                     PurchasePrice = definition.PurchasePrice,
                     StorePrice = definition.StorePrice,
                 };
 
-                await _dbContext.ProductPrices.AddAsync(productPrice);
-                await _dbContext.SaveChangesAsync();
+                productPrices.Add(productPrice);
 
                 var ignoreGroup = definition.ProductGroupNumber.HasValue == false;
                 var productGroup = !ignoreGroup ? await _dbContext.ProductGroups
@@ -47,12 +51,12 @@ namespace CIS.Application.Products.Services
                 {
                     productGroup = new ProductGroupDao()
                     {
+                        Id = Guid.NewGuid(),
                         Number = definition.ProductGroupNumber.Value,
                         Name = definition.ProductGroupName,
                     };
 
-                    await _dbContext.ProductGroups.AddAsync(productGroup);
-                    await _dbContext.SaveChangesAsync();
+                    productGroups.Add(productGroup);
                 }
 
                 var product = new ProductDao() 
@@ -68,9 +72,13 @@ namespace CIS.Application.Products.Services
                     ProductGroupId = productGroup?.Id,
                 };
 
-                await _dbContext.Products.AddAsync(product);
-                await _dbContext.SaveChangesAsync();
+                products.Add(product);
             }
+
+            await _dbContext.ProductPrices.AddRangeAsync(productPrices);
+            await _dbContext.ProductGroups.AddRangeAsync(productGroups);
+            await _dbContext.Products.AddRangeAsync(products);
+            await _dbContext.SaveChangesAsync();
 
             return true;
         }

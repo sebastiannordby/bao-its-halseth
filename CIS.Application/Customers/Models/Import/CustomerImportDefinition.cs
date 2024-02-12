@@ -20,7 +20,7 @@ namespace CIS.Library.Customers.Models.Import
 
         public class StoreDefinition
         {
-            public required int? Number { get; set; }
+            public required int Number { get; set; }
             public required string Name { get; set; }
             public required string? AddressLine { get; set; }
             public required string? AddressPostalCode { get; set; }

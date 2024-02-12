@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace CIS.Application.Orders.Services
 {
-    internal class ImportOrderService : IExecuteImportService<SalesOrderImportDefinition>
+    internal class ImportSalesOrderService : IExecuteImportService<SalesOrderImportDefinition>
     {
         private readonly CISDbContext _dbContext;
         private Dictionary<int, string> _storeNames = new();
         private Dictionary<int, string> _productNames = new();
 
-        public ImportOrderService(CISDbContext dbContext)
+        public ImportSalesOrderService(CISDbContext dbContext)
         {
             _dbContext = dbContext;
         }

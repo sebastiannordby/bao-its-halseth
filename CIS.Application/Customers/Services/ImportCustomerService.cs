@@ -24,6 +24,9 @@ namespace CIS.Application.Customers.Services
         public async Task<bool> Import(IEnumerable<CustomerImportDefinition> importDefinitions)
         {
             var lookedUpRegions = new List<RegionImportStruct>();
+            var customers = new List<CustomerDao>();
+            var stores = new List<StoreDao>();
+            var regions = new List<RegionDao>();
 
             foreach (var customerDefinition in importDefinitions)
             {
@@ -34,6 +37,7 @@ namespace CIS.Application.Customers.Services
 
                 var customerDao = new CustomerDao()
                 {
+                    Id = Guid.NewGuid(),
                     Number = customerDefinition.Number,
                     Name = customerDefinition.Name,
                     ContactPersonEmailAddress = customerDefinition.ContactPersonEmailAddress,
@@ -43,7 +47,7 @@ namespace CIS.Application.Customers.Services
                     IsActive = customerDefinition.IsActive
                 };
 
-                await _dbContext.Customers.AddAsync(customerDao);
+                customers.Add(customerDao);
 
                 if (customerDefinition.Store is not null)
                 {
@@ -52,25 +56,27 @@ namespace CIS.Application.Customers.Services
 
                     if(storeDefinition.RegionNumber.HasValue)
                     {
-                        var regionExists = _dbContext.Regions
-                            .Any(x => x.Number == storeDefinition.RegionNumber);
-                        if(!regionExists)
+                        var region = regions
+                            .FirstOrDefault(x => x.Number == storeDefinition.RegionNumber);
+                        if(region is null)
                         {
-                            var regionDao = new RegionDao()
+                            region = new RegionDao()
                             {
+                                Id = Guid.NewGuid(),
                                 Number = storeDefinition.RegionNumber.Value,
                                 Name = storeDefinition.Name ?? "IKKE DEFINERT",
                             };
 
-                            await _dbContext.Regions.AddAsync(regionDao);
-
-                            regionId = regionDao.Id;
+                            regions.Add(region);
                         }
+
+                        regionId = region.Id;
                     }
 
                     var storeDao = new StoreDao()
                     {
-                        Number = storeDefinition.Number.Value,
+                        Id = Guid.NewGuid(),
+                        Number = storeDefinition.Number,
                         Name = customerDefinition.Name,
                         AddressLine = storeDefinition.AddressLine,
                         AddressPostalCode = storeDefinition.AddressPostalCode,
@@ -80,11 +86,14 @@ namespace CIS.Application.Customers.Services
                         OwnerCustomerId = customerDao.Id
                     };
 
-                    await _dbContext.Stores.AddAsync(storeDao);
+                    stores.Add(storeDao);
                 }
-
-                await _dbContext.SaveChangesAsync();
             }
+
+            await _dbContext.Customers.AddRangeAsync(customers);
+            await _dbContext.Stores.AddRangeAsync(stores);
+            await _dbContext.Regions.AddRangeAsync(regions);
+            await _dbContext.SaveChangesAsync();
 
             return true;
         }
