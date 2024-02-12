@@ -1,9 +1,49 @@
 ﻿
 @if(Product is not null)
 {
-    <h3>@Product.Number - @Product.Name</h3>
-    <p>Gruppe: @Product.ProductGroupName</p>
-    <p>Kostpris: @Product.CostPrice</p>
-    <p>Innkjøpspris: @Product.PurchasePrice</p>
-    <p>Butikkpris/listepris: @Product.StorePrice</p>
+
+    <div>
+        <div>
+            <h3>Vare: @Product.Number - @Product.Name</h3>
+            <h3>Alternativt navn: @Product.AlternateName</h3>
+            <p>Gruppe: @Product.ProductGroupName</p>
+            <p>Kostpris: @Product.CostPrice</p>
+            <p>Innkjøpspris: @Product.PurchasePrice</p>
+            <p>Butikkpris/listepris: @Product.StorePrice</p>
+        </div>
+        <div>
+            <RadzenFieldset 
+                AllowCollapse="true" 
+                Style="width: 100%; margin-top: 20px;" 
+                ExpandTitle="Expand orders." 
+                CollapseTitle="Collapse orders."
+                ExpandAriaLabel="Expand the list of orders." 
+                CollapseAriaLabel="Collapse the list of orders.">
+                <HeaderTemplate>
+                    <span class="d-inline-flex align-items-center align-middle">
+                        <RadzenIcon Icon="account_box" class="me-1" /><b>Priser</b>
+                    </span>
+                </HeaderTemplate>
+                <ChildContent>
+                    <div class="flex flex-col gap-2">
+                        <div>
+                            <label class="block">Kostpris - Hva du betaler</label>
+                            <RadzenNumeric TValue="int" Min="1" Max="10"  />
+                        </div>
+                        <div>
+                            <label class="block">Innkjøpspris - Hva butikken betaler</label>
+                            <RadzenNumeric TValue="int" Min="1" Max="10"/>
+                        </div>
+                        <div>
+                            <label class="block">Butikkpris - Hva konsumenten betaler</label>
+                            <RadzenNumeric TValue="int" Min="1" Max="10"/>
+                        </div>
+                    </div>
+                </ChildContent>
+                <SummaryTemplate>
+                    <RadzenButton Text="Oppdater" />
+                </SummaryTemplate>
+            </RadzenFieldset>
+        </div>
+    </div>
 }
