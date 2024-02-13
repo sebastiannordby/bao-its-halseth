@@ -1,8 +1,10 @@
 ﻿using CIS.Application.Customers.Models;
+using CIS.Application.Legacy;
 using CIS.Application.Orders.Models;
 using CIS.Application.Orders.Models.Import;
 using CIS.Application.Orders.Repositories;
 using CIS.Application.Orders.Services;
+using CIS.Application.Shared.Services;
 using CIS.Library.Orders.Models.Import;
 using CIS.Library.Shared.Services;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +25,9 @@ namespace CIS.Application.Orders
             return services
                 .AddScoped<ISalesQueries, SalesQueries>()
                 .AddScoped<IExecuteImportService<SalesOrderImportDefinition>, ImportSalesOrderService>()
-                .AddScoped<IExecuteImportService<SalesStatisticsImportDefinition>, ImportSalesStatisticsService>();
+                .AddScoped<IMigrateLegacyService<Ordre>, ImportSalesOrderService>()
+                .AddScoped<IExecuteImportService<SalesStatisticsImportDefinition>, ImportSalesStatisticsService>()
+                .AddScoped<IMigrateLegacyService<Salg>, ImportSalesStatisticsService>();
         }
 
         internal static ModelBuilder SetupOrderModels(this ModelBuilder modelBuilder)

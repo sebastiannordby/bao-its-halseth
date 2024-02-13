@@ -1,7 +1,11 @@
 ﻿using CIS.Application.Customers.Models;
+using CIS.Application.Legacy;
+using CIS.Application.Shared.Extensions;
+using CIS.Application.Shared.Services;
 using CIS.Application.Stores.Models;
 using CIS.Library.Customers.Models.Import;
 using CIS.Library.Shared.Services;
+using Microsoft.AspNet.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,16 +13,23 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace CIS.Application.Customers.Services
 {
-    internal class ImportCustomerService : IExecuteImportService<CustomerImportDefinition>
+    internal class ImportCustomerService : 
+        IExecuteImportService<CustomerImportDefinition>,
+        IMigrateLegacyService<Butikkliste>
     {
         private readonly CISDbContext _dbContext;
+        private readonly SWNDistroContext _swnDistroContext;
 
-        public ImportCustomerService(CISDbContext dbContext)
+        public ImportCustomerService(
+            CISDbContext dbContext, 
+            SWNDistroContext swnDistroContext)
         {
             _dbContext = dbContext;
+            _swnDistroContext = swnDistroContext;
         }
 
         public async Task<bool> Import(IEnumerable<CustomerImportDefinition> importDefinitions)
@@ -96,6 +107,53 @@ namespace CIS.Application.Customers.Services
             await _dbContext.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task Migrate(Func<string, Task> log)
+        {
+            await log("Importering av kunder/butikker påbegynt.");
+
+            await _swnDistroContext.Butikklistes.ProcessEntitiesInBatches(async (customers, percentage) =>
+            {
+                var importDefinitions = new List<CustomerImportDefinition>();
+
+                foreach (var leg in customers)
+                {
+                    var importDef = new CustomerImportDefinition()
+                    {
+                        Number = leg.Kundenr ?? leg.Butikknr,
+                        Name = leg.Butikknavn,
+                        ContactPersonName = leg.Butikknavn,
+                        ContactPersonEmailAddress = leg.Epost,
+                        ContactPersonPhoneNumber = leg.Telefon?.ToString(),
+                        IsActive = leg.Aktiv ?? true,
+                        CustomerGroupNumber = null,
+                        Store = new CustomerImportDefinition.StoreDefinition()
+                        {
+                            Name = leg.Butikknavn,
+                            Number = leg.Butikknr,
+                            AddressLine = leg.Gateadresse,
+                            AddressPostalCode = leg.Postnr?.ToString(),
+                            AddressPostalOffice = leg.Poststed,
+                            RegionName = leg.RegionNavn,
+                            RegionNumber = leg.RegionNr,
+                        }
+                    };
+
+                    importDefinitions.Add(importDef);
+                }
+
+                var success = await Import(importDefinitions);
+                var names = importDefinitions
+                    .Select(x => x.Name)
+                    .ToArray();
+
+                var namesMsg = string.Join("\n", names);
+                var successMsg = success ? "Vellykket" : "Feilet";
+                var message = $"({percentage}%)({successMsg}) Kunder:\n{namesMsg}\n";
+
+                await log(message);
+            });
         }
 
         private struct RegionImportStruct

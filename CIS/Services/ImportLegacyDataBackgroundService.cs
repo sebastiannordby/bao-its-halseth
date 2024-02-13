@@ -1,7 +1,9 @@
 using CIS.Application.Legacy;
 using CIS.Application.Orders.Models.Import;
+using CIS.Application.Shared.Extensions;
 using CIS.Application.Shared.Models;
 using CIS.Application.Shared.Repositories;
+using CIS.Application.Shared.Services;
 using CIS.Library.Customers.Models.Import;
 using CIS.Library.Orders.Models.Import;
 using CIS.Library.Products.Import;
@@ -48,6 +50,11 @@ namespace CIS.Services
             _isRunning = true;
             using var scope = _scopeFactory.CreateScope();
 
+            var migrateSalesStatisticsService = scope.ServiceProvider.GetRequiredService<IMigrateLegacyService<Salg>>();
+            var migrateSalesOrderService = scope.ServiceProvider.GetRequiredService<IMigrateLegacyService<Ordre>>();
+            var migrateCustomerService = scope.ServiceProvider.GetRequiredService<IMigrateLegacyService<Butikkliste>>();
+            var migrateProductService = scope.ServiceProvider.GetRequiredService<IMigrateLegacyService<Vareinfo>>();
+
             var legacyDbContext = scope.ServiceProvider
                 .GetRequiredService<SWNDistroContext>();
 
@@ -59,311 +66,43 @@ namespace CIS.Services
 
             if(uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.Products))
             {
-                await ImportProducts(legacyDbContext, scope);
+                await migrateProductService.Migrate(async (message) =>
+                {
+                    await _hubContext.Clients.All.SendAsync(ReceiveMessage, message);
+                });
                 await migrationTaskRepo.Complete(MigrationTask.TaskType.Products);
             }
 
             if (uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.Customers))
             {
-                await ImportCustomers(legacyDbContext, scope);
+                await migrateCustomerService.Migrate(async(message) =>
+                {
+                    await _hubContext.Clients.All.SendAsync(ReceiveMessage, message);
+                });
                 await migrationTaskRepo.Complete(MigrationTask.TaskType.Customers);
             }
 
             if (uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.SalesOrders))
             {
-                await ImportOrders(legacyDbContext, scope);
+                await migrateSalesOrderService.Migrate(async(message) =>
+                {
+                    await _hubContext.Clients.All.SendAsync(ReceiveMessage, message);
+                });
                 await migrationTaskRepo.Complete(MigrationTask.TaskType.SalesOrders);
             }
 
             if (uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.SalesOrderStatistics))
             {
-                await ImportSalesOrderStatistics(legacyDbContext, scope);
+                await migrateSalesStatisticsService.Migrate(async(message) =>
+                {
+                    await _hubContext.Clients.All.SendAsync(ReceiveMessage, message);
+                });
+
                 await migrationTaskRepo.Complete(MigrationTask.TaskType.SalesOrderStatistics);
             }
 
             await _hubContext.Clients.All.SendAsync(Finished);
             _isRunning = false;
-        }
-
-        private async Task ImportSalesOrderStatistics(SWNDistroContext legacyDbContext, IServiceScope scope)
-        {
-            var importService = scope.ServiceProvider
-                .GetRequiredService<IExecuteImportService<SalesStatisticsImportDefinition>>();
-
-            await _hubContext.Clients.All.SendAsync(ReceiveMessage, "Importering av salgstall påbegynt.");
-
-            await legacyDbContext.Salgs.ProcessEntitiesInBatches(async(sales, percentage) =>
-            {
-                var importDefinitions = new List<SalesStatisticsImportDefinition>();
-
-                foreach(var sale in sales)
-                {
-                    var definition = new SalesStatisticsImportDefinition()
-                    {
-                        Number = (int) sale.Id,
-                        Date = sale.Dato.Value,
-                        ProductNumber = sale.VareId ?? 0,
-                        CostPrice = sale.OurPrice ?? 0,
-                        PurchasePrice = sale.Innpris ?? 0,
-                        Quantity = sale.Antall ?? 0,
-                        StoreNumber = sale.Butikknr ?? 0,
-                        StorePrice = sale.Utpris ?? 0,
-                        CustomerNumber = sale.Kundenr ?? 0,
-                    };
-
-                    importDefinitions.Add(definition);
-                }
-
-                var success = await importService.Import(importDefinitions);
-                var successMsg = success ? "Vellykket" : "Feilet";
-                var message = $"({percentage}%)({successMsg}) Salgstall..\n";
-
-                await _hubContext.Clients.All.SendAsync(ReceiveMessage, message);
-            }, 500);
-
-            await _hubContext.Clients.All.SendAsync(ReceiveMessage, "Importering av salgstall vellykket.");
-        }
-
-        private async Task ImportOrders(SWNDistroContext legacyDbContext, IServiceScope scope)
-        {
-            var importService = scope.ServiceProvider
-                .GetRequiredService<IExecuteImportService<SalesOrderImportDefinition>>();
-
-            await _hubContext.Clients.All.SendAsync(ReceiveMessage, "Importering av ordre/bestillinger påbegynt.");
-
-            var allOrderGroupingsQuery = legacyDbContext.Ordres
-                .AsNoTracking()
-                .GroupBy(x => new { x.Dato, x.Butikknr })
-                .Select(x => new
-                {
-                    Dato = x.Key.Dato,
-                    Butikknr = x.Key.Butikknr
-                });
-
-            await DbSetExtensions.ProcessEntitiesInBatches(allOrderGroupingsQuery, async (orderGroupings, percentageDone) =>
-            {
-                var importDefinitions = new List<SalesOrderImportDefinition>();
-
-                foreach (var test in orderGroupings)
-                {
-                    var grouping = await legacyDbContext.Ordres
-                        .AsNoTracking()
-                        .Where(x => x.Butikknr == test.Butikknr)
-                        .Where(x => x.Dato == test.Dato)
-                        .ToListAsync();
-
-                    var legOrder = grouping.First();
-                    var importOrder = new SalesOrderImportDefinition()
-                    {
-                        Number = (int)legOrder.Id,
-                        AlternateNumber = legOrder.NettOrdreRef,
-                        StoreNumber = legOrder.Butikknr ?? 0,
-                        StoreName = null,
-                        CustomerNumber = legOrder.Butikknr ?? 0,
-                        CustomerName = null,
-                        DeliveredDate = DateOnly.FromDateTime(DateTime.Now),
-                        OrderDate = DateOnly.FromDateTime(DateTime.Now),
-                        Reference = legOrder.Ordreref as string,
-                        IsDeleted = (legOrder.Ordretype ?? "").Equals("Slettet", StringComparison.OrdinalIgnoreCase)
-                    };
-
-                    foreach (var orderLine in grouping)
-                    {
-                        var importLine = new SalesOrderImportDefinition.Line()
-                        {
-                            CostPrice = orderLine.OurPrice,
-                            EAN = orderLine.Ean,
-                            ProductName = null,
-                            Quantity = orderLine.Antall ?? 0,
-                            PurchasePrice = orderLine.Innpris,
-                            QuantityDelivered = orderLine.AntallLevert ?? 0,
-                            CurrencyCode = "NOK"
-                        };
-
-                        importOrder.Lines.Add(importLine);
-                    }
-
-                    importDefinitions.Add(importOrder);
-                }
-
-                var success = await importService
-                    .Import(importDefinitions);
-
-                var textLines = importDefinitions
-                    .Select(x => x.Number.ToString())
-                    .ToArray();
-
-                var text = string.Join("\n", textLines);
-                var successMsg = success ? "Vellykket" : "Feilet";
-                var message = $"({percentageDone}%)({successMsg}) Ordre:\n{text}\n";
-
-                await _hubContext.Clients.All.SendAsync(ReceiveMessage, message);
-            });
-
-            await _hubContext.Clients.All.SendAsync(ReceiveMessage, "Importering av ordre/bestillinger vellykket.");
-        } 
-
-        private async Task ImportProducts(SWNDistroContext legacyDbContext, IServiceScope scope)
-        {
-            var importService = scope.ServiceProvider
-                .GetRequiredService<IExecuteImportService<ProductImportDefinition>>();
-
-            await _hubContext.Clients.All.SendAsync(ReceiveMessage, "Importering av varer påbegynt.");
-
-            await legacyDbContext.Vareinfos.ProcessEntitiesInBatches(async(products, percentage) =>
-            {
-                var importDefinitions = new List<ProductImportDefinition>();
-
-                foreach(var legProd in products)
-                {
-                    var importDef = new ProductImportDefinition()
-                    {
-                        Number = (int) legProd.Id,
-                        AlternateNumber = legProd.VarenrSwn,
-                        Name = legProd.Varebeskrivelse2,
-                        AlternateName = legProd.VaretekstAlternativ,
-                        SuppliersProductNumber = legProd.VarenrLev,
-                        EAN = legProd.Ean,
-                        IsActive = legProd.Aktiv ?? false,
-                        CurrencyCode = "NOK",
-                        CostPrice = legProd.OurPrice,
-                        PurchasePrice = legProd.Innpris,
-                        StorePrice = legProd.Utpris
-                    };
-
-                    importDefinitions.Add(importDef);
-                }
-
-                var success = await importService.Import(importDefinitions);
-                var productNames = importDefinitions
-                    .Select(x => x.Name)
-                    .ToArray();
-
-                var productNamesMsg = string.Join("\n", productNames);
-                var successMsg = success ? "Vellykket" : "Feilet";
-                var message = $"({percentage}%)({successMsg}) Varer:\n{productNamesMsg}\n";
-
-                await _hubContext.Clients.All.SendAsync(ReceiveMessage, message);
-            });
-
-            await _hubContext.Clients.All.SendAsync(ReceiveMessage, "Importering av varer vellykket.");
-        }
-
-        private async Task ImportCustomers(SWNDistroContext legacyDbContext, IServiceScope scope)
-        {
-            var importService = scope.ServiceProvider
-                .GetRequiredService<IExecuteImportService<CustomerImportDefinition>>();
-
-            await _hubContext.Clients.All.SendAsync(ReceiveMessage, "Importering av kunder/butikker påbegynt.");
-
-            await legacyDbContext.Butikklistes.ProcessEntitiesInBatches(async (customers, percentage) =>
-            {
-                var importDefinitions = new List<CustomerImportDefinition>();
-
-                foreach (var leg in customers)
-                {
-                    var importDef = new CustomerImportDefinition()
-                    {
-                        Number = leg.Kundenr ?? leg.Butikknr,
-                        Name = leg.Butikknavn,
-                        ContactPersonName = leg.Butikknavn,
-                        ContactPersonEmailAddress = leg.Epost,
-                        ContactPersonPhoneNumber = leg.Telefon?.ToString(),
-                        IsActive = leg.Aktiv ?? true,
-                        CustomerGroupNumber = null,
-                        Store = new CustomerImportDefinition.StoreDefinition() 
-                        { 
-                            Name = leg.Butikknavn,
-                            Number = leg.Butikknr,
-                            AddressLine = leg.Gateadresse,
-                            AddressPostalCode = leg.Postnr?.ToString(),
-                            AddressPostalOffice = leg.Poststed,
-                            RegionName = leg.RegionNavn,
-                            RegionNumber = leg.RegionNr,
-                        }
-                    };
-
-                    importDefinitions.Add(importDef);
-                }
-
-                var success = await importService.Import(importDefinitions);
-                var names = importDefinitions
-                    .Select(x => x.Name)
-                    .ToArray();
-
-                var namesMsg = string.Join("\n", names);
-                var successMsg = success ? "Vellykket" : "Feilet";
-                var message = $"({percentage}%)({successMsg}) Kunder:\n{namesMsg}\n";
-
-                await _hubContext.Clients.All.SendAsync(ReceiveMessage, message);
-            });
-        }
-    }
-
-    public static class DbSetExtensions
-    {
-
-        public static async Task ProcessEntitiesInBatches<T>(
-            this DbSet<T> dbSet,
-            Func<IEnumerable<T>, int, Task> processBatch,
-            int batchSize = 50)
-            where T : class
-        {
-            var totalRecords = await dbSet.CountAsync();
-            var offset = 0;
-
-            while (true)
-            {
-                // Query for the next batch of entities
-                var batch = await dbSet
-                    .AsNoTracking()
-                    .Skip(offset)
-                    .Take(batchSize)
-                    .ToListAsync();
-
-                var batchCount = batch.Count;
-                var numberOfRecordsProcessed = offset + batchCount;
-                var newPercentage = (int)Math.Round(
-                    (double)numberOfRecordsProcessed / totalRecords * 100);
-
-                if (batch.Count == 0)
-                    break; // No more entities to process
-
-                // Process the batch
-                await processBatch(batch, newPercentage);
-
-                offset += batch.Count;
-            }
-        }
-
-        public static async Task ProcessEntitiesInBatches<T>(
-            this IQueryable<T> dbSet,
-            Func<IEnumerable<T>, int, Task> processBatch)
-            where T : class
-        {
-            var totalRecords = await dbSet.CountAsync();
-            var batchSize = 100;
-            var offset = 0;
-
-            while (offset < totalRecords)
-            {
-                // Query for the next batch of entities
-                var batch = await dbSet
-                    .AsNoTracking()
-                    .Skip(offset)
-                    .Take(batchSize)
-                    .ToListAsync();
-
-                // Process the batch
-                await processBatch(batch, CalculatePercentage(offset, totalRecords));
-
-                offset += batch.Count;
-            }
-        }
-
-        private static int CalculatePercentage(int offset, int totalRecords)
-        {
-            return (int)Math.Round((double)(offset * 100) / totalRecords);
         }
     }
 }

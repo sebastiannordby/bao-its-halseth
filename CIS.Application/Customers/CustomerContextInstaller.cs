@@ -1,6 +1,8 @@
 ﻿using CIS.Application.Customers.Models;
 using CIS.Application.Customers.Repositories;
 using CIS.Application.Customers.Services;
+using CIS.Application.Legacy;
+using CIS.Application.Shared.Services;
 using CIS.Library.Customers.Models.Import;
 using CIS.Library.Customers.Repositories;
 using CIS.Library.Shared.Services;
@@ -22,6 +24,7 @@ namespace CIS.Application.Customers
         {
             return services
                 .AddScoped<IExecuteImportService<CustomerImportDefinition>, ImportCustomerService>()
+                .AddScoped<IMigrateLegacyService<Butikkliste>, ImportCustomerService>()
                 .AddScoped<ICustomerViewRepository, CustomerViewRepository>();
         }
 

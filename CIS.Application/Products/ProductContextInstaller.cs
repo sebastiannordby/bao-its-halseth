@@ -1,6 +1,8 @@
-﻿using CIS.Application.Products.Models;
+﻿using CIS.Application.Legacy;
+using CIS.Application.Products.Models;
 using CIS.Application.Products.Repositories;
 using CIS.Application.Products.Services;
+using CIS.Application.Shared.Services;
 using CIS.Library.Products.Import;
 using CIS.Library.Products.Repositories;
 using CIS.Library.Shared.Services;
@@ -21,6 +23,7 @@ namespace CIS.Application.Products
         {
             return services
                 .AddScoped<IExecuteImportService<ProductImportDefinition>, ImportProductService>()
+                .AddScoped<IMigrateLegacyService<Vareinfo>, ImportProductService>()
                 .AddScoped<IProductViewRepository, ProductViewRepository>();
         }
 
