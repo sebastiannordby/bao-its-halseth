@@ -2,60 +2,22 @@
 
 <div class="bg-gray-800 w-full h-full overflow-y-auto">
     <!-- Sales Section -->
-    <div class="text-white font-bold text-lg p-4">Salg</div>
-    <ul>
-        <li>
-            <a href="/" class="block text-gray-200 hover:bg-gray-700 px-4 py-2 flex items-center">
-                <i class="material-symbols-sharp mr-2">bar_chart_4_bars</i>
-                Dashboard/Salgstall
-            </a>
-        </li>
-        <li>
-            <a href="/sales-orders" class="block text-gray-200 hover:bg-gray-700 px-4 py-2 flex items-center">
-                <i class="material-symbols-sharp mr-2">note</i>
-                Bestillinger
-            </a>
-        </li>
+    <NavMenuSection Title="Salg">
+        <NavMenuItem Text="Dashboard/Salgstall" Href="/" Icon="bar_chart_4_bars" />
+        <NavMenuItem Text="Bestillinger" Href="/sales-orders" Icon="note" />
         <!-- Add other menu items in the Sales section similarly -->
-    </ul>
+    </NavMenuSection>
 
-    <!-- Main Data Section -->
-    <div class="text-white font-bold text-lg p-4">Grunndata</div>
-    <ul>
-        <li>
-            <a href="/stores" class="block text-gray-200 hover:bg-gray-700 px-4 py-2 flex items-center">
-                <i class="material-symbols-sharp mr-2">storefront</i>
-                Butikker
-            </a>
-        </li>
-        <li>
-            <a href="/customers" class="block text-gray-200 hover:bg-gray-700 px-4 py-2 flex items-center">
-                <i class="material-symbols-sharp mr-2">person</i>
-                Kunder
-            </a>
-        </li>
-        <li>
-            <a href="/products" class="block text-gray-200 hover:bg-gray-700 px-4 py-2 flex items-center">
-                <i class="material-symbols-sharp mr-2">category</i>
-                Varer
-            </a>
-        </li>
+    <NavMenuSection Title="Grunndata">
+        <NavMenuItem Text="Butikker" Href="/stores" Icon="storefront" />
+        <NavMenuItem Text="Kunder" Href="/customers" Icon="person" />
+        <NavMenuItem Text="Varer" Href="/products" Icon="category" />
         <!-- Add other menu items in the Main Data section similarly -->
-    </ul>
+    </NavMenuSection>
 
-    <div class="text-white font-bold text-lg p-4">Forrige system</div>
-    <ul>
-        <li>
-            <a href="/import-legacy" class="block text-gray-200 hover:bg-gray-700 px-4 py-2 flex items-center">
-                <i class="material-symbols-sharp mr-2">function</i>
-                Migrering
-            </a>
-        </li>
-        <li>
-            <a href="/inspect-legacy-data" class="block text-gray-200 hover:bg-gray-700 px-4 py-2 flex items-center">
-                <i class="material-symbols-sharp mr-2">mystery</i>
-                Inspiser
-            </a>
-        </li>
-    </ul>
+    <NavMenuSection Title="Forrige system">
+        <NavMenuItem Text="Migrering" Href="/import-legacy" Icon="function" />
+        <NavMenuItem Text="Inspiser" Href="/inspect-legacy-data" Icon="mystery" />
+    </NavMenuSection>
+
 </div>

@@ -1,0 +1,13 @@
+﻿
+<li>
+    <a href="@Href" class="block text-gray-200 hover:bg-gray-700 px-4 py-2 flex items-center">
+        <i class="material-symbols-sharp mr-2">@Icon</i>
+        @Text
+    </a>
+</li>
+
+@code {
+    [Parameter] public string Href { get; set; }
+    [Parameter] public string Icon { get; set; }
+    [Parameter] public string Text { get; set; }
+}

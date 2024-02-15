@@ -1,0 +1,12 @@
+﻿<div class="bg-transparent">
+    <div class="text-white font-bold text-lg p-4">@Title</div>
+
+    <ul>
+        @ChildContent
+    </ul>
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
+}
