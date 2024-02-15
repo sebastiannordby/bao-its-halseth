@@ -20,7 +20,7 @@ namespace CIS.Application.Shopify
             _orderServiceFactory = orderServiceFactory;
 
             //trenger accesstoken :)))))
-            _apiCredentials = new ShopifyApiCredentials("rcordre", "");
+            _apiCredentials = new ShopifyApiCredentials(_options.Domain, _options.AccessToken);
             _orderService = _orderServiceFactory.Create(_apiCredentials);
 
         }
