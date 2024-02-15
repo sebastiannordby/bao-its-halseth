@@ -1,0 +1,164 @@
+﻿@page "/products"
+@using CIS.WebApp.Extensions
+@using CIS.Library.Products.Import
+@using CIS.Library.Products.Models
+@using CIS.Library.Stores.Models
+@using CIS.WebApp.Services
+@using OfficeOpenXml
+@using CIS.Library.Customers.Models.Import
+
+<PageTitle>Varer</PageTitle>
+<h1 class="text-xl">Varer</h1>
+
+<RadzenTabs 
+    @bind-SelectedIndex="_selectedTabIndex"
+    Style="height: 100%" 
+    RenderMode="TabRenderMode.Server">
+    <Tabs>
+        <RadzenTabsItem Text="Oversikt">
+            <RadzenDataGrid 
+                @ref="_overviewGrid"
+                TItem="ProductView" 
+                Data="_products"
+                FilterMode="FilterMode.Advanced"
+                AllowFiltering="true"
+                AllowPaging="true"
+                AllowSorting="true"
+                RowDoubleClick="OnRowDoubleClick"
+                AllowMultiColumnSorting="true"
+                AllowColumnPicking="true"
+                AllowGrouping="true"
+                AllowColumnResize="true"
+                PageSize="1000"
+                Style="height: 100%">
+
+                <Columns>
+                    <RadzenDataGridColumn 
+                        TItem="ProductView"
+                        Property="@nameof(ProductView.Number)" 
+                        Title="#"
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="ProductView"
+                        Property="@nameof(ProductView.Name)" 
+                        Title="Navn" 
+                        Width="200px"
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="ProductView"
+                        Property="@nameof(ProductView.CostPrice)" 
+                        Title="Kostpris"
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="ProductView"
+                        Property="@nameof(ProductView.PurchasePrice)" 
+                        Title="Innkjøpspris"
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="ProductView"
+                        Property="@nameof(ProductView.StorePrice)"
+                        Title="Butikkpris/Listepris" 
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="ProductView"
+                        Property="@nameof(ProductView.ProductGroupNumber)"
+                        Title="Gruppe#" 
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="ProductView"
+                        Property="@nameof(ProductView.ProductGroupName)"
+                        Title="Gruppe" 
+                        Width="200px"
+                        Sortable="true" />
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Import">
+            <div class="bg-white p-2 flex flex-col h-full w-full">
+                <RadzenAlert Title="Informasjon" 
+                    AlertStyle="AlertStyle.Info" 
+                    Variant="Variant.Flat" 
+                    Shade="Shade.Lighter">
+
+                    <div class="mt-2">
+                        <label>For å kjøre import:</label>
+                        <ul style="list-style: auto; padding-left: 2rem;">
+                            <li>Velg excel fil</li>
+                            <li>Vent til dataen vises i tabellen</li>
+                            <li>Trykk "Kjør import"</li>
+                        </ul>
+                    </div>
+                </RadzenAlert>
+
+                <div class="flex items-center gap-2 p-2">
+                    <InputFile 
+                        OnChange="@ImportExcelFile"
+                        accept=".xlsx"
+                        multiple="false" />
+                    <RadzenButton 
+                        Icon="download" 
+                        Click="ExecuteImport" 
+                        Text="Kjør import" />
+                </div>
+
+                    <RadzenDataGrid 
+                        @ref="_importDataGrid"
+                        TItem="ProductImportDefinition" 
+                        Data="_productImportDefinitions"
+                        FilterMode="FilterMode.Advanced"
+                        AllowFiltering="true"
+                        AllowPaging="true"
+                        AllowSorting="true"
+                        AllowMultiColumnSorting="true"
+                        AllowColumnPicking="true"
+                        AllowGrouping="true"
+                        PageSize="1000"
+                        Style="height: 100%">
+
+                        <Columns>
+                            <RadzenDataGridColumn 
+                                TItem="ProductImportDefinition"
+                                Property="@nameof(ProductImportDefinition.Number)" 
+                                Title="#"
+                                Sortable="true" />
+                            <RadzenDataGridColumn 
+                                TItem="ProductImportDefinition"
+                                Property="@nameof(ProductImportDefinition.Name)" 
+                                Title="Navn" 
+                                Width="200px"
+                                Sortable="true" />
+                            <RadzenDataGridColumn 
+                                TItem="ProductImportDefinition"
+                                Property="@nameof(ProductImportDefinition.CostPrice)" 
+                                Title="Kostpris"
+                                Sortable="true" />
+                            <RadzenDataGridColumn 
+                                TItem="ProductImportDefinition"
+                                Property="@nameof(ProductImportDefinition.PurchasePrice)" 
+                                Title="Innkjøpspris"
+                                Sortable="true" />
+                            <RadzenDataGridColumn 
+                                TItem="ProductImportDefinition"
+                                Property="@nameof(ProductImportDefinition.StorePrice)"
+                                Title="Butikkpris/Listepris" 
+                                Sortable="true" />
+                            <RadzenDataGridColumn 
+                                TItem="ProductImportDefinition"
+                                Property="@nameof(ProductImportDefinition.ProductGroupNumber)"
+                                Title="Gruppe#" 
+                                Sortable="true" />
+                            <RadzenDataGridColumn 
+                                TItem="ProductImportDefinition"
+                                Property="@nameof(ProductImportDefinition.ProductGroupName)"
+                                Title="Gruppe" 
+                                Width="200px"
+                                Sortable="true" />
+                        </Columns>
+                    </RadzenDataGrid>
+            </div>
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>
+
+
+

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CIS.Application.Orders.Models
 {
-    internal class SalesOrderDao
+    public class SalesOrderDao
     {
         public Guid Id { get; set; }
         public int Number { get; set; }

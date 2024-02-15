@@ -38,3 +38,7 @@
 /CIS/appsettings.Development.json
 /CIS.Application/bin/Debug/net8.0
 /CIS.Application/obj
+/.vs
+/CIS.WebApp/bin/Debug/net8.0
+/CIS.WebApp/node_modules
+/CIS.WebApp/obj

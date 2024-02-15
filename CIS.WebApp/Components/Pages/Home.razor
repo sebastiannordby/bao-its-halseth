@@ -1,0 +1,60 @@
+﻿@page "/"
+@attribute [Authorize]
+@using CIS.Application.Orders.Models
+@using Microsoft.AspNetCore.Authorization
+
+<PageTitle>Dashboard/Salgstall</PageTitle>
+
+<div class="bg-white p-4">
+    @if (_showMigrationPage)
+    {
+        <div class="flex flex-col gap-2 text-center bg-white p-6 rounded-xl my-4">
+            <AuthorizeView>
+                <h1 class="text-2xl">Hei, @context.User.Identity.Name!</h1>
+            </AuthorizeView>
+            <p class="text-xl">Velkommen til din nye applikasjon.</p>
+            <p class="text-md font-bold">
+                For å gjennomrette systemet har vi laget en migreringsrutine for deg.
+                Dette må fullføres før du kan ta i bruk systemet.    
+            </p>
+
+            <a class="text-xl my-2 underline" href="/import-legacy">Klikk her for å starte migreringen</a>
+        </div>
+    }
+    else
+    {
+        <h1 class="text-2xl">Hei, Ole-Hermann!</h1>
+
+        @if(_mostSoldProducts?.Any() == true)
+        {
+            <div class="bg-white p-4">
+                <h3 class="text-lg">Mest solgte produkter</h3>
+                <RadzenChart>
+                    <RadzenPieSeries 
+                        Data="@_mostSoldProducts" 
+                        Title="Mest solgte varer" 
+                        CategoryProperty="@nameof(MostSoldProductView.ProductName)" 
+                        ValueProperty="@nameof(MostSoldProductView.TotalQuantity)">
+                        <RadzenSeriesDataLabels Visible="true" />
+                    </RadzenPieSeries>
+                </RadzenChart>
+            </div>
+        }
+
+        @if(_bestCustomerStores?.Any() == true)
+        {
+            <div class="bg-white p-4">
+                <h3 class="text-lg">Butikker som kjøper for mest</h3>
+                <RadzenChart>
+                    <RadzenPieSeries 
+                        Data="@_bestCustomerStores" 
+                        Title="Butikker som kjøper for mest" 
+                        CategoryProperty="@nameof(StoreMostBoughtView.StoreName)" 
+                        ValueProperty="@nameof(StoreMostBoughtView.TotalBoughtFor)">
+                        <RadzenSeriesDataLabels Visible="true" />
+                    </RadzenPieSeries>
+                </RadzenChart>
+            </div>
+        }
+    }
+</div>

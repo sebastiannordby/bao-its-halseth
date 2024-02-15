@@ -7,7 +7,10 @@ using CIS.Application.Products.Models;
 using CIS.Application.Shared.Models;
 using CIS.Application.Stores;
 using CIS.Application.Stores.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace CIS.Application
 {
-    internal sealed class CISDbContext : DbContext
+    public sealed class CISDbContext : IdentityDbContext<ApplicationUser>
     {
         public required DbSet<CustomerDao> Customers { get; set; }
         public required DbSet<CustomerGroupDao> CustomerGroups { get; set; }
@@ -45,6 +48,8 @@ namespace CIS.Application
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.SetupCustomerModels();
             modelBuilder.SetupOrderModels();
             modelBuilder.SetupProductModels();

@@ -14,10 +14,12 @@ namespace CIS.Application
     public static class DataAccessInstaller
     {
         public static IServiceCollection AddDataAccess(
-            this IServiceCollection services, Action<DbContextOptionsBuilder>? factory)
+            this IServiceCollection services, string connectionString)
         {
+            services.AddDbContext<CISDbContext>(options =>
+                options.UseSqlServer(connectionString));
+
             return services
-                .AddDbContext<CISDbContext>(factory)
                 .AddScoped<IMigrationTaskRepo, MigrationTaskRepo>()
                 .AddCustomerServices()
                 .AddStoreServices()

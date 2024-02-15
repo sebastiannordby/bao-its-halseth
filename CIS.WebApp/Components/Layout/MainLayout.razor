@@ -1,0 +1,41 @@
+﻿@using Radzen.Blazor
+@inherits LayoutComponentBase
+
+<RadzenComponents />
+<RadzenDialog />
+
+<AuthorizeView>
+    <Authorized>
+        <RadzenLayout>
+            <RadzenHeader style="background-color: #4CAF50; color: white;">
+                <div class="flex items-center justify-between px-4 h-full">
+                    <div class="text-xl font-semibold">CIS - Custom Install Software</div>
+                    <div class="flex items-center space-x-4">
+                        <!-- Add user profile dropdown or any other header elements here -->
+                        <!-- Example: <UserProfileDropdown /> -->
+                    </div>
+                </div>
+            </RadzenHeader>
+            <RadzenSidebar>
+                <NavMenu />
+            </RadzenSidebar>
+            <RadzenBody>
+                <RadzenContentContainer>
+                    @Body
+                </RadzenContentContainer>
+            </RadzenBody>
+        </RadzenLayout>
+    </Authorized>
+    <NotAuthorized>
+        <a href="/Account/Register">Register</a>
+        <a href="/Account/Login">Log in</a>
+        @Body
+    </NotAuthorized>
+</AuthorizeView>
+
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
