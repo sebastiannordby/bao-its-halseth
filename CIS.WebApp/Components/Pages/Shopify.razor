@@ -1,0 +1,21 @@
+﻿@page "/shopify"
+@using CIS.Application.Shopify
+
+<h3>Shopify</h3>
+
+
+<RadzenButton Click="GetOrdersFromShopify"/>
+
+@code {
+    [Inject] ShopifyClientService ShopifyService { get; set; }
+
+
+
+
+    private async Task GetOrdersFromShopify()
+    {
+
+        var orders = await ShopifyService.GetOrders();
+
+    }
+}
