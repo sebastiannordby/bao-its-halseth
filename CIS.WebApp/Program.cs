@@ -9,6 +9,9 @@ using CIS.WebApp.Services;
 using CIS.WebApp.Extensions;
 using Radzen;
 using CIS.Application.Shopify.Options;
+using CIS.Application.Shopify;
+using ShopifySharp.Extensions.DependencyInjection;
+using ShopifySharp;
 
 namespace CIS.WebApp
 {
@@ -39,8 +42,9 @@ namespace CIS.WebApp
 
             builder.Services.AddSignalR();
 
-            builder.Services.Configure<ShopifyClientServiceOptions>(builder.Configuration.GetSection("Shopify"));
+            builder.Services.AddShopifySharp<LeakyBucketExecutionPolicy>();
 
+            builder.Services.AddScoped<ShopifyClientService>();
             builder.Services.AddCascadingAuthenticationState();
             builder.Services.AddScoped<IdentityUserAccessor>();
             builder.Services.AddScoped<IdentityRedirectManager>();
