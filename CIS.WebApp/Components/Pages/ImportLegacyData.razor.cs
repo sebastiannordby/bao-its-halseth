@@ -1,13 +1,14 @@
 ﻿using CIS.Application.Legacy;
+using CIS.Application.Listeners;
 using CIS.Application.Shared.Models;
 using CIS.Application.Shared.Repositories;
 using CIS.WebApp.Services;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Radzen;
 using System.Linq.Dynamic.Core;
+using Microsoft.AspNetCore.SignalR.Client;
 
 namespace CIS.WebApp.Components.Pages
 {
@@ -78,13 +79,13 @@ namespace CIS.WebApp.Components.Pages
                 .WithUrl(NavigationManager.ToAbsoluteUri("/import-legacy-hub")) // Replace "/myHub" with the appropriate endpoint URL
                 .Build();
 
-            _hubConnection.On<string>("ReceiveMessage", async msg =>
+            _hubConnection.On<string>(nameof(IListenImportClient.ReceiveMessage), async msg =>
             {
                 _logMessages = _logMessages.Prepend(msg);
                 await InvokeAsync(StateHasChanged);
             });
 
-            _hubConnection.On("Finished", async() =>
+            _hubConnection.On(nameof(IListenImportClient.Finished), async() =>
             {
                 NotificationService.Notify(NotificationSeverity.Info, "Import ferdig",
                     "Importering av data ferdig.");
@@ -105,16 +106,13 @@ namespace CIS.WebApp.Components.Pages
             await SetToImportingState();
             NotificationService.Notify(
                 NotificationSeverity.Info, "Import startet");
-            await InvokeAsync(StateHasChanged);
-            await _hubConnection.SendAsync("StartBackgroundService");
+            await BackgroundImportService.StartAsync(CancellationToken.None);
         }
 
         private async Task StopBackgroundService()
         {
             await _hubConnection.SendAsync("StopBackgroundService");
         }
-
-
 
         public void Dispose()
         {

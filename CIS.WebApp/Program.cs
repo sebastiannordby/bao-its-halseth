@@ -12,6 +12,7 @@ using CIS.Application.Shopify.Options;
 using CIS.Application.Shopify;
 using ShopifySharp.Extensions.DependencyInjection;
 using ShopifySharp;
+using CIS.Application.Hubs;
 
 namespace CIS.WebApp
 {

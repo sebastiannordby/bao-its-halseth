@@ -1,11 +1,13 @@
 ﻿using CIS.Application.Customers.Models;
+using CIS.Application.Hubs;
 using CIS.Application.Legacy;
+using CIS.Application.Listeners;
 using CIS.Application.Shared.Extensions;
 using CIS.Application.Shared.Services;
 using CIS.Application.Stores.Models;
 using CIS.Library.Customers.Models.Import;
 using CIS.Library.Shared.Services;
-using Microsoft.AspNet.SignalR;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -23,13 +25,16 @@ namespace CIS.Application.Customers.Services
     {
         private readonly CISDbContext _dbContext;
         private readonly SWNDistroContext _swnDistroContext;
+        private readonly IHubContext<ImportLegacyDataHub, IListenImportClient> _hub;
 
         public ImportCustomerService(
-            CISDbContext dbContext, 
-            SWNDistroContext swnDistroContext)
+            CISDbContext dbContext,
+            SWNDistroContext swnDistroContext,
+            IHubContext<ImportLegacyDataHub, IListenImportClient> hub)
         {
             _dbContext = dbContext;
             _swnDistroContext = swnDistroContext;
+            _hub = hub;
         }
 
         public async Task<bool> Import(IEnumerable<CustomerImportDefinition> importDefinitions)
@@ -109,9 +114,9 @@ namespace CIS.Application.Customers.Services
             return true;
         }
 
-        public async Task Migrate(Func<string, Task> log)
+        public async Task Migrate()
         {
-            await log("Importering av kunder/butikker påbegynt.");
+            await _hub.Clients.All.ReceiveMessage("Importering av kunder/butikker påbegynt.");
 
             await _swnDistroContext.Butikklistes.ProcessEntitiesInBatches(async (customers, percentage) =>
             {
@@ -152,7 +157,7 @@ namespace CIS.Application.Customers.Services
                 var successMsg = success ? "Vellykket" : "Feilet";
                 var message = $"({percentage}%)({successMsg}) Kunder:\n{namesMsg}\n";
 
-                await log(message);
+                await _hub.Clients.All.ReceiveMessage(message);
             });
         }
 

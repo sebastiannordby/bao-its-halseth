@@ -1,10 +1,12 @@
-﻿using CIS.Application.Legacy;
+﻿using CIS.Application.Hubs;
+using CIS.Application.Legacy;
+using CIS.Application.Listeners;
 using CIS.Application.Products.Models;
 using CIS.Application.Shared.Extensions;
 using CIS.Application.Shared.Services;
 using CIS.Library.Products.Import;
 using CIS.Library.Shared.Services;
-using Microsoft.AspNet.SignalR;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -21,13 +23,16 @@ namespace CIS.Application.Products.Services
     {
         private readonly CISDbContext _dbContext;
         private readonly SWNDistroContext _swnDistroContext;
+        private readonly IHubContext<ImportLegacyDataHub, IListenImportClient> _hub;
 
         public ImportProductService(
-            CISDbContext dbContext, 
-            SWNDistroContext swnDistroContext)
+            CISDbContext dbContext,
+            SWNDistroContext swnDistroContext,
+            IHubContext<ImportLegacyDataHub, IListenImportClient> hub)
         {
             _dbContext = dbContext;
             _swnDistroContext = swnDistroContext;
+            _hub = hub;
         }
 
         public async Task<bool> Import(IEnumerable<ProductImportDefinition> definitions)
@@ -94,9 +99,9 @@ namespace CIS.Application.Products.Services
             return true;
         }
 
-        public async Task Migrate(Func<string, Task> log)
+        public async Task Migrate()
         {
-            await log("Importering av varer påbegynt.");
+            await _hub.Clients.All.ReceiveMessage("Importering av varer påbegynt.");
 
             await _swnDistroContext.Vareinfos.ProcessEntitiesInBatches(async (products, percentage) =>
             {
@@ -131,10 +136,10 @@ namespace CIS.Application.Products.Services
                 var successMsg = success ? "Vellykket" : "Feilet";
                 var message = $"({percentage}%)({successMsg}) Varer:\n{productNamesMsg}\n";
 
-                await log(message);
+                await _hub.Clients.All.ReceiveMessage(message);
             });
 
-            await log("Importering av varer vellykket.");
+            await _hub.Clients.All.ReceiveMessage("Importering av varer vellykket.");
         }
     }
 }

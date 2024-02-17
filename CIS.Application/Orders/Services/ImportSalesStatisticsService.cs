@@ -1,10 +1,12 @@
-﻿using CIS.Application.Legacy;
+﻿using CIS.Application.Hubs;
+using CIS.Application.Legacy;
+using CIS.Application.Listeners;
 using CIS.Application.Orders.Contracts;
 using CIS.Application.Orders.Contracts.Import;
 using CIS.Application.Shared.Extensions;
 using CIS.Application.Shared.Services;
 using CIS.Library.Shared.Services;
-using Microsoft.AspNet.SignalR;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -20,18 +22,21 @@ namespace CIS.Application.Orders.Services
     {
         private readonly CISDbContext _dbContext;
         private readonly SWNDistroContext _swnDbContext;
+        private readonly IHubContext<ImportLegacyDataHub, IListenImportClient> _hub;
 
         public ImportSalesStatisticsService(
-            CISDbContext dbContext, 
-            SWNDistroContext swnDbContext)
+            CISDbContext dbContext,
+            SWNDistroContext swnDbContext,
+            IHubContext<ImportLegacyDataHub, IListenImportClient> hub)
         {
             _dbContext = dbContext;
             _swnDbContext = swnDbContext;
+            _hub = hub;
         }
 
-        public async Task Migrate(Func<string, Task> log)
+        public async Task Migrate()
         {
-            await log("Importering av salgstall påbegynt.");
+            await _hub.Clients.All.ReceiveMessage("Importering av salgstall påbegynt.");
 
             await _swnDbContext.Salgs.ProcessEntitiesInBatches(async (sales, percentage) =>
             {
@@ -59,10 +64,10 @@ namespace CIS.Application.Orders.Services
                 var successMsg = success ? "Vellykket" : "Feilet";
                 var message = $"({percentage}%)({successMsg}) Salgstall..\n";
 
-                await log(message); 
+                await _hub.Clients.All.ReceiveMessage(message); 
             }, 500);
 
-            await log("Importering av salgstall vellykket.");
+            await _hub.Clients.All.ReceiveMessage("Importering av salgstall vellykket.");
         }
 
         public async Task<bool> Import(IEnumerable<SalesStatisticsImportDefinition> definitions)

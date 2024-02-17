@@ -25,13 +25,14 @@ namespace CIS.Application.Orders
             this IServiceCollection services)
         {
             services
+                .AddScoped<IMigrationMapper<IEnumerable<OrderGroupingStruct>, IEnumerable<SalesOrderImportDefinition>>, LegacyCISSalesOrderMapper>()
                 .AddScoped<IProcessImportCommandService<ImportSalesOrderCommand>, ProcessImportSalesOrderCommandService>()
+                .AddScoped<IMigrateLegacyService<Ordre>, MigrateLegacyOrderService>()
                 .AddScoped<IValidator<ImportSalesOrderCommand>, ImportSalesOrderCommandValidator>()
                 .AddScoped<IValidator<SalesOrderImportDefinition>, SalesOrderImportDefinitionValidator>();
 
             return services
                 .AddScoped<ISalesQueries, SalesQueries>()
-                .AddScoped<IMigrateLegacyService<Ordre>, ImportSalesOrderService>()
                 .AddScoped<IExecuteImportService<SalesStatisticsImportDefinition>, ImportSalesStatisticsService>()
                 .AddScoped<IMigrateLegacyService<Salg>, ImportSalesStatisticsService>();
         }

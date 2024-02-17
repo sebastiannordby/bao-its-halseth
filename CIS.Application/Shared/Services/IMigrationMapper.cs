@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace CIS.Application.Shared.Services
 {
-    public interface IMigrateLegacyService<TModel>
-        where TModel : class
+    public interface IMigrationMapper<TIn, TOut>
     {
-        Task Migrate();
+        Task<TOut> Map(TIn input);
     }
 }

@@ -14,7 +14,11 @@ namespace CIS.Application.Orders.Import.Contracts
         {
             RuleFor(x => x.CustomerNumber)
                 .NotEmpty();
+            RuleFor(x => x.CustomerName)
+                .NotEmpty();
             RuleFor(x => x.StoreNumber)
+                .NotEmpty();
+            RuleFor(x => x.StoreName)
                 .NotEmpty();
             RuleFor(x => x.Lines)
                 .NotEmpty();

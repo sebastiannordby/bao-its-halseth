@@ -57,17 +57,6 @@ namespace CIS.Application.Orders.Import
                         IsDeleted = orderDefinition.IsDeleted
                     };
 
-                    if (string.IsNullOrWhiteSpace(orderDao.StoreName))
-                    {
-                        orderDao.StoreName = await GetStoreNameCashed(
-                            orderDao.StoreNumber) ?? "";
-                    }
-
-                    if (string.IsNullOrWhiteSpace(orderDao.CustomerName))
-                    {
-                        orderDao.CustomerName = orderDao.StoreName;
-                    }
-
                     orders.Add(orderDao);
 
                     foreach (var lineDefinition in orderDefinition.Lines)
@@ -86,12 +75,6 @@ namespace CIS.Application.Orders.Import
                             CurrencyCode = "NOK"
                         };
 
-                        if (string.IsNullOrWhiteSpace(orderLineDao.ProductName))
-                        {
-                            orderLineDao.ProductName = await GetProductNameCached(
-                                orderLineDao.ProductNumber, orderLineDao.EAN);
-                        }
-
                         orderLines.Add(orderLineDao);
                     }
                 }
@@ -106,42 +89,6 @@ namespace CIS.Application.Orders.Import
             {
                 return false;
             }
-        }
-
-        private async Task<string> GetProductNameCached(
-    int productNumber, string ean)
-        {
-            if (_productNames.ContainsKey(productNumber))
-                return _productNames[productNumber];
-
-            var productName = await _dbContext.Products
-                .Where(x =>
-                    x.Number == productNumber ||
-                    x.EAN == ean)
-                .Select(x => x.Name)
-                .FirstOrDefaultAsync() ?? string.Empty;
-            _productNames.Add(productNumber, productName);
-
-            return productName;
-        }
-
-        private async Task<string?> GetStoreNameCashed(int storeNumber)
-        {
-            if (storeNumber == 0)
-                return null;
-
-            if (_storeNames.ContainsKey(storeNumber))
-                return _storeNames[storeNumber];
-
-            var storeName = await _dbContext.Stores
-                .Where(x =>
-                    x.Number == storeNumber)
-                .Select(x => x.Name)
-            .FirstOrDefaultAsync() ?? string.Empty;
-
-            _storeNames.Add(storeNumber, storeName);
-
-            return storeName;
         }
     }
 }

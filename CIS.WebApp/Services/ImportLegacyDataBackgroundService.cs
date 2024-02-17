@@ -1,4 +1,6 @@
+using CIS.Application.Hubs;
 using CIS.Application.Legacy;
+using CIS.Application.Listeners;
 using CIS.Application.Orders.Contracts.Import;
 using CIS.Application.Shared.Extensions;
 using CIS.Application.Shared.Models;
@@ -22,7 +24,7 @@ namespace CIS.WebApp.Services
 {
     public class ImportLegacyDataBackgroundService
     {
-        private readonly IHubContext<ImportLegacyDataHub> _hubContext;
+        private readonly IHubContext<ImportLegacyDataHub, IListenImportClient> _hubContext;
         private readonly IServiceScopeFactory _scopeFactory;
         private bool _isRunning;
 
@@ -33,10 +35,10 @@ namespace CIS.WebApp.Services
 
         public ImportLegacyDataBackgroundService(
             IServiceScopeFactory scopeFactory,
-            IHubContext<ImportLegacyDataHub> hubContext)
+            IHubContext<ImportLegacyDataHub, IListenImportClient> hubContext)
         {
-            _hubContext = hubContext;
             _scopeFactory = scopeFactory;
+            _hubContext = hubContext;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -63,42 +65,30 @@ namespace CIS.WebApp.Services
 
             if(uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.Products))
             {
-                await migrateProductService.Migrate(async (message) =>
-                {
-                    await _hubContext.Clients.All.SendAsync(ReceiveMessage, message);
-                });
+                await migrateProductService.Migrate();
                 await migrationTaskRepo.Complete(MigrationTask.TaskType.Products);
             }
 
             if (uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.Customers))
             {
-                await migrateCustomerService.Migrate(async(message) =>
-                {
-                    await _hubContext.Clients.All.SendAsync(ReceiveMessage, message);
-                });
+                await migrateCustomerService.Migrate();
                 await migrationTaskRepo.Complete(MigrationTask.TaskType.Customers);
             }
 
             if (uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.SalesOrders))
             {
-                await migrateSalesOrderService.Migrate(async(message) =>
-                {
-                    await _hubContext.Clients.All.SendAsync(ReceiveMessage, message);
-                });
+                await migrateSalesOrderService.Migrate();
                 await migrationTaskRepo.Complete(MigrationTask.TaskType.SalesOrders);
             }
 
             if (uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.SalesOrderStatistics))
             {
-                await migrateSalesStatisticsService.Migrate(async(message) =>
-                {
-                    await _hubContext.Clients.All.SendAsync(ReceiveMessage, message);
-                });
-
+                await migrateSalesStatisticsService.Migrate();
                 await migrationTaskRepo.Complete(MigrationTask.TaskType.SalesOrderStatistics);
             }
 
-            await _hubContext.Clients.All.SendAsync(Finished);
+            await _hubContext.Clients.All.Finished();
+
             _isRunning = false;
         }
     }
