@@ -90,8 +90,10 @@ namespace CIS.Application.Orders.Import
             return importDefinitions;
         }
 
-        private async Task<string> GetProductNameCached(string ean)
+        private async Task<string?> GetProductNameCached(string ean)
         {
+            if (string.IsNullOrWhiteSpace(ean))
+                return null;
             if (_productNames.ContainsKey(ean))
                 return _productNames[ean];
 
