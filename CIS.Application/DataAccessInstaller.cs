@@ -6,6 +6,8 @@ using CIS.Application.Products;
 using CIS.Application.Shared.Models;
 using CIS.Application.Shared.Repositories;
 using CIS.Application.Stores;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -36,8 +38,10 @@ namespace CIS.Application
             return services;
         }
 
-        public static void MigrateDataAccess(
-            this IServiceProvider provider, bool requiresMigrationFromLegacy)
+        public static async Task MigrateDataAccess(
+            this IServiceProvider provider, 
+            bool requiresMigrationFromLegacy,
+            bool insertTestUser)
         {
             var appDbContext = provider
                 .GetRequiredService<CISDbContext>();
@@ -62,6 +66,27 @@ namespace CIS.Application
                         }
 
                         appDbContext.SaveChanges();
+                    }
+                }
+
+                if(insertTestUser)
+                {
+                    if(!appDbContext.Users.Any())
+                    {
+                        var userManager = provider
+                            .GetRequiredService<UserManager<ApplicationUser>>();
+
+                        var user = new ApplicationUser
+                        {
+                            UserName = "admin@cis.no",
+                            Email = "admin@cis.no",
+                            LockoutEnabled = false,
+                            TwoFactorEnabled = false,
+                        };
+                        var result = await userManager.CreateAsync(user, "Password1.");
+                        var emailConfirmationCode = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                        var confirmEmailRes = await userManager.ConfirmEmailAsync(user, emailConfirmationCode);
+
                     }
                 }
             }

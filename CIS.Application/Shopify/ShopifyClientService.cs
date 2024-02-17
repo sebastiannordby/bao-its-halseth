@@ -32,8 +32,6 @@ namespace CIS.Application.Shopify
         {
             var filter = new OrderListFilter()
             {
-                CreatedAtMin = createdAtMin,
-                Limit = 100
             };
 
             var orders = await _orderService
@@ -45,6 +43,7 @@ namespace CIS.Application.Shopify
         public async Task<IEnumerable<DraftOrder>> GetDraftOrdersAsync()
         {
             var draftOrders = await _draftOrderService.ListAsync();
+
             return draftOrders.Items;
         }
     }

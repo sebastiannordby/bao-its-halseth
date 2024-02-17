@@ -11,8 +11,8 @@
                 <div class="flex items-center justify-between px-4 h-full">
                     <div class="text-xl font-semibold">CIS - Custom Install Software</div>
                     <div class="flex items-center space-x-4">
-                        <!-- Add user profile dropdown or any other header elements here -->
-                        <!-- Example: <UserProfileDropdown /> -->
+                        <span class="material-symbols-sharp">account_circle</span>
+                        <label>@context?.User?.Identity?.Name</label>
                     </div>
                 </div>
             </RadzenHeader>
@@ -30,11 +30,6 @@
         @Body
     </NotAuthorized>
 </AuthorizeView>
-
-@*         <a href="/Account/Register">Register</a>
-        <a href="/Account/Login">Log in</a>
- *@
-
 
 <div id="blazor-error-ui">
     An unhandled error has occurred.

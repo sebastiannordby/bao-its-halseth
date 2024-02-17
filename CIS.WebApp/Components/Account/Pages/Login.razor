@@ -10,21 +10,16 @@
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
 
-<PageTitle>Log in</PageTitle>
+<PageTitle>Logg in</PageTitle>
 
-<div style="background-size: cover; background-repeat: no-repeat; background-image: url(https://images.pexels.com/photos/14579031/pexels-photo-14579031.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2)"
-    class="flex flex-col gap-2 items-center justify-content-center h-full">
-
-    <div class="flex flex-col gap-2 items-center justify-content-center h-full w-full backdrop-blur-md">
-
-        <div class="p-6 bg-white rounded-md min-w-72 max-w-[500px]">
+<div class="flex items-center justify-center h-screen bg-cover bg-no-repeat bg-center" style="background-image: url(https://th.bing.com/th/id/OIG3.QeChUZmpibRHnMI6hIO2?w=1024&h=1024&rs=1&pid=ImgDetMain)">
+    <div class="flex items-center justify-center h-full w-full backdrop-blur-sm shadow-xl">
+        <div class="p-8 bg-white rounded-md min-w-96 max-w-[500px]">
             <h1 class="text-xl mb-2">Logg inn</h1>
-
             <section>
                 <StatusMessage Message="@errorMessage" />
                 <EditForm Model="Input" method="post" OnValidSubmit="LoginUser" FormName="login">
                     <DataAnnotationsValidator />
-                    <hr />
                     <ValidationSummary class="text-danger" role="alert" />
                     <div class="form-floating mb-3">
                         <InputText @bind-Value="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
@@ -43,7 +38,7 @@
                         </label>
                     </div>
                     <div>
-                        <button type="submit" class="w-100 btn btn-lg btn-primary">Logg inn</button>
+                        <button type="submit" class="w-full btn btn-lg btn-primary">Logg inn</button>
                     </div>
                     <div class="mt-2">
                         <p>
@@ -61,6 +56,7 @@
         </div>
     </div>
 </div>
+
 
 @* <div class="col-md-6 col-md-offset-2">
     <section>
@@ -123,13 +119,13 @@
     {
         [Required]
         [EmailAddress]
-        public string Email { get; set; } = "";
+        public string Email { get; set; } = "admin@cis.no";
 
         [Required]
         [DataType(DataType.Password)]
-        public string Password { get; set; } = "";
+        public string Password { get; set; } = "Password1.";
 
         [Display(Name = "Remember me?")]
-        public bool RememberMe { get; set; }
+        public bool RememberMe { get; set; } = true;
     }
 }

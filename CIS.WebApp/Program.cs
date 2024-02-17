@@ -17,7 +17,7 @@ namespace CIS.WebApp
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -92,7 +92,9 @@ namespace CIS.WebApp
             }
 
             app.UseHttpsRedirection();
-            app.InitializeDatabase(requiresMigrationFromLegacy: true);
+            await app.InitializeDatabase(
+                requiresMigrationFromLegacy: true,
+                insertTestUser: true);
             app.UseStaticFiles();
             app.UseAntiforgery();
 

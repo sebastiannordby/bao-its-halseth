@@ -4,12 +4,15 @@ namespace CIS.WebApp.Extensions
 {
     public static class StartupExtensions
     {
-        public static void InitializeDatabase(
-            this IApplicationBuilder app, bool requiresMigrationFromLegacy)
+        public static async Task InitializeDatabase(
+            this IApplicationBuilder app, 
+            bool requiresMigrationFromLegacy, 
+            bool insertTestUser)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
-                serviceScope.ServiceProvider.MigrateDataAccess(requiresMigrationFromLegacy);
+                await serviceScope.ServiceProvider.MigrateDataAccess(
+                    requiresMigrationFromLegacy, insertTestUser);
             }
         }
     }

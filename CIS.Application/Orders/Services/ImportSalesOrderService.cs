@@ -242,7 +242,7 @@ namespace CIS.Application.Orders.Services
             if (_storeNames.ContainsKey(storeNumber))
                 return _storeNames[storeNumber];
 
-            var storeName = await _dbContext.Products
+            var storeName = await _dbContext.Stores
                 .Where(x =>
                     x.Number == storeNumber)
                 .Select(x => x.Name)

@@ -2,64 +2,86 @@
 @using CIS.Application.Shopify
 @using ShopifySharp
 
-<h3>Shopify</h3>
+<PageTitle>Shopify</PageTitle>
 
+<div class="h-full w-full">
+    <h1 class="text-xl">Shopify</h1>
 
-<RadzenButton Click="GetOrdersFromShopify"/>
-
-<RadzenDataGrid 
-    TItem="DraftOrder"
-    Data="_draftOrders"
-    FilterMode="FilterMode.Advanced"
-    AllowFiltering="true"
-    AllowPaging="true"
-    AllowSorting="true"
-    AllowMultiColumnSorting="true"
-    AllowColumnPicking="true"
-    AllowGrouping="true"
-    AllowColumnResize="true"
-    PageSize="1000"
-    Style="height: 100%">
-
-    <Columns>
-        <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.OrderId))" Title="#" />
-        <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.Name))" Title="Navn" />
-        <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.BillingAddress))" Title="Billing address" >
-            <Template>
-                <label>@context.BillingAddress.Address1 (@context.BillingAddress.Province) (@context.BillingAddress.City)</label>
-            </Template>
-        </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.Customer))" Title="Kunde" Context="item">
-            <Template>
-                <label>@item.Customer.FirstName @item.Customer.LastName</label>
-            </Template>
-        </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.Email))" Title="Navn" />
-        <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.Currency))" Title="Valuta" />
-        <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.SubtotalPrice))" Title="Subtotal pris" />
-        <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.TotalPrice))" Title="Total pris" />
-    </Columns>
-</RadzenDataGrid>
-
-
-
-@code {
-    [Inject] 
-    public ShopifyClientService ShopifyService { get; set; }
-
-    private IEnumerable<DraftOrder> _draftOrders;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await GetOrdersFromShopify();
-        }
-    }
-
-    private async Task GetOrdersFromShopify()
-    {
-        _draftOrders = await ShopifyService.GetDraftOrdersAsync();
-        StateHasChanged();
-    } 
-}
+    <RadzenTabs
+        Style="height: 100%;">
+        <Tabs>
+            <RadzenTabsItem Text="Bestillinger">
+                <RadzenDataGrid 
+                    TItem="Order"
+                    Data="_orders"
+                    Count="_ordersCount"
+                    LoadData="LoadOrders"
+                    FilterMode="FilterMode.Advanced"
+                    AllowFiltering="true"
+                    AllowPaging="true"
+                    AllowSorting="true"
+                    AllowMultiColumnSorting="true"
+                    AllowColumnPicking="true"
+                    AllowGrouping="true"
+                    AllowColumnResize="true"
+                    PageSize="1000"
+                    Style="height: 100%">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="Order" Property="@(nameof(Order.OrderNumber))" Title="#" />
+                        <RadzenDataGridColumn TItem="Order" Property="@(nameof(Order.Name))" Title="Navn" />
+                        <RadzenDataGridColumn TItem="Order" Property="@(nameof(Order.BillingAddress))" Title="Billing address">
+                            <Template>
+                                <label>@context.BillingAddress.Address1 (@context.BillingAddress.Province) (@context.BillingAddress.City)</label>
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="Order" Property="@(nameof(Order.Customer))" Title="Kunde" Context="item">
+                            <Template>
+                                <label>@item.Customer.FirstName @item.Customer.LastName</label>
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="Order" Property="@(nameof(Order.Email))" Title="Navn" />
+                        <RadzenDataGridColumn TItem="Order" Property="@(nameof(Order.Currency))" Title="Valuta" />
+                        <RadzenDataGridColumn TItem="Order" Property="@(nameof(Order.SubtotalPrice))" Title="Subtotal pris" />
+                        <RadzenDataGridColumn TItem="Order" Property="@(nameof(Order.TotalPrice))" Title="Total pris" />
+                    </Columns>
+                </RadzenDataGrid>
+            </RadzenTabsItem>
+            <RadzenTabsItem Text="Bestillinger - kladd">
+                <RadzenDataGrid 
+                    TItem="DraftOrder"
+                    Data="_draftOrders"
+                    Count="_draftOrdersCount"
+                    LoadData="LoadDraftOrders"
+                    FilterMode="FilterMode.Advanced"
+                    AllowFiltering="true"
+                    AllowPaging="true"
+                    AllowSorting="true"
+                    AllowMultiColumnSorting="true"
+                    AllowColumnPicking="true"
+                    AllowGrouping="true"
+                    AllowColumnResize="true"
+                    PageSize="1000"
+                    Style="height: 100%">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.OrderId))" Title="Id" />
+                        <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.Name))" Title="Navn" />
+                        <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.BillingAddress))" Title="Billing address" >
+                            <Template>
+                                <label>@context.BillingAddress.Address1 (@context.BillingAddress.Province) (@context.BillingAddress.City)</label>
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.Customer))" Title="Kunde" Context="item">
+                            <Template>
+                                <label>@item.Customer.FirstName @item.Customer.LastName</label>
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.Email))" Title="Navn" />
+                        <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.Currency))" Title="Valuta" />
+                        <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.SubtotalPrice))" Title="Subtotal pris" />
+                        <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.TotalPrice))" Title="Total pris" />
+                    </Columns>
+                </RadzenDataGrid>
+            </RadzenTabsItem>
+        </Tabs>
+    </RadzenTabs>
+</div>
