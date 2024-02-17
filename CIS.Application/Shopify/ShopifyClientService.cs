@@ -12,12 +12,13 @@ namespace CIS.Application.Shopify
     {
         private readonly ShopifyClientServiceOptions _options;
         private readonly ShopifyApiCredentials _apiCredentials;
-
-
         private readonly IOrderService _orderService;
         private readonly IDraftOrderService _draftOrderService;
 
-        public ShopifyClientService(IOptions<ShopifyClientServiceOptions> options, IOrderServiceFactory orderServiceFactory, IDraftOrderServiceFactory draftOrderServiceFactory )
+        public ShopifyClientService(
+            IOptions<ShopifyClientServiceOptions> options, 
+            IOrderServiceFactory orderServiceFactory, 
+            IDraftOrderServiceFactory draftOrderServiceFactory )
         {
             _options = options.Value;
 
@@ -25,23 +26,26 @@ namespace CIS.Application.Shopify
             _apiCredentials = new ShopifyApiCredentials($"https://{_options.Domain}.myshopify.com", _options.AccessToken);
             _orderService = orderServiceFactory.Create(_apiCredentials);
             _draftOrderService = draftOrderServiceFactory.Create(_apiCredentials);
-
         }
 
-
-        public async Task<IEnumerable<Order>> GetOrdersAsync()
+        public async Task<IEnumerable<Order>> GetOrdersAsync(DateTime createdAtMin)
         {
-            var orders = await _orderService.ListAsync();
+            var filter = new OrderListFilter()
+            {
+                CreatedAtMin = createdAtMin,
+                Limit = 100
+            };
+
+            var orders = await _orderService
+                .ListAsync();
+
             return orders.Items;
         }
-
 
         public async Task<IEnumerable<DraftOrder>> GetDraftOrdersAsync()
         {
             var draftOrders = await _draftOrderService.ListAsync();
             return draftOrders.Items;
         }
-
-
     }
 }

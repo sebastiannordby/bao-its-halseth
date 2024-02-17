@@ -44,21 +44,18 @@
 
 
 @code {
-    [Inject] ShopifyClientService ShopifyService { get; set; }
-
-
+    [Inject] 
+    public ShopifyClientService ShopifyService { get; set; }
 
     private IEnumerable<DraftOrder> _draftOrders;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-
         if (firstRender)
         {
             await GetOrdersFromShopify();
         }
     }
-
 
     private async Task GetOrdersFromShopify()
     {

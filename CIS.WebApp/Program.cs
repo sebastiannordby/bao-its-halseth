@@ -31,7 +31,8 @@ namespace CIS.WebApp
             if (string.IsNullOrWhiteSpace(legacyConnectionString))
                 throw new ArgumentException("ConnectionStrings:LegacyConnection must be configured in user secrets or appsettings.json.");
 
-            builder.Services.Configure<ShopifyClientServiceOptions>(builder.Configuration.GetSection("Shopify"));
+            builder.Services.Configure<ShopifyClientServiceOptions>(
+                builder.Configuration.GetSection("Shopify"));
 
             // Add services to the container.
             builder.Services.AddRazorComponents()
@@ -73,10 +74,6 @@ namespace CIS.WebApp
                 .AddDefaultTokenProviders();
 
             builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
-
-
-            
-
 
             var app = builder.Build();
 

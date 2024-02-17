@@ -1414,7 +1414,8 @@ namespace CIS.Application.Legacy
                 },
                 parameterreturnValue,
             };
-            var _ = await _context.SqlQueryAsync<Vareinfo_VedlikeholdResult>("EXEC @returnValue = [dbo].[Vareinfo_Vedlikehold] @id, @varenr_swn, @varenr_prod, @varenrLev, @ean, @varetekst, @sort, @aktiv, @utvid, @la, @lo, @se, @KJ, @SY, @TB, @TO, @FL, @productFit, @prøve, @bongtekst, @salgsnavn, @linkBilde, @linkforp", sqlParameters, cancellationToken);
+            var _ = await _context.SqlQueryAsync<Vareinfo_VedlikeholdResult>(
+                "EXEC @returnValue = [dbo].[Vareinfo_Vedlikehold] @id, @varenr_swn, @varenr_prod, @varenrLev, @ean, @varetekst, @sort, @aktiv, @utvid, @la, @lo, @se, @KJ, @SY, @TB, @TO, @FL, @productFit, @prøve, @bongtekst, @salgsnavn, @linkBilde, @linkforp", sqlParameters, cancellationToken);
 
             returnValue?.SetValue(parameterreturnValue.Value);
 
@@ -1441,7 +1442,8 @@ namespace CIS.Application.Legacy
                 },
                 parameterreturnValue,
             };
-            var _ = await _context.SqlQueryAsync<varetellingImportFilerResult>("EXEC @returnValue = [dbo].[varetellingImportFiler] @filnavn", sqlParameters, cancellationToken);
+            var _ = await _context.SqlQueryAsync<varetellingImportFilerResult>(
+                "EXEC @returnValue = [dbo].[varetellingImportFiler] @filnavn", sqlParameters, cancellationToken);
 
             returnValue?.SetValue(parameterreturnValue.Value);
 
@@ -1468,7 +1470,8 @@ namespace CIS.Application.Legacy
                 },
                 parameterreturnValue,
             };
-            var _ = await _context.SqlQueryAsync<varetellingImportFiler_VTFILER_RCResult>("EXEC @returnValue = [dbo].[varetellingImportFiler_VTFILER_RC] @filnavn", sqlParameters, cancellationToken);
+            var _ = await _context.SqlQueryAsync<varetellingImportFiler_VTFILER_RCResult>(
+                "EXEC @returnValue = [dbo].[varetellingImportFiler_VTFILER_RC] @filnavn", sqlParameters, cancellationToken);
 
             returnValue?.SetValue(parameterreturnValue.Value);
 

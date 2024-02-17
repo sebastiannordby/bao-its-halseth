@@ -2,10 +2,12 @@
 using CIS.Application.Orders.Models;
 using CIS.Application.Shared.Extensions;
 using CIS.Application.Shared.Services;
+using CIS.Application.Shopify;
 using CIS.Library.Orders.Models.Import;
 using CIS.Library.Shared.Services;
 using Microsoft.AspNet.SignalR;
 using Microsoft.EntityFrameworkCore;
+using ShopifySharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,19 +19,52 @@ namespace CIS.Application.Orders.Services
 {
     internal class ImportSalesOrderService : 
         IExecuteImportService<SalesOrderImportDefinition>,
-        IMigrateLegacyService<Ordre>
+        IMigrateLegacyService<Ordre>,
+        IExecuteImportFromShopify<Order>
     {
         private readonly CISDbContext _dbContext;
         private readonly SWNDistroContext _swnDbContext;
+        private readonly ShopifyClientService _shopifyClientService;
+
         private Dictionary<int, string> _storeNames = new();
         private Dictionary<int, string> _productNames = new();
 
         public ImportSalesOrderService(
             CISDbContext dbContext, 
-            SWNDistroContext swnDbContext)
+            SWNDistroContext swnDbContext,
+            ShopifyClientService shopifyClientService)
         {
             _dbContext = dbContext;
             _swnDbContext = swnDbContext;
+            _shopifyClientService = shopifyClientService;
+        }
+
+        public async Task ExecuteShopifyImport()
+        {
+            var latestOrderDate = _dbContext.SalesOrders
+                .Max(x => x.OrderDate);
+
+            var getOrdersAfterDateTime = latestOrderDate
+                .ToDateTime(TimeOnly.MinValue);
+
+            var shopifyOrders = await _shopifyClientService.GetOrdersAsync(
+                getOrdersAfterDateTime);
+
+            var ordersToInsert = new List<SalesOrderDao>();
+            var orderLinesToInsert = new List<SalesOrderLineDao>();
+
+            foreach(var shopifyOrder in shopifyOrders)
+            {
+                var newOrder = new SalesOrderDao()
+                {
+                    Number = shopifyOrder.OrderNumber ?? 0,
+                    AlternateNumber = shopifyOrder.OrderNumber?.ToString(),
+                    CustomerName = shopifyOrder.Customer.FirstName,
+                    StoreName = shopifyOrder.Customer.LastName,
+                    OrderDate = shopifyOrder.CreatedAt.HasValue ? 
+                        DateOnly.FromDateTime(shopifyOrder.CreatedAt.Value.DateTime) : DateOnly.FromDateTime(DateTime.Now),
+                };
+            }
         }
 
         public async Task<bool> Import(IEnumerable<SalesOrderImportDefinition> definitions)
