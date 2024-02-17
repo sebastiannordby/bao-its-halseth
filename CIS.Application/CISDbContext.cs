@@ -1,7 +1,7 @@
 ﻿using CIS.Application.Customers;
 using CIS.Application.Customers.Models;
 using CIS.Application.Orders;
-using CIS.Application.Orders.Models;
+using CIS.Application.Orders.Contracts;
 using CIS.Application.Products;
 using CIS.Application.Products.Models;
 using CIS.Application.Shared.Models;

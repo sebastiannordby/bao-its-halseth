@@ -42,3 +42,5 @@
 /CIS.WebApp/bin/Debug/net8.0
 /CIS.WebApp/node_modules
 /CIS.WebApp/obj
+/CIS.Tests/bin/Debug/net8.0
+/CIS.Tests/obj

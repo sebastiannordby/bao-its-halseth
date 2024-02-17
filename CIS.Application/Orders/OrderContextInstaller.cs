@@ -1,11 +1,12 @@
 ﻿using CIS.Application.Customers.Models;
 using CIS.Application.Legacy;
-using CIS.Application.Orders.Models;
-using CIS.Application.Orders.Models.Import;
+using CIS.Application.Orders.Contracts;
+using CIS.Application.Orders.Contracts.Import;
+using CIS.Application.Orders.Import;
+using CIS.Application.Orders.Import.Contracts;
 using CIS.Application.Orders.Repositories;
 using CIS.Application.Orders.Services;
 using CIS.Application.Shared.Services;
-using CIS.Library.Orders.Models.Import;
 using CIS.Library.Shared.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FluentValidation;
 
 namespace CIS.Application.Orders
 {
@@ -22,9 +24,13 @@ namespace CIS.Application.Orders
         internal static IServiceCollection AddOrderServices(
             this IServiceCollection services)
         {
+            services
+                .AddScoped<IProcessImportCommandService<ImportSalesOrderCommand>, ProcessImportSalesOrderCommandService>()
+                .AddScoped<IValidator<ImportSalesOrderCommand>, ImportSalesOrderCommandValidator>()
+                .AddScoped<IValidator<SalesOrderImportDefinition>, SalesOrderImportDefinitionValidator>();
+
             return services
                 .AddScoped<ISalesQueries, SalesQueries>()
-                .AddScoped<IExecuteImportService<SalesOrderImportDefinition>, ImportSalesOrderService>()
                 .AddScoped<IMigrateLegacyService<Ordre>, ImportSalesOrderService>()
                 .AddScoped<IExecuteImportService<SalesStatisticsImportDefinition>, ImportSalesStatisticsService>()
                 .AddScoped<IMigrateLegacyService<Salg>, ImportSalesStatisticsService>();

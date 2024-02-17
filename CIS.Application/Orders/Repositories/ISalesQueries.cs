@@ -1,5 +1,5 @@
 ﻿using CIS.Application.Legacy;
-using CIS.Application.Orders.Models;
+using CIS.Application.Orders.Contracts;
 using CIS.Library.Orders.Models;
 using Microsoft.EntityFrameworkCore;
 using Radzen;

@@ -1,5 +1,4 @@
-﻿using CIS.Library.Orders.Models.Import;
-using CIS.Library.Shared.Services;
+﻿using CIS.Library.Shared.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using OfficeOpenXml;
@@ -15,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Linq.Dynamic.Core;
 using CIS.Application.Orders.Repositories;
+using CIS.Application.Orders.Contracts;
 
 namespace CIS.WebApp.Components.Pages
 {

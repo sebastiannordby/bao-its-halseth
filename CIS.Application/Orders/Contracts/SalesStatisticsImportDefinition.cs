@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.Application.Orders.Models
+namespace CIS.Application.Orders.Contracts.Import
 {
-    public class SalesStatisticsDao
+    public class SalesStatisticsImportDefinition
     {
-        public Guid Id { get; set; }
         public int Number { get; set; }
         public DateTime Date { get; set; }
         public int StoreNumber { get; set; }

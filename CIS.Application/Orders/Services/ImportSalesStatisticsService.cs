@@ -1,6 +1,6 @@
 ﻿using CIS.Application.Legacy;
-using CIS.Application.Orders.Models;
-using CIS.Application.Orders.Models.Import;
+using CIS.Application.Orders.Contracts;
+using CIS.Application.Orders.Contracts.Import;
 using CIS.Application.Shared.Extensions;
 using CIS.Application.Shared.Services;
 using CIS.Library.Shared.Services;
@@ -11,8 +11,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Formats.Asn1.AsnWriter;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CIS.Application.Orders.Services
 {

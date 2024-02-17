@@ -1,11 +1,10 @@
 using CIS.Application.Legacy;
-using CIS.Application.Orders.Models.Import;
+using CIS.Application.Orders.Contracts.Import;
 using CIS.Application.Shared.Extensions;
 using CIS.Application.Shared.Models;
 using CIS.Application.Shared.Repositories;
 using CIS.Application.Shared.Services;
 using CIS.Library.Customers.Models.Import;
-using CIS.Library.Orders.Models.Import;
 using CIS.Library.Products.Import;
 using CIS.Library.Shared.Services;
 using CIS.WebApp.Components.Pages;
@@ -23,8 +22,6 @@ namespace CIS.WebApp.Services
 {
     public class ImportLegacyDataBackgroundService
     {
-        private readonly ManualResetEvent _signal = new ManualResetEvent(false);
-        private CancellationTokenSource _cancellationTokenSource;
         private readonly IHubContext<ImportLegacyDataHub> _hubContext;
         private readonly IServiceScopeFactory _scopeFactory;
         private bool _isRunning;

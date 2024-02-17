@@ -1,4 +1,4 @@
-﻿using CIS.Application.Orders.Models;
+﻿using CIS.Application.Orders.Contracts;
 using CIS.Application.Orders.Repositories;
 using CIS.Application.Shared.Models;
 using CIS.Application.Shared.Repositories;

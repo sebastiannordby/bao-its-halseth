@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.Library.Orders.Models.Import
+namespace CIS.Application.Orders.Contracts
 {
     public class SalesOrderImportDefinition
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CIS.Application.Orders.Models
+namespace CIS.Application.Orders.Contracts
 {
     public class SalesOrderDao
     {

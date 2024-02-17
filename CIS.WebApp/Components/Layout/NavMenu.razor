@@ -23,8 +23,11 @@
     </NavMenuSection>
 
     <NavMenuSection Title="Forrige system">
-        <NavMenuItem Text="Migrering" Href="/import-legacy" Icon="function" />
+        @if (_showMigrationPage)
+        {
+            <NavMenuItem Text="Migrering" Href="/import-legacy" Icon="function" />
+        }
+
         <NavMenuItem Text="Inspiser" Href="/inspect-legacy-data" Icon="mystery" />
     </NavMenuSection>
-
 </div>

@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CIS.Application", "CIS.Appl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CIS.WebApp", "CIS.WebApp\CIS.WebApp.csproj", "{5768D037-EE1E-482C-96E9-985A8AE9F6E4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CIS.Tests", "CIS.Tests\CIS.Tests.csproj", "{3F95D20E-14E0-4710-B110-EE1650BCE1EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{5768D037-EE1E-482C-96E9-985A8AE9F6E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5768D037-EE1E-482C-96E9-985A8AE9F6E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5768D037-EE1E-482C-96E9-985A8AE9F6E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F95D20E-14E0-4710-B110-EE1650BCE1EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F95D20E-14E0-4710-B110-EE1650BCE1EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F95D20E-14E0-4710-B110-EE1650BCE1EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F95D20E-14E0-4710-B110-EE1650BCE1EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
