@@ -8,6 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using CIS.WebApp.Services;
 using CIS.WebApp.Extensions;
 using Radzen;
+using CIS.Application.Shopify.Options;
+using CIS.Application.Shopify;
+using ShopifySharp.Extensions.DependencyInjection;
+using ShopifySharp;
 
 namespace CIS.WebApp
 {
@@ -27,6 +31,8 @@ namespace CIS.WebApp
             if (string.IsNullOrWhiteSpace(legacyConnectionString))
                 throw new ArgumentException("ConnectionStrings:LegacyConnection must be configured in user secrets or appsettings.json.");
 
+            builder.Services.Configure<ShopifyClientServiceOptions>(builder.Configuration.GetSection("Shopify"));
+
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
@@ -36,6 +42,9 @@ namespace CIS.WebApp
 
             builder.Services.AddSignalR();
 
+            builder.Services.AddShopifySharp<LeakyBucketExecutionPolicy>();
+
+            builder.Services.AddScoped<ShopifyClientService>();
             builder.Services.AddCascadingAuthenticationState();
             builder.Services.AddScoped<IdentityUserAccessor>();
             builder.Services.AddScoped<IdentityRedirectManager>();
@@ -64,6 +73,10 @@ namespace CIS.WebApp
                 .AddDefaultTokenProviders();
 
             builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+
+
+            
+
 
             var app = builder.Build();
 
