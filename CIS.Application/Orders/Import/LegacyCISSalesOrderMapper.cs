@@ -1,5 +1,6 @@
 ﻿using CIS.Application.Legacy;
 using CIS.Application.Orders.Contracts;
+using CIS.Application.Orders.Import.Contracts;
 using CIS.Application.Orders.Services;
 using CIS.Application.Shared.Services;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,8 @@ using System.Threading.Tasks;
 
 namespace CIS.Application.Orders.Import
 {
-    internal class LegacyCISSalesOrderMapper : IMigrationMapper<IEnumerable<OrderGroupingStruct>, IEnumerable<SalesOrderImportDefinition>>
+    internal class LegacyCISSalesOrderMapper : 
+        IMigrationMapper<LegacyCISOrderSource, SalesOrderImportDefinition>
     {
         private Dictionary<int, string> _storeNames = new();
         private Dictionary<string, string> _productNames = new();
@@ -29,18 +31,12 @@ namespace CIS.Application.Orders.Import
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<SalesOrderImportDefinition>> Map(IEnumerable<OrderGroupingStruct> orderGroupings)
+        public async Task<IEnumerable<SalesOrderImportDefinition>> Map(LegacyCISOrderSource source)
         {
             var importDefinitions = new List<SalesOrderImportDefinition>();
 
-            foreach (var ordreStruct in orderGroupings)
+            foreach (var grouping in source.OrderGrouping)
             {
-                var grouping = await _swnDbContext.Ordres
-                    .AsNoTracking()
-                    .Where(x => x.Butikknr == ordreStruct.Butikknr)
-                    .Where(x => x.Dato == ordreStruct.Dato)
-                    .ToListAsync();
-
                 var legOrder = grouping.First();
                 if (!legOrder.Butikknr.HasValue)
                     throw new Exception();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CIS.Application.Shared.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CIS.Library.Customers.Models.Import
 {
-    public class CustomerImportDefinition
+    public class CustomerImportDefinition : CISImportDefinition
     {
         public required int Number { get; set; }
         public required string Name { get; set; }

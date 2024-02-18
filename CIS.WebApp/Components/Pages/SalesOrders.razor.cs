@@ -15,13 +15,14 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Linq.Dynamic.Core;
 using CIS.Application.Orders.Repositories;
 using CIS.Application.Orders.Contracts;
+using CIS.Application.Orders.Import.Contracts;
 
 namespace CIS.WebApp.Components.Pages
 {
-    public partial class SalesOrders : ComponentBase
+    public partial class SalesOrders : ComponentBase, IDisposable
     {
         [Inject]
-        public IExecuteImportService<SalesOrderImportDefinition> ImportOrderService { get; set; }
+        public IProcessImportCommandService<ImportSalesOrderCommand> ImportOrderService { get; set; }
 
         [Inject]
         public NotificationService NotificationService { get; set; }
@@ -50,6 +51,8 @@ namespace CIS.WebApp.Components.Pages
         public const int IMPORT_TAB_INDEX = 1;
 
         private int _selectedTabIndex = OVERVIEW_TAB_INDEX;
+
+        private CancellationTokenSource _cts = new();
 
         protected override async Task OnInitializedAsync()
         {
@@ -179,7 +182,13 @@ namespace CIS.WebApp.Components.Pages
 
         private async Task ExecuteImport()
         {
-            var result = await ImportOrderService.Import(_orderImportDefinitions);
+            var command = new ImportSalesOrderCommand()
+            {
+                Definitions = _orderImportDefinitions
+            };
+            
+            var result = await ImportOrderService
+                .Import(command, _cts.Token);
             if (result)
             {
                 NotificationService.Notify(
@@ -192,6 +201,12 @@ namespace CIS.WebApp.Components.Pages
             {
                 NotificationService.Notify(NotificationSeverity.Error, "Importering feilet");
             }
+        }
+
+        public void Dispose()
+        {
+            _cts.Cancel();
+            _cts.Dispose();
         }
     }
 }

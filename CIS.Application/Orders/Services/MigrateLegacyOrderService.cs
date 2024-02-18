@@ -22,14 +22,14 @@ namespace CIS.Application.Orders.Services
         private readonly CISDbContext _dbContext;
         private readonly SWNDistroContext _swnDbContext;
         private readonly IProcessImportCommandService<ImportSalesOrderCommand> _processImportService;
-        private readonly IMigrationMapper<IEnumerable<OrderGroupingStruct>, IEnumerable<SalesOrderImportDefinition>> _migrationMapper;
+        private readonly IMigrationMapper<LegacyCISOrderSource, SalesOrderImportDefinition> _migrationMapper;
         private readonly IHubContext<ImportLegacyDataHub, IListenImportClient> _hub;
 
         public MigrateLegacyOrderService(
             CISDbContext dbContext,
             SWNDistroContext swnDbContext,
             IProcessImportCommandService<ImportSalesOrderCommand> processImportService,
-            IMigrationMapper<IEnumerable<OrderGroupingStruct>, IEnumerable<SalesOrderImportDefinition>> migrationMapper,
+            IMigrationMapper<LegacyCISOrderSource, SalesOrderImportDefinition> migrationMapper,
             IHubContext<ImportLegacyDataHub, IListenImportClient> hub)
         {
             _dbContext = dbContext;
@@ -52,9 +52,26 @@ namespace CIS.Application.Orders.Services
                     Butikknr = x.Key.Butikknr
                 });
 
-            await allOrderGroupingsQuery.ProcessEntitiesInBatches(async (orderGroupings, percentageDone) =>
+            await allOrderGroupingsQuery.ProcessEntitiesInBatches(async (batchGroup, percentageDone) =>
             {
-                var importDefinitions = await _migrationMapper.Map(orderGroupings);
+                var orderGroupAggregate = (
+                    from orderGrouping in batchGroup
+                    join orders in _swnDbContext.Ordres
+                        on new { orderGrouping.Butikknr, orderGrouping.Dato } equals new { orders.Butikknr, orders.Dato }
+                        into orderGroup
+                    select new
+                    {
+                        OrderGrouping = orderGrouping,
+                        Orders = orderGroup
+                    }
+                ).Select(x => x.Orders).ToList();
+
+                var legacyDataSource = new LegacyCISOrderSource()
+                {
+                    OrderGrouping = orderGroupAggregate
+                };
+
+                var importDefinitions = await _migrationMapper.Map(legacyDataSource);
                 var success = await _processImportService.Import(new()
                 {
                     Definitions = importDefinitions

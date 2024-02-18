@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CIS.Application.Shared.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CIS.Library.Products.Import
 {
-    public class ProductImportDefinition
+    public class ProductImportDefinition : CISImportDefinition
     {
         public int Number { get; set; }
         public int AlternateNumber { get; set; }

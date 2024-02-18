@@ -65,7 +65,7 @@ namespace CIS.Application.Orders.Services
                 var message = $"({percentage}%)({successMsg}) Salgstall..\n";
 
                 await _hub.Clients.All.ReceiveMessage(message); 
-            }, 500);
+            }, 1500);
 
             await _hub.Clients.All.ReceiveMessage("Importering av salgstall vellykket.");
         }
@@ -76,7 +76,7 @@ namespace CIS.Application.Orders.Services
 
             foreach(var definition in definitions) 
             {
-                statistics.Add(new()
+                var dao = new SalesStatisticsDao()
                 {
                     Id = Guid.NewGuid(),
                     Number = definition.Number,
@@ -88,7 +88,9 @@ namespace CIS.Application.Orders.Services
                     Quantity = definition.Quantity,
                     StoreNumber = definition.StoreNumber,
                     StorePrice = definition.StorePrice,
-                });
+                };
+
+                statistics.Add(dao);
             }
 
             await _dbContext.SalesStatistics.AddRangeAsync(statistics);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CIS.Application.Shared.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CIS.Application.Orders.Contracts.Import
 {
-    public class SalesStatisticsImportDefinition
+    public class SalesStatisticsImportDefinition : CISImportDefinition
     {
         public int Number { get; set; }
         public DateTime Date { get; set; }

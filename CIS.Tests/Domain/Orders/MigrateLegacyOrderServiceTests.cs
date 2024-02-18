@@ -13,12 +13,15 @@ using NSubstitute;
 using Microsoft.AspNetCore.SignalR;
 using CIS.Application.Hubs;
 using CIS.Application.Legacy;
+using CIS.Application.Orders.Contracts;
+using CIS.Application.Orders.Services;
 
 namespace CIS.Tests.Domain.Orders
 {
     public class MigrateLegacyOrderServiceTests : IClassFixture<DomainTestFixture>
     {
         private readonly IMigrateLegacyService<Ordre> _sut;
+        private readonly IMigrationMapper<LegacyCISOrderSource, SalesOrderImportDefinition> _sutMapper;
         private readonly IHubContext<ImportLegacyDataHub, IListenImportClient> _hubMock;
 
         public MigrateLegacyOrderServiceTests(DomainTestFixture fixture)
@@ -32,6 +35,7 @@ namespace CIS.Tests.Domain.Orders
             var services = serviceCollection.BuildServiceProvider();
 
             _sut = services.GetRequiredService<IMigrateLegacyService<Ordre>>();
+            _sutMapper = services.GetRequiredService<IMigrationMapper<LegacyCISOrderSource, SalesOrderImportDefinition>>();
         }
 
         [Fact]

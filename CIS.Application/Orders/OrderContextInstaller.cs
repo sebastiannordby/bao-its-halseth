@@ -25,7 +25,7 @@ namespace CIS.Application.Orders
             this IServiceCollection services)
         {
             services
-                .AddScoped<IMigrationMapper<IEnumerable<OrderGroupingStruct>, IEnumerable<SalesOrderImportDefinition>>, LegacyCISSalesOrderMapper>()
+                .AddScoped<IMigrationMapper<LegacyCISOrderSource, SalesOrderImportDefinition>, LegacyCISSalesOrderMapper>()
                 .AddScoped<IProcessImportCommandService<ImportSalesOrderCommand>, ProcessImportSalesOrderCommandService>()
                 .AddScoped<IMigrateLegacyService<Ordre>, MigrateLegacyOrderService>()
                 .AddScoped<IValidator<ImportSalesOrderCommand>, ImportSalesOrderCommandValidator>()

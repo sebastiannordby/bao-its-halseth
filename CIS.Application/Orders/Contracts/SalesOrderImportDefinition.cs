@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CIS.Application.Shared.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CIS.Application.Orders.Contracts
 {
-    public class SalesOrderImportDefinition
+    public class SalesOrderImportDefinition : CISImportDefinition
     {
         public int Number { get; set; }
         public string? AlternateNumber { get; set; } // ordrenrNett
