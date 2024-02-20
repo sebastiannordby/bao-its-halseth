@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Radzen;
 using System.Linq.Dynamic.Core;
 
-namespace CIS.WebApp.Components.Pages
+namespace CIS.WebApp.Components.Pages.Admin
 {
     public partial class InspectLegacyData : ComponentBase
     {

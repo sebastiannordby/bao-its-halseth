@@ -1,0 +1,68 @@
+﻿@page "/admin/user-management"
+@using CIS.Application
+
+<PageTitle>Tilgangstyring</PageTitle>
+<h1 class="text-xl">Tilgangstyring</h1>
+
+<RadzenTabs
+    Style="height: 100%;">
+    <Tabs>
+        <RadzenTabsItem Text="Oversikt">
+            <RadzenDataGrid 
+                TItem="ApplicationUser" 
+                Data="_users"
+                FilterMode="FilterMode.Advanced"
+                AllowFiltering="true"
+                AllowPaging="true"
+                AllowSorting="true"
+                AllowMultiColumnSorting="true"
+                AllowColumnPicking="true"
+                AllowGrouping="true"
+                AllowColumnResize="true"
+                PageSize="1000"
+                Style="height: 100%">
+
+                <Columns>
+                    <RadzenDataGridColumn 
+                        TItem="ApplicationUser"
+                        Property="@nameof(ApplicationUser.UserName)" 
+                        Title="Brukernavn"
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="ApplicationUser"
+                        Property="@nameof(ApplicationUser.Email)" 
+                        Title="E-post"
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="ApplicationUser"
+                        Property="@nameof(ApplicationUser.PhoneNumber)" 
+                        Title="Mobil" 
+                        Width="200px"
+                        Sortable="true" />
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Ny bruker">
+            <div class="p-4 border border-gray">
+                <EditForm Model="NewUser" OnValidSubmit="HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
+                    <div class="flex flex-col gap-2">
+                        <InputText id="username" @bind-Value="NewUser.UserName" placeholder="Brukernavn" />
+                        <InputText id="password" @bind-Value="NewUser.Password" placeholder="Passord" type="password" />
+                        <InputSelect id="role" @bind-Value="NewUser.Role">
+                            @foreach (var role in RoleManager.Roles)
+                            {
+                                <option value="@role.Name">@role.Name</option>
+                            }
+                        </InputSelect>
+
+                        <button type="submit">Legg til</button>
+                    </div>
+                </EditForm>
+            </div>
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>
+

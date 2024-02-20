@@ -11,7 +11,7 @@ using Radzen;
 using Radzen.Blazor;
 using CIS.WebApp.Components.Dialogs;
 
-namespace CIS.WebApp.Components.Pages
+namespace CIS.WebApp.Components.Pages.Admin
 {
     public partial class Products : ComponentBase
     {

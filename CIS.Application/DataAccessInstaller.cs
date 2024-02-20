@@ -5,6 +5,7 @@ using CIS.Application.Orders;
 using CIS.Application.Products;
 using CIS.Application.Shared.Models;
 using CIS.Application.Shared.Repositories;
+using CIS.Application.Shopify;
 using CIS.Application.Stores;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -19,10 +20,11 @@ namespace CIS.Application
             this IServiceCollection services, string connectionString)
         {
             services.AddDbContext<CISDbContext>(options =>
-                options.UseSqlServer(connectionString));
+                options.UseSqlServer(connectionString), ServiceLifetime.Transient);
 
             return services
                 .AddScoped<IMigrationTaskRepo, MigrationTaskRepo>()
+                .AddScoped<ImportShopifyOrderService>()
                 .AddCustomerServices()
                 .AddStoreServices()
                 .AddProductServices()
@@ -71,7 +73,29 @@ namespace CIS.Application
 
                 if(insertTestUser)
                 {
-                    if(!appDbContext.Users.Any())
+                    if (!appDbContext.Roles.Any())
+                    {
+                        var customerRole = new IdentityRole()
+                        {
+                            Id = UserTypes.CUSTOMER,
+                            Name = UserTypes.CUSTOMER,
+                            NormalizedName = UserTypes.CUSTOMER.Normalize()
+                        };
+
+                        var adminRole = new IdentityRole()
+                        {
+                            Id = UserTypes.ADMINISTRATOR,
+                            Name = UserTypes.ADMINISTRATOR,
+                            NormalizedName = UserTypes.ADMINISTRATOR.Normalize()
+                        };
+
+                        appDbContext.Roles.Add(customerRole);
+                        appDbContext.Roles.Add(adminRole);
+                        appDbContext.SaveChanges();
+                    }
+
+
+                    if (!appDbContext.Users.Any())
                     {
                         var userManager = provider
                             .GetRequiredService<UserManager<ApplicationUser>>();
@@ -87,6 +111,14 @@ namespace CIS.Application
                         var emailConfirmationCode = await userManager.GenerateEmailConfirmationTokenAsync(user);
                         var confirmEmailRes = await userManager.ConfirmEmailAsync(user, emailConfirmationCode);
 
+                        var role = new IdentityUserRole<string>()
+                        {
+                            RoleId = UserTypes.ADMINISTRATOR,
+                            UserId = user.Id
+                        };
+
+                        appDbContext.UserRoles.Add(role);
+                        appDbContext.SaveChanges();
                     }
                 }
             }

@@ -2,7 +2,7 @@
 using CIS.Library.Stores.Repositories;
 using Microsoft.AspNetCore.Components;
 
-namespace CIS.WebApp.Components.Pages
+namespace CIS.WebApp.Components.Pages.Admin
 {
     public partial class Stores : ComponentBase
     {

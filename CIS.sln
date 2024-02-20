@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CIS.Application", "CIS.Appl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CIS.WebApp", "CIS.WebApp\CIS.WebApp.csproj", "{5768D037-EE1E-482C-96E9-985A8AE9F6E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CIS.Tests", "CIS.Tests\CIS.Tests.csproj", "{3F95D20E-14E0-4710-B110-EE1650BCE1EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CIS.Tests", "CIS.Tests\CIS.Tests.csproj", "{3F95D20E-14E0-4710-B110-EE1650BCE1EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Components;
 using Radzen;
 using ShopifySharp;
 
-namespace CIS.WebApp.Components.Pages
+namespace CIS.WebApp.Components.Pages.Admin
 {
     public partial class Shopify : ComponentBase
     {
         [Inject]
-        public required ShopifyClientService ShopifyService { get; set; }
+        public required IShopifyClientService ShopifyService { get; set; }
 
         private IEnumerable<DraftOrder> _draftOrders = Enumerable.Empty<DraftOrder>();
         private int _draftOrdersCount;
@@ -19,7 +19,7 @@ namespace CIS.WebApp.Components.Pages
         private async Task LoadOrders(LoadDataArgs args)
         {
             var orders = await ShopifyService
-                .GetOrdersAsync(DateTime.Now.AddYears(-1));
+                .GetOrdersAsync(CancellationToken.None);
 
             _orders = orders;
             _ordersCount = orders.Count();
@@ -28,7 +28,7 @@ namespace CIS.WebApp.Components.Pages
         private async Task LoadDraftOrders(LoadDataArgs args)
         {
             var draftOrders = await ShopifyService
-                .GetDraftOrdersAsync();
+                .GetDraftOrdersAsync(CancellationToken.None);
 
             _draftOrders = draftOrders;
             _draftOrdersCount = draftOrders.Count();

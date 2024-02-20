@@ -10,7 +10,7 @@ using Radzen;
 using System.Linq.Dynamic.Core;
 using Microsoft.AspNetCore.SignalR.Client;
 
-namespace CIS.WebApp.Components.Pages
+namespace CIS.WebApp.Components.Pages.Admin
 {
     public partial class ImportLegacyData : ComponentBase, IDisposable
     {

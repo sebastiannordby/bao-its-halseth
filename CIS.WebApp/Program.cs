@@ -32,6 +32,7 @@ namespace CIS.WebApp
             if (string.IsNullOrWhiteSpace(legacyConnectionString))
                 throw new ArgumentException("ConnectionStrings:LegacyConnection must be configured in user secrets or appsettings.json.");
 
+            builder.Services.AddShopifyFeature();
             builder.Services.Configure<ShopifyClientServiceOptions>(
                 builder.Configuration.GetSection("Shopify"));
 
@@ -46,7 +47,6 @@ namespace CIS.WebApp
 
             builder.Services.AddShopifySharp<LeakyBucketExecutionPolicy>();
 
-            builder.Services.AddScoped<ShopifyClientService>();
             builder.Services.AddCascadingAuthenticationState();
             builder.Services.AddScoped<IdentityUserAccessor>();
             builder.Services.AddScoped<IdentityRedirectManager>();
@@ -58,8 +58,17 @@ namespace CIS.WebApp
                 options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
             }).AddIdentityCookies();
 
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy(UserTypes.ADMINISTRATOR,
+                     policy => policy.RequireRole(UserTypes.ADMINISTRATOR));
+                options.AddPolicy(UserTypes.CUSTOMER,
+                     policy => policy.RequireRole(UserTypes.CUSTOMER));
+            });
+
             builder.Services.AddDataAccess(connectionString);
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+            builder.Services.AddHttpContextAccessor();
 
             builder.Services
                 .AddLegacyDatabase(legacyConnectionString);
@@ -70,6 +79,7 @@ namespace CIS.WebApp
                 .AddScoped<ImportService>();
 
             builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<CISDbContext>()
                 .AddSignInManager()
                 .AddDefaultTokenProviders();

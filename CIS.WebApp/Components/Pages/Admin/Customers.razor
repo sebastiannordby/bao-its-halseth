@@ -1,11 +1,14 @@
-﻿@page "/customers"
+﻿@page "/admin/customers"
+@using CIS.Application
 @using CIS.Library.Customers.Models
 @using CIS.WebApp.Extensions
 @using CIS.Library.Stores.Models
 @using CIS.WebApp.Services
+@using Microsoft.AspNetCore.Authorization
 @using OfficeOpenXml
 @using CIS.Library.Customers.Models.Import
 @using Radzen
+@attribute [Authorize(Roles = UserTypes.ADMINISTRATOR)]
 
 <PageTitle>Kunder</PageTitle>
 <h1 class="text-xl">Kunder</h1>

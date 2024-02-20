@@ -17,7 +17,7 @@ using CIS.Application.Orders.Repositories;
 using CIS.Application.Orders.Contracts;
 using CIS.Application.Orders.Import.Contracts;
 
-namespace CIS.WebApp.Components.Pages
+namespace CIS.WebApp.Components.Pages.Admin
 {
     public partial class SalesOrders : ComponentBase, IDisposable
     {

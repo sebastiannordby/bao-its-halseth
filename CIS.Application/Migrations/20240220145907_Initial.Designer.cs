@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CIS.Application.Migrations
 {
     [DbContext(typeof(CISDbContext))]
-    [Migration("20240215182908_Initial")]
+    [Migration("20240220145907_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -69,6 +69,9 @@ namespace CIS.Application.Migrations
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("StoreId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -148,7 +151,7 @@ namespace CIS.Application.Migrations
                     b.ToTable("CustomerGroups");
                 });
 
-            modelBuilder.Entity("CIS.Application.Orders.Models.SalesOrderDao", b =>
+            modelBuilder.Entity("CIS.Application.Orders.Contracts.SalesOrderDao", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -195,7 +198,7 @@ namespace CIS.Application.Migrations
                     b.ToTable("SalesOrders");
                 });
 
-            modelBuilder.Entity("CIS.Application.Orders.Models.SalesOrderLineDao", b =>
+            modelBuilder.Entity("CIS.Application.Orders.Contracts.SalesOrderLineDao", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -243,7 +246,7 @@ namespace CIS.Application.Migrations
                     b.ToTable("SalesOrderLines");
                 });
 
-            modelBuilder.Entity("CIS.Application.Orders.Models.SalesStatisticsDao", b =>
+            modelBuilder.Entity("CIS.Application.Orders.Contracts.SalesStatisticsDao", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -580,9 +583,9 @@ namespace CIS.Application.Migrations
                         .HasForeignKey("CustomerGroupId");
                 });
 
-            modelBuilder.Entity("CIS.Application.Orders.Models.SalesOrderLineDao", b =>
+            modelBuilder.Entity("CIS.Application.Orders.Contracts.SalesOrderLineDao", b =>
                 {
-                    b.HasOne("CIS.Application.Orders.Models.SalesOrderDao", null)
+                    b.HasOne("CIS.Application.Orders.Contracts.SalesOrderDao", null)
                         .WithMany()
                         .HasForeignKey("SalesOrderId")
                         .OnDelete(DeleteBehavior.Cascade)

@@ -9,6 +9,6 @@ namespace CIS.Application.Shared.Services
     public interface IExecuteImportFromShopify<TModel>
         where TModel : class
     {
-        Task ExecuteShopifyImport();
+        Task ExecuteShopifyImport(CancellationToken cancellationToken = default);
     }
 }

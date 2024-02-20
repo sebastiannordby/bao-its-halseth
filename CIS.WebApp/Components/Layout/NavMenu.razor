@@ -4,30 +4,61 @@
 <div class="bg-gray-800 w-full h-full overflow-y-auto">
     <!-- Sales Section -->
     <NavMenuSection Title="Salg">
-        <NavMenuItem Text="Dashboard/Salgstall" Href="/" Icon="bar_chart_4_bars" />
-        <NavMenuItem Text="Bestillinger" Href="/sales-orders" Icon="note" />
-        <!-- Add other menu items in the Sales section similarly -->
+        <NavMenuItem 
+            Text="Dashboard/Salgstall" 
+            Href="/admin" 
+            Icon="bar_chart_4_bars" />
+        <NavMenuItem 
+            Text="Bestillinger" 
+            Href="/admin/sales-orders" 
+            Icon="note" />
     </NavMenuSection>
 
     <NavMenuSection Title="Grunndata">
-        <NavMenuItem Text="Butikker" Href="/stores" Icon="storefront" />
-        <NavMenuItem Text="Kunder" Href="/customers" Icon="person" />
-        <NavMenuItem Text="Varer" Href="/products" Icon="category" />
-        <!-- Add other menu items in the Main Data section similarly -->
+        <NavMenuItem 
+            Text="Butikker" 
+            Href="/admin/stores" 
+            Icon="storefront" />
+        <NavMenuItem 
+            Text="Kunder"
+            Href="/admin/customers" 
+            Icon="person" />
+        <NavMenuItem 
+            Text="Varer" 
+            Href="/admin/products" 
+            Icon="category" />
+    </NavMenuSection>
+
+    <NavMenuSection Title="Tilgangsstyring">
+        <NavMenuItem 
+            Text="Brukere" 
+            Href="/admin/user-management" 
+            Icon="key" />
     </NavMenuSection>
 
     <NavMenuSection Title="Ekstern">
-        <NavMenuItem Text="Shopify" Href="/shopify" Icon="store"/>
-        <NavMenuItem Text="SAP" Href="/shopify" Icon="warehouse"/>
-
+        <NavMenuItem 
+            Text="Shopify" 
+            Href="/admin/shopify" 
+            Icon="store" />
+        <NavMenuItem 
+            Text="SAP" 
+            Href="/admin/shopify" 
+            Icon="warehouse" />
     </NavMenuSection>
 
     <NavMenuSection Title="Forrige system">
         @if (_showMigrationPage)
         {
-            <NavMenuItem Text="Migrering" Href="/import-legacy" Icon="function" />
+            <NavMenuItem 
+                Text="Migrering" 
+                Href="/admin/import-legacy" 
+                Icon="function" />
         }
 
-        <NavMenuItem Text="Inspiser" Href="/inspect-legacy-data" Icon="mystery" />
+        <NavMenuItem 
+            Text="Inspiser" 
+            Href="/admin/inspect-legacy-data" 
+            Icon="mystery" />
     </NavMenuSection>
 </div>

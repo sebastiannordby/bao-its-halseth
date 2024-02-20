@@ -14,7 +14,8 @@ namespace CIS.WebApp.Components.Layout
         
         protected override async Task OnInitializedAsync()
         {
-            var migrationTasks = await MigrationTaskRepo.GetMigrationTasks();
+            var migrationTasks = await MigrationTaskRepo
+                .GetMigrationTasks();
 
             _showMigrationPage = migrationTasks
                 .Where(x => !x.Executed)

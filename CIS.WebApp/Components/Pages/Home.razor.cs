@@ -1,48 +1,39 @@
-﻿using CIS.Application.Orders.Contracts;
-using CIS.Application.Orders.Repositories;
-using CIS.Application.Shared.Models;
-using CIS.Application.Shared.Repositories;
+﻿using CIS.Application;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Identity;
 
 namespace CIS.WebApp.Components.Pages
 {
-    public partial class Home
+    public partial class Home : ComponentBase
     {
         [Inject]
-        public IMigrationTaskRepo MigrationTaskRepo { get; set; }
+        public required IHttpContextAccessor HttpContextAccessor { get; set; }
 
         [Inject]
-        public ISalesQueries SalesQueries { get; set; }
+        public required UserManager<ApplicationUser> UserManager { get; set; }
 
-        private IEnumerable<MigrationTask> _migrationTasks;
-        private IEnumerable<MigrationTask> _uncompletedMigrationTasks;
-        private IReadOnlyCollection<MostSoldProductView> _mostSoldProducts;
-        private IReadOnlyCollection<StoreMostBoughtView> _bestCustomerStores;
-        private DateTime _currentSeasonDate;
-        private SeasonalityAnalysisResult _seasonalAnalysis;
-        private readonly Dictionary<MigrationTask.TaskType, string> _migrationTaskTypeNames = new()
-        {
-            { MigrationTask.TaskType.Customers, "Kunde" },
-            { MigrationTask.TaskType.Products, "Varer" },
-            { MigrationTask.TaskType.SalesOrders, "Bestillinger" }
-        };
-
-        private bool _showMigrationPage = true;
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            _migrationTasks = await MigrationTaskRepo.GetMigrationTasks();
-            _uncompletedMigrationTasks = _migrationTasks.Where(x => !x.Executed);
+            var user = await UserManager.GetUserAsync(
+                HttpContextAccessor.HttpContext.User);
 
-            _showMigrationPage = _uncompletedMigrationTasks.Any();
-
-            if (!_showMigrationPage)
+            if(user is not null)
             {
-                _mostSoldProducts = await SalesQueries
-                    .GetMostSoldProduct(5);
-                _bestCustomerStores = await SalesQueries
-                    .GetMostBoughtViews(5);
+                var roles = await UserManager.GetRolesAsync(user);
+
+                if(roles.Contains(UserTypes.ADMINISTRATOR))
+                {
+                    NavigationManager.NavigateTo("/admin/home");
+                }
+                else if (roles.Contains(UserTypes.CUSTOMER))
+                {
+                    NavigationManager.NavigateTo("/customer/home");
+                }
             }
+
         }
     }
 }

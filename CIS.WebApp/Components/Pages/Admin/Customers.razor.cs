@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using Radzen;
 using Radzen.Blazor;
 
-namespace CIS.WebApp.Components.Pages
+namespace CIS.WebApp.Components.Pages.Admin
 {
     public partial class Customers : ComponentBase
     {
