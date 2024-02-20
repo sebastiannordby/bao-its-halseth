@@ -5,7 +5,7 @@
 <RadzenComponents />
 <RadzenDialog />
 
-<AuthorizeView>
+<AuthorizeView Policy="@UserTypes.ADMINISTRATOR">
     <Authorized>
         <RadzenLayout>
             <RadzenHeader style="background-color: #4CAF50; color: white;">
@@ -27,11 +27,37 @@
             </RadzenBody>
         </RadzenLayout>
     </Authorized>
+</AuthorizeView>
+
+<AuthorizeView Policy="@UserTypes.CUSTOMER">
+    <Authorized>
+        <RadzenLayout>
+            <RadzenHeader style="background-color: #4CAF50; color: white;">
+                <div class="flex items-center justify-between px-4 h-full">
+                    <div class="text-xl font-semibold">CIS - Kundeportal</div>
+                    <div class="flex items-center space-x-4">
+                        <span class="material-symbols-sharp">account_circle</span>
+                        <label>@context?.User?.Identity?.Name</label>
+                    </div>
+                </div>
+            </RadzenHeader>
+            <RadzenSidebar>
+                Kundemeny her
+            </RadzenSidebar>
+            <RadzenBody>
+                <RadzenContentContainer>
+                    @Body
+                </RadzenContentContainer>
+            </RadzenBody>
+        </RadzenLayout>
+    </Authorized>
+</AuthorizeView>
+
+<AuthorizeView>
     <NotAuthorized>
         @Body
     </NotAuthorized>
 </AuthorizeView>
-
 
 <div id="blazor-error-ui">
     An unhandled error has occurred.

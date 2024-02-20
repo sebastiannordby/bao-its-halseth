@@ -9,6 +9,6 @@ namespace CIS.Application
 {
     public class ApplicationUser : IdentityUser
     {
-        public Guid? StoreId { get; set; }
+        public Guid? CustomerId { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿@page "/admin/user-management"
 @using CIS.Application
+@using CIS.Application.Customers.Models
 
 <PageTitle>Tilgangstyring</PageTitle>
 <h1 class="text-xl">Tilgangstyring</h1>
@@ -9,8 +10,8 @@
     <Tabs>
         <RadzenTabsItem Text="Oversikt">
             <RadzenDataGrid 
-                TItem="ApplicationUser" 
-                Data="_users"
+                TItem="UserView" 
+                Data="_userViews"
                 FilterMode="FilterMode.Advanced"
                 AllowFiltering="true"
                 AllowPaging="true"
@@ -24,18 +25,23 @@
 
                 <Columns>
                     <RadzenDataGridColumn 
-                        TItem="ApplicationUser"
-                        Property="@nameof(ApplicationUser.UserName)" 
+                        TItem="UserView"
+                        Property="@nameof(UserView.UserName)" 
                         Title="Brukernavn"
                         Sortable="true" />
                     <RadzenDataGridColumn 
-                        TItem="ApplicationUser"
-                        Property="@nameof(ApplicationUser.Email)" 
+                        TItem="UserView"
+                        Property="@nameof(UserView.CustomerDisplay)" 
+                        Title="Kunde"
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="UserView"
+                        Property="@nameof(UserView.Email)" 
                         Title="E-post"
                         Sortable="true" />
                     <RadzenDataGridColumn 
-                        TItem="ApplicationUser"
-                        Property="@nameof(ApplicationUser.PhoneNumber)" 
+                        TItem="UserView"
+                        Property="@nameof(UserView.PhoneNumber)" 
                         Title="Mobil" 
                         Width="200px"
                         Sortable="true" />
@@ -43,22 +49,96 @@
             </RadzenDataGrid>
         </RadzenTabsItem>
         <RadzenTabsItem Text="Ny bruker">
-            <div class="p-4 border border-gray">
+            <div class="p-4 bg-white">
                 <EditForm Model="NewUser" OnValidSubmit="HandleValidSubmit">
                     <DataAnnotationsValidator />
                     <ValidationSummary />
 
                     <div class="flex flex-col gap-2">
-                        <InputText id="username" @bind-Value="NewUser.UserName" placeholder="Brukernavn" />
-                        <InputText id="password" @bind-Value="NewUser.Password" placeholder="Passord" type="password" />
-                        <InputSelect id="role" @bind-Value="NewUser.Role">
-                            @foreach (var role in RoleManager.Roles)
-                            {
-                                <option value="@role.Name">@role.Name</option>
-                            }
-                        </InputSelect>
+                        @if(NewUser.Role == UserTypes.ADMINISTRATOR)
+                        {
+                            <RadzenAlert 
+                                AlertStyle="AlertStyle.Warning" 
+                                Variant="Variant.Flat"
+                                Text="Brukeren du er i ferd med å opprette er av typen Administrator."
+                                Shade="Shade.Lighter" />
+                        }
 
-                        <button type="submit">Legg til</button>
+                        <div>
+                            <label class="block mb-1">Brukernavn<span class="ml-1 text-red-400">*</span></label>
+                            <RadzenTextBox
+                                @bind-Value="@NewUser.UserName" 
+                                AutoComplete="false"
+                                Style="width: 100%;" />
+                        </div>
+                        <div>
+                            <label class="block mb-1">E-post<span class="ml-1 text-red-400">*</span></label>
+                            <RadzenTextBox
+                                @bind-Value="@NewUser.Email" 
+                                AutoComplete="false"
+                                Style="width: 100%;" />
+                        </div>
+
+                        <div>
+                            <label class="block mb-1">Passord<span class="ml-1 text-red-400">*</span></label>
+                            <RadzenPassword 
+                                @bind-Value="@NewUser.Password" 
+                                AutoComplete="false"
+                                Style="width: 100%;" />
+                        </div>
+                        <div>
+                            <label class="block mb-1">Gjenta passord<span class="ml-1 text-red-400">*</span></label>
+                            <RadzenPassword 
+                                @bind-Value="@NewUser.RepeatPassword" 
+                                AutoComplete="false"
+                                Style="width: 100%;"  />
+                        </div>
+                        <div>
+                            <label class="block mb-1">Rolle<span class="ml-1 text-red-400">*</span></label>
+                            <RadzenDropDown 
+                                @bind-Value="NewUser.Role"
+                                TValue="string"
+                                Data="_roles">
+                                    <Template Context="roleContext">
+                                        @GetRoleDisplayName(roleContext as string)
+                                    </Template>
+                                    <ValueTemplate Context="roleContext">
+                                        @GetRoleDisplayName(roleContext as string)
+                                    </ValueTemplate>
+                                </RadzenDropDown>
+                        </div>
+                        @if(NewUser.Role == UserTypes.CUSTOMER)
+                        {
+                            <div>
+                                <label class="block mb-1">Kunde<span class="ml-1 text-red-400">*</span></label>
+                                <RadzenDropDown 
+                                    @bind-Value="@NewUser.CustomerId"
+                                    Data="_customers" 
+                                    Style="width: 100%; max-width: 400px;" 
+                                    TextProperty="@nameof(CustomerDao.Name)"
+                                    ValueProperty="@nameof(CustomerDao.Id)">
+                                    <Template Context="custContext">
+                                        @{
+                                            var customer = custContext as CustomerDao;
+                                        }
+
+                                        @customer.Number - @customer.Name
+                                    </Template>
+                                    <ValueTemplate Context="custContext">
+                                        @{
+                                            var customer = custContext as CustomerDao;
+                                        }
+
+                                        @customer.Number - @customer.Name
+                                    </ValueTemplate>
+                                </RadzenDropDown>
+                            </div>
+                        }
+
+                        <RadzenButton 
+                            Text="Opprett bruker" 
+                            ButtonType="ButtonType.Submit"
+                            ButtonStyle="ButtonStyle.Primary"/>
                     </div>
                 </EditForm>
             </div>
