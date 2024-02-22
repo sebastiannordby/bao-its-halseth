@@ -14,9 +14,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CIS.Application
 {
-    public static class DataAccessInstaller
+    public static class CISApplicationInstaller
     {
-        public static IServiceCollection AddDataAccess(
+        public static IServiceCollection AddCISApplication(
             this IServiceCollection services, string connectionString)
         {
             services.AddDbContext<CISDbContext>(options =>
@@ -25,13 +25,14 @@ namespace CIS.Application
             return services
                 .AddScoped<IMigrationTaskRepo, MigrationTaskRepo>()
                 .AddScoped<ImportShopifyOrderService>()
+                .AddScoped<CISUserService>()
                 .AddCustomerServices()
                 .AddStoreServices()
                 .AddProductServices()
                 .AddOrderServices();
         }
 
-        public static IServiceCollection AddLegacyDatabase(
+        public static IServiceCollection AddSWNDistroLegacyDatabase(
             this IServiceCollection services, string connectionString)
         {
             services.AddDbContext<SWNDistroContext>(
@@ -40,7 +41,7 @@ namespace CIS.Application
             return services;
         }
 
-        public static async Task MigrateDataAccess(
+        public static async Task ApplyCISDataMigrations(
             this IServiceProvider provider, 
             bool requiresMigrationFromLegacy,
             bool insertTestUser)

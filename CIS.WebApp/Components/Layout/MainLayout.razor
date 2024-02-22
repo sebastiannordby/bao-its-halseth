@@ -1,4 +1,5 @@
 ﻿@using CIS.Application
+@using CIS.WebApp.Components.Layout.Customer
 @using Radzen.Blazor
 @inherits LayoutComponentBase
 
@@ -42,7 +43,7 @@
                 </div>
             </RadzenHeader>
             <RadzenSidebar>
-                Kundemeny her
+                <CustomerNavMenu />
             </RadzenSidebar>
             <RadzenBody>
                 <RadzenContentContainer>

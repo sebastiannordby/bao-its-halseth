@@ -7,13 +7,13 @@ using CIS.Library.Stores.Models;
 using CIS.Library.Stores.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace CIS.Application.Stores.Repositories
+namespace CIS.Application.Stores.Services.Implementation
 {
-    internal class StoreViewRepository : IStoreViewRepository
+    internal class StoreService : IStoreService
     {
         private readonly CISDbContext _dbContext;
 
-        public StoreViewRepository(CISDbContext dbContext)
+        public StoreService(CISDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -44,9 +44,9 @@ namespace CIS.Application.Stores.Repositories
                     CustomerContactPersonName = customer.ContactPersonName,
                     CustomerContactPersonEmailAddress = customer.ContactPersonEmailAddress,
                     CustomerContactPersonPhoneNumber = customer.ContactPersonPhoneNumber,
-                    CustomerGroupNumber = customerGroup != null ? 
+                    CustomerGroupNumber = customerGroup != null ?
                         customerGroup.Number : null,
-                    CustomerGroupName = customerGroup != null ? 
+                    CustomerGroupName = customerGroup != null ?
                         customerGroup.Name : null,
                 }
             ).ToListAsync();

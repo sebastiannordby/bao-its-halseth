@@ -8,7 +8,7 @@ using CIS.Library.Stores.Models;
 
 namespace CIS.Library.Stores.Repositories
 {
-    public interface IStoreViewRepository
+    public interface IStoreService
     {
         Task<IReadOnlyCollection<StoreView>> List();
     }

@@ -7,7 +7,7 @@ namespace CIS.WebApp.Components.Pages.Admin
     public partial class Stores : ComponentBase
     {
         [Inject]
-        private IStoreViewRepository StoreViewRepository { get; set; }
+        private IStoreService StoreViewRepository { get; set; }
 
         private IReadOnlyCollection<StoreView> _stores;
 

@@ -66,12 +66,12 @@ namespace CIS.WebApp
                      policy => policy.RequireRole(UserTypes.CUSTOMER));
             });
 
-            builder.Services.AddDataAccess(connectionString);
+            builder.Services.AddCISApplication(connectionString);
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddHttpContextAccessor();
 
             builder.Services
-                .AddLegacyDatabase(legacyConnectionString);
+                .AddSWNDistroLegacyDatabase(legacyConnectionString);
 
             builder.Services
                 .AddSingleton<ImportLegacyDataBackgroundService>()

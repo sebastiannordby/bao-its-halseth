@@ -1,0 +1,197 @@
+﻿@page "/customer/stock-count"
+@using CIS.Application.Products.Models
+@using CIS.Application.Stores.Models
+
+
+<PageTitle>Varetelling</PageTitle>
+<h1 class="text-xl">Varetelling</h1>
+
+<RadzenTabs 
+    Style="height: 100%" 
+    RenderMode="TabRenderMode.Server">
+    <Tabs>
+        <RadzenTabsItem Text="Nåværende beholdning">
+            <RadzenDataGrid 
+                TItem="StockCountView" 
+                Data="_currentStoreCountDataSource"
+                FilterMode="FilterMode.Advanced"
+                AllowFiltering="true"
+                AllowPaging="true"
+                AllowSorting="true"
+                AllowMultiColumnSorting="true"
+                AllowColumnPicking="true"
+                AllowGrouping="true"
+                AllowColumnResize="true"
+                PageSize="1000"
+                Style="height: 100%">
+                <Columns>
+                    <RadzenDataGridColumn 
+                        TItem="StockCountView"
+                        Property="@nameof(StockCountView.ProductNumber)" 
+                        Title="Vare#"
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="StockCountView"
+                        Property="@nameof(StockCountView.ProductName)" 
+                        Title="Vare" 
+                        Width="200px"
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="StockCountView"
+                        Property="@nameof(StockCountView.Quantity)" 
+                        Title="Antall" 
+                        Width="200px"
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="StockCountView"
+                        Property="@nameof(StockCountView.CountedByPersonFullName)" 
+                        Title="Loggført av"
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="StockCountView"
+                        Property="@nameof(StockCountView.CountedDateTime)" 
+                        Title="Loggført dato"
+                        Sortable="true" />
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Registrer beholdning">
+           <div class="flex flex-col gap-2">
+                <div class="p-2">
+                    <h4 class="text-md">Registrer beholdning</h4>
+
+                    <div class="p-3 flex flex-col gap-2">
+                        <div>
+                            <label class="block mb-1">Vare</label>
+                            <RadzenDropDown 
+                                @bind-Value="@_registerInput.ProductId"
+                                Data="_products" 
+                                Style="width: 100%; max-width: 400px;" 
+                                TextProperty="@nameof(ProductDao.Name)"
+                                ValueProperty="@nameof(ProductDao.Id)">
+                                <Template Context="custContext">
+                                    @{
+                                        var model = custContext as ProductDao;
+                                    }
+
+                                    @model.Number - @model.Name
+                                </Template>
+                                <ValueTemplate Context="custContext">
+                                    @{
+                                        var model = custContext as ProductDao;
+                                    }
+
+                                    @model.Number - @model.Name
+                                </ValueTemplate>
+                            </RadzenDropDown>
+                        </div>
+                        <div>
+                            <label class="block mb-1">Antall</label>
+                            <RadzenNumeric 
+                                @bind-Value="@_registerInput.Quantity" 
+                                Name="Antall" 
+                                Placeholder="Skriv antall" />
+                        </div>
+
+                        <RadzenButton 
+                            ButtonStyle="ButtonStyle.Primary" 
+                            Text="Registrer" 
+                            Click="@ExecuteRegisterStockCount" />
+                    </div>
+                </div>
+
+                <RadzenDataGrid 
+                    TItem="StockCountView" 
+                    Data="_currentStoreCountDataSource"
+                    FilterMode="FilterMode.Advanced"
+                    AllowFiltering="true"
+                    AllowPaging="true"
+                    AllowSorting="true"
+                    AllowMultiColumnSorting="true"
+                    AllowColumnPicking="true"
+                    AllowGrouping="true"
+                    AllowColumnResize="true"
+                    PageSize="1000"
+                    Style="height: 100%">
+                    <Columns>
+                        <RadzenDataGridColumn 
+                            TItem="StockCountView"
+                            Property="@nameof(StockCountView.ProductNumber)" 
+                            Title="Vare#"
+                            Sortable="true" />
+                        <RadzenDataGridColumn 
+                            TItem="StockCountView"
+                            Property="@nameof(StockCountView.ProductName)" 
+                            Title="Vare" 
+                            Width="200px"
+                            Sortable="true" />
+                        <RadzenDataGridColumn 
+                            TItem="StockCountView"
+                            Property="@nameof(StockCountView.Quantity)" 
+                            Title="Antall" 
+                            Width="200px"
+                            Sortable="true" />
+                        <RadzenDataGridColumn 
+                            TItem="StockCountView"
+                            Property="@nameof(StockCountView.CountedByPersonFullName)" 
+                            Title="Loggført av"
+                            Sortable="true" />
+                        <RadzenDataGridColumn 
+                            TItem="StockCountView"
+                            Property="@nameof(StockCountView.CountedDateTime)" 
+                            Title="Loggført dato"
+                            Sortable="true" />
+                    </Columns>
+                </RadzenDataGrid>
+           </div>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Historikk">
+            <RadzenDataGrid 
+                TItem="StockCountView" 
+                Data="_historyStoreCountDataSource"
+                FilterMode="FilterMode.Advanced"
+                AllowFiltering="true"
+                AllowPaging="true"
+                AllowSorting="true"
+                AllowMultiColumnSorting="true"
+                AllowColumnPicking="true"
+                AllowGrouping="true"
+                AllowColumnResize="true"
+                PageSize="1000"
+                Style="height: 100%">
+                <Columns>
+                    <RadzenDataGridColumn 
+                        TItem="StockCountView"
+                        Property="@nameof(StockCountView.ProductNumber)" 
+                        Title="Vare#"
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="StockCountView"
+                        Property="@nameof(StockCountView.ProductName)" 
+                        Title="Vare" 
+                        Width="200px"
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="StockCountView"
+                        Property="@nameof(StockCountView.Quantity)" 
+                        Title="Antall" 
+                        Width="200px"
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="StockCountView"
+                        Property="@nameof(StockCountView.CountedByPersonFullName)" 
+                        Title="Loggført av"
+                        Sortable="true" />
+                    <RadzenDataGridColumn 
+                        TItem="StockCountView"
+                        Property="@nameof(StockCountView.CountedDateTime)" 
+                        Title="Loggført dato"
+                        Sortable="true" />
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>
+
+
+

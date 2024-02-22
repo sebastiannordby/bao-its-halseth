@@ -403,6 +403,33 @@ namespace CIS.Application.Migrations
                     b.ToTable("Regions");
                 });
 
+            modelBuilder.Entity("CIS.Application.Stores.Models.StockCountDao", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CountedByPersonFullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CountedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("StoreId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StockCounts");
+                });
+
             modelBuilder.Entity("CIS.Application.Stores.Models.StoreDao", b =>
                 {
                     b.Property<Guid>("Id")

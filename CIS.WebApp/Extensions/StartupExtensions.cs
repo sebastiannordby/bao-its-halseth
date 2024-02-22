@@ -11,7 +11,7 @@ namespace CIS.WebApp.Extensions
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
-                await serviceScope.ServiceProvider.MigrateDataAccess(
+                await serviceScope.ServiceProvider.ApplyCISDataMigrations(
                     requiresMigrationFromLegacy, insertTestUser);
             }
         }

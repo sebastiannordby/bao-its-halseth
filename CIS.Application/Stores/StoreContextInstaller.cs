@@ -1,5 +1,6 @@
 ﻿using CIS.Application.Stores.Models;
-using CIS.Application.Stores.Repositories;
+using CIS.Application.Stores.Services;
+using CIS.Application.Stores.Services.Implementation;
 using CIS.Library.Stores.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +18,8 @@ namespace CIS.Application.Stores
             this IServiceCollection services)
         {
             return services
-                .AddScoped<IStoreViewRepository, StoreViewRepository>();
+                .AddScoped<IStoreService, StoreService>()
+                .AddScoped<IStockCountService, StockCountService>();
         }
 
         internal static ModelBuilder SetupStoreModels(this ModelBuilder modelBuilder)
@@ -34,6 +36,11 @@ namespace CIS.Application.Stores
                 entity.HasKey(x => x.Id);
                 entity.Property(x => x.Name)
                     .HasMaxLength(150);
+            });
+
+            modelBuilder.Entity<StockCountDao>(entity =>
+            {
+                entity.HasKey(x => x.Id);
             });
 
             return modelBuilder;

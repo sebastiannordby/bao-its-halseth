@@ -180,6 +180,22 @@ namespace CIS.Application.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "StockCounts",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StoreId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    CountedByPersonFullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CountedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StockCounts", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Stores",
                 columns: table => new
                 {
@@ -445,6 +461,9 @@ namespace CIS.Application.Migrations
 
             migrationBuilder.DropTable(
                 name: "SalesStatistics");
+
+            migrationBuilder.DropTable(
+                name: "StockCounts");
 
             migrationBuilder.DropTable(
                 name: "Stores");

@@ -30,6 +30,7 @@ namespace CIS.Application
 
         public required DbSet<StoreDao> Stores { get; set; }
         public required DbSet<RegionDao> Regions { get; set; }
+        public required DbSet<StockCountDao> StockCounts { get; set; }
 
         public required DbSet<SalesOrderDao> SalesOrders { get; set; }
         public required DbSet<SalesOrderLineDao> SalesOrderLines { get; set; }

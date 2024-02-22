@@ -1,0 +1,21 @@
+﻿@using CIS.WebApp.Components.ViewComponents
+
+<div class="bg-gray-800 w-full h-full overflow-y-auto">
+    <NavMenuSection Title="Salg">
+        <NavMenuItem 
+            Text="Mine Bestillinger" 
+            Href="/customer/my-orders" 
+            Icon="note" />
+        <NavMenuItem 
+            Text="Bestillingsforslag"
+            Href="/customer/order-proposal" 
+            Icon="function" />
+    </NavMenuSection>
+
+    <NavMenuSection Title="Lager/Beholdning">
+        <NavMenuItem 
+            Text="Varetelling" 
+            Href="/customer/stock-count" 
+            Icon="calculate" />
+    </NavMenuSection>
+</div>
