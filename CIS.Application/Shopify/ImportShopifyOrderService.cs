@@ -1,6 +1,6 @@
 ﻿using CIS.Application.Legacy;
-using CIS.Application.Orders.Contracts;
-using CIS.Application.Orders.Import.Contracts;
+using CIS.Application.Orders.Migration.Contracts;
+using CIS.Application.Orders.Infrastructure.Models;
 using CIS.Application.Shared.Extensions;
 using CIS.Application.Shared.Services;
 using CIS.Library.Shared.Services;

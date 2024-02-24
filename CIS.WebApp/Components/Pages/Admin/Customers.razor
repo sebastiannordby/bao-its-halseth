@@ -1,12 +1,13 @@
 ﻿@page "/admin/customers"
+@using CIS.Application.Stores.Models
+@using CIS.Application.Stores.Models.Import
+@using Microsoft.AspNetCore.Authorization
 @using CIS.Application
-@using CIS.Library.Customers.Models
 @using CIS.WebApp.Extensions
 @using CIS.Library.Stores.Models
 @using CIS.WebApp.Services
 @using Microsoft.AspNetCore.Authorization
 @using OfficeOpenXml
-@using CIS.Library.Customers.Models.Import
 @using Radzen
 @attribute [Authorize(Roles = UserTypes.ADMINISTRATOR)]
 
@@ -104,7 +105,7 @@
 
                 <RadzenDataGrid 
                     @ref="_importDataGrid"
-                    TItem="CustomerImportDefinition" 
+                    TItem="ImportCustomerDefinition" 
                     Data="_customerImportDefinitions"
                     FilterMode="FilterMode.Advanced"
                     AllowFiltering="true"
@@ -118,34 +119,34 @@
 
                     <Columns>
                         <RadzenDataGridColumn 
-                            TItem="CustomerImportDefinition"
-                            Property="@nameof(CustomerImportDefinition.Number)" 
+                            TItem="ImportCustomerDefinition"
+                            Property="@nameof(ImportCustomerDefinition.Number)" 
                             Title="#"
                             Sortable="true" />
                         <RadzenDataGridColumn 
-                            TItem="CustomerImportDefinition"
-                            Property="@nameof(CustomerImportDefinition.Name)" 
+                            TItem="ImportCustomerDefinition"
+                            Property="@nameof(ImportCustomerDefinition.Name)" 
                             Title="Navn" 
                             Sortable="true" />
                         <RadzenDataGridColumn 
-                            TItem="CustomerImportDefinition"
-                            Property="@nameof(CustomerImportDefinition.ContactPersonName)" 
+                            TItem="ImportCustomerDefinition"
+                            Property="@nameof(ImportCustomerDefinition.ContactPersonName)" 
                             Title="Kontakt"
                             Sortable="true" />
                         <RadzenDataGridColumn 
-                            TItem="CustomerImportDefinition"
-                            Property="@nameof(CustomerImportDefinition.ContactPersonEmailAddress)" 
+                            TItem="ImportCustomerDefinition"
+                            Property="@nameof(ImportCustomerDefinition.ContactPersonEmailAddress)" 
                             Title="Email"
                             Sortable="true" />
                         <RadzenDataGridColumn 
-                            TItem="CustomerImportDefinition"
-                            Property="@nameof(CustomerImportDefinition.ContactPersonPhoneNumber)"
+                            TItem="ImportCustomerDefinition"
+                            Property="@nameof(ImportCustomerDefinition.ContactPersonPhoneNumber)"
                             Title="Telefon" 
                             Sortable="true" />
 
                         <RadzenDataGridColumn 
-                            TItem="CustomerImportDefinition"
-                            Property="@nameof(CustomerImportDefinition.IsActive)"
+                            TItem="ImportCustomerDefinition"
+                            Property="@nameof(ImportCustomerDefinition.IsActive)"
                             Title="Aktiv"
                             Context="data" 
                             Sortable="true">

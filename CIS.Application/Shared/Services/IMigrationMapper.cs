@@ -11,6 +11,6 @@ namespace CIS.Application.Shared.Services
     public interface IMigrationMapper<TIn, TOut>
         where TOut : CISImportDefinition
     {
-        Task<IEnumerable<TOut>> Map(TIn input);
+        Task<IReadOnlyCollection<TOut>> Map(TIn input, CancellationToken cancellationToken);
     }
 }

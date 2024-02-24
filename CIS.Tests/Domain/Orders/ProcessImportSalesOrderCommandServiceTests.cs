@@ -1,5 +1,4 @@
 ﻿using CIS.Application.Orders.Contracts;
-using CIS.Application.Orders.Import.Contracts;
 using CIS.Library.Shared.Services;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CIS.Application.Orders;
+using CIS.Application.Orders.Import.Contracts;
 
 namespace CIS.Tests.Domain.Orders
 {
@@ -21,7 +21,7 @@ namespace CIS.Tests.Domain.Orders
         {
             var serviceCollection = fixture.GetServiceCollection();
 
-            serviceCollection.AddOrderServices();
+            serviceCollection.AddOrderFeature();
 
             var services = serviceCollection.BuildServiceProvider();
 
@@ -33,7 +33,7 @@ namespace CIS.Tests.Domain.Orders
         {
             var command = new ImportSalesOrderCommand()
             {
-                Definitions = Enumerable.Empty<SalesOrderImportDefinition>()
+                Definitions = Enumerable.Empty<Application.Orders.Contracts.ImportSalesOrderDefinition>()
             };
 
             await Assert.ThrowsAnyAsync<ValidationException>(async() =>
@@ -47,9 +47,9 @@ namespace CIS.Tests.Domain.Orders
         {
             var command = new ImportSalesOrderCommand()
             {
-                Definitions = new List<SalesOrderImportDefinition>()
+                Definitions = new List<Application.Orders.Contracts.ImportSalesOrderDefinition>()
                 {
-                    Activator.CreateInstance<SalesOrderImportDefinition>()
+                    Activator.CreateInstance<Application.Orders.Contracts.ImportSalesOrderDefinition>()
                 }
             };
 

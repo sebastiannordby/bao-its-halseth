@@ -5,7 +5,6 @@
 @using CIS.Library.Stores.Models
 @using CIS.WebApp.Services
 @using OfficeOpenXml
-@using CIS.Library.Customers.Models.Import
 
 <PageTitle>Varer</PageTitle>
 <h1 class="text-xl">Varer</h1>
@@ -103,7 +102,7 @@
 
                     <RadzenDataGrid 
                         @ref="_importDataGrid"
-                        TItem="ProductImportDefinition" 
+                        TItem="ImportProductDefinition" 
                         Data="_productImportDefinitions"
                         FilterMode="FilterMode.Advanced"
                         AllowFiltering="true"
@@ -117,39 +116,39 @@
 
                         <Columns>
                             <RadzenDataGridColumn 
-                                TItem="ProductImportDefinition"
-                                Property="@nameof(ProductImportDefinition.Number)" 
+                                TItem="ImportProductDefinition"
+                                Property="@nameof(ImportProductDefinition.Number)" 
                                 Title="#"
                                 Sortable="true" />
                             <RadzenDataGridColumn 
-                                TItem="ProductImportDefinition"
-                                Property="@nameof(ProductImportDefinition.Name)" 
+                                TItem="ImportProductDefinition"
+                                Property="@nameof(ImportProductDefinition.Name)" 
                                 Title="Navn" 
                                 Width="200px"
                                 Sortable="true" />
                             <RadzenDataGridColumn 
-                                TItem="ProductImportDefinition"
-                                Property="@nameof(ProductImportDefinition.CostPrice)" 
+                                TItem="ImportProductDefinition"
+                                Property="@nameof(ImportProductDefinition.CostPrice)" 
                                 Title="Kostpris"
                                 Sortable="true" />
                             <RadzenDataGridColumn 
-                                TItem="ProductImportDefinition"
-                                Property="@nameof(ProductImportDefinition.PurchasePrice)" 
+                                TItem="ImportProductDefinition"
+                                Property="@nameof(ImportProductDefinition.PurchasePrice)" 
                                 Title="Innkjøpspris"
                                 Sortable="true" />
                             <RadzenDataGridColumn 
-                                TItem="ProductImportDefinition"
-                                Property="@nameof(ProductImportDefinition.StorePrice)"
+                                TItem="ImportProductDefinition"
+                                Property="@nameof(ImportProductDefinition.StorePrice)"
                                 Title="Butikkpris/Listepris" 
                                 Sortable="true" />
                             <RadzenDataGridColumn 
-                                TItem="ProductImportDefinition"
-                                Property="@nameof(ProductImportDefinition.ProductGroupNumber)"
+                                TItem="ImportProductDefinition"
+                                Property="@nameof(ImportProductDefinition.ProductGroupNumber)"
                                 Title="Gruppe#" 
                                 Sortable="true" />
                             <RadzenDataGridColumn 
-                                TItem="ProductImportDefinition"
-                                Property="@nameof(ProductImportDefinition.ProductGroupName)"
+                                TItem="ImportProductDefinition"
+                                Property="@nameof(ImportProductDefinition.ProductGroupName)"
                                 Title="Gruppe" 
                                 Width="200px"
                                 Sortable="true" />

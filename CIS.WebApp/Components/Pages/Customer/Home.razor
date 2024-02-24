@@ -1,3 +1,7 @@
 ﻿@page "/customer/home"
 
-<h1>Hei Kunde</h1>
+@if (_signedOnUser is not null)
+{
+    <h1>Hei @_signedOnUser.CustomerName</h1>
+}
+

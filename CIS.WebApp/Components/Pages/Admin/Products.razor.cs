@@ -2,7 +2,6 @@
 using CIS.WebApp.Extensions;
 using CIS.Library.Products.Import;
 using CIS.Library.Products.Models;
-using CIS.Library.Products.Repositories;
 using CIS.Library.Shared.Services;
 using CIS.WebApp.Services;
 using Microsoft.AspNetCore.Components;
@@ -10,25 +9,26 @@ using Microsoft.AspNetCore.Components.Forms;
 using Radzen;
 using Radzen.Blazor;
 using CIS.WebApp.Components.Dialogs;
+using CIS.Application.Products;
 
 namespace CIS.WebApp.Components.Pages.Admin
 {
     public partial class Products : ComponentBase
     {
         [Inject]
-        public IProductViewRepository ProductViewRepository { get; set; }
+        public required IExecuteImportService<ImportProductDefinition> ProductImportService { get; set; }
 
         [Inject]
-        public IExecuteImportService<ProductImportDefinition> ProductImportService { get; set; }
+        public required ImportService ImportService { get; set; }
 
         [Inject]
-        public ImportService ImportService { get; set; }
+        public required NotificationService NotificationService { get; set; }
 
         [Inject]
-        public NotificationService NotificationService { get; set; }
+        public required DialogService DialogService { get; set; }
 
         [Inject]
-        public DialogService DialogService { get; set; }
+        public required IProductQueries ProductQueries { get; set; }
 
         public const int OVERVIEW_TAB_INDEX = 0;
         public const int IMPORT_TAB_INDEX = 1;
@@ -38,8 +38,8 @@ namespace CIS.WebApp.Components.Pages.Admin
         private IReadOnlyCollection<ProductView> _products;
         private RadzenDataGrid<ProductView> _overviewGrid;
 
-        private List<ProductImportDefinition> _productImportDefinitions;
-        private RadzenDataGrid<ProductImportDefinition> _importDataGrid;
+        private List<ImportProductDefinition> _productImportDefinitions;
+        private RadzenDataGrid<ImportProductDefinition> _importDataGrid;
 
         private bool _showDetailDialog;
         private ProductView _detailDialogProduct;
@@ -51,7 +51,7 @@ namespace CIS.WebApp.Components.Pages.Admin
 
         private async Task LoadOverviewData()
         {
-            _products = await ProductViewRepository.List();
+            _products = await ProductQueries.List();
 
             if(_overviewGrid is not null)
             {
@@ -142,7 +142,7 @@ namespace CIS.WebApp.Components.Pages.Admin
                     if (!number.HasValue)
                         return;
 
-                    var importDef = new ProductImportDefinition()
+                    var importDef = new ImportProductDefinition()
                     {
                         Number = number.Value,
                         Name = name,

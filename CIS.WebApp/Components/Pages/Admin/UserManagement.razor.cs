@@ -1,5 +1,6 @@
 ﻿using CIS.Application;
-using CIS.Application.Customers.Models;
+using CIS.Application.Stores.Infrastructure;
+using CIS.Application.Stores.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -20,13 +21,13 @@ namespace CIS.WebApp.Components.Pages.Admin
         public required NotificationService NotificationService { get; set; }
 
         [Inject]
-        public required CISDbContext DbContext { get; set; }
+        public required IStoreQueries CustomerQueries { get; set; }
 
         private NewUserModel NewUser = new NewUserModel();
 
         private IEnumerable<UserView> _userViews = Enumerable.Empty<UserView>();
         private IEnumerable<string> _roles = Enumerable.Empty<string>();
-        private IEnumerable<CustomerDao> _customers = Enumerable.Empty<CustomerDao>();
+        private IEnumerable<CustomerView> _customers = Enumerable.Empty<CustomerView>();
 
         protected override async Task OnInitializedAsync()
         {
@@ -69,10 +70,7 @@ namespace CIS.WebApp.Components.Pages.Admin
 
         private async Task FetchCustomers()
         {
-            var customers = await DbContext.Customers
-                .AsNoTracking()
-                .ToListAsync();
-            _customers = customers;
+            _customers = await CustomerQueries.List();
         }
 
         private string GetRoleDisplayName(string role)

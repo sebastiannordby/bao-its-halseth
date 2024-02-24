@@ -89,7 +89,7 @@
                                 <RadzenDataGrid 
                                     @ref="_importDataGrid"
                                     SelectionMode="DataGridSelectionMode.Multiple"
-                                    KeyProperty="@nameof(SalesOrderImportDefinition.Number)" 
+                                    KeyProperty="@nameof(ImportSalesOrderDefinition.Number)" 
                                     Count="_orderImportDefinitions?.Count ?? 0" 
                                     Data="@_orderImportDefinitions"
                                     FilterPopupRenderMode="PopupRenderMode.OnDemand" 
@@ -104,41 +104,41 @@
                                     PageSize="1000"
                                     AllowColumnResize="true"
                                     PagerHorizontalAlign="HorizontalAlign.Center" 
-                                    TItem="SalesOrderImportDefinition" 
+                                    TItem="ImportSalesOrderDefinition" 
                                     ColumnWidth="100px"
                                     Style="height: 100%">
                                     <Columns>
                                         <RadzenDataGridColumn 
-                                            TItem="SalesOrderImportDefinition" 
-                                            Property="@nameof(SalesOrderImportDefinition.Number)" 
+                                            TItem="ImportSalesOrderDefinition" 
+                                            Property="@nameof(ImportSalesOrderDefinition.Number)" 
                                             Title="#" />
                                         <RadzenDataGridColumn 
-                                            TItem="SalesOrderImportDefinition" 
-                                            Property="@nameof(SalesOrderImportDefinition.AlternateNumber)" 
+                                            TItem="ImportSalesOrderDefinition" 
+                                            Property="@nameof(ImportSalesOrderDefinition.AlternateNumber)" 
                                             Title="Alternativt#" />
                                         <RadzenDataGridColumn 
-                                            TItem="SalesOrderImportDefinition" 
-                                            Property="@nameof(SalesOrderImportDefinition.StoreNumber)" 
+                                            TItem="ImportSalesOrderDefinition" 
+                                            Property="@nameof(ImportSalesOrderDefinition.StoreNumber)" 
                                             Title="Butikk#" />
                                         <RadzenDataGridColumn 
-                                            TItem="SalesOrderImportDefinition" 
-                                            Property="@nameof(SalesOrderImportDefinition.StoreName)" 
+                                            TItem="ImportSalesOrderDefinition" 
+                                            Property="@nameof(ImportSalesOrderDefinition.StoreName)" 
                                             Title="Butikknavn" />
                                         <RadzenDataGridColumn 
-                                            TItem="SalesOrderImportDefinition" 
-                                            Property="@nameof(SalesOrderImportDefinition.CustomerNumber)" 
+                                            TItem="ImportSalesOrderDefinition" 
+                                            Property="@nameof(ImportSalesOrderDefinition.CustomerNumber)" 
                                             Title="Kunde#" />
                                         <RadzenDataGridColumn 
-                                            TItem="SalesOrderImportDefinition" 
-                                            Property="@nameof(SalesOrderImportDefinition.CustomerName)" 
+                                            TItem="ImportSalesOrderDefinition" 
+                                            Property="@nameof(ImportSalesOrderDefinition.CustomerName)" 
                                             Title="Kunde" />
                                         <RadzenDataGridColumn 
-                                            TItem="SalesOrderImportDefinition" 
-                                            Property="@nameof(SalesOrderImportDefinition.CustomerName)" 
+                                            TItem="ImportSalesOrderDefinition" 
+                                            Property="@nameof(ImportSalesOrderDefinition.CustomerName)" 
                                             Title="Kunde" />
                                         <RadzenDataGridColumn 
-                                            TItem="SalesOrderImportDefinition" 
-                                            Property="@nameof(SalesOrderImportDefinition.IsDeleted)" 
+                                            TItem="ImportSalesOrderDefinition" 
+                                            Property="@nameof(ImportSalesOrderDefinition.IsDeleted)" 
                                             Title="Er slettet" />
                                     </Columns>
                                     <LoadingTemplate>

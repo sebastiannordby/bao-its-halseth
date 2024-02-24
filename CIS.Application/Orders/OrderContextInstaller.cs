@@ -1,11 +1,8 @@
-﻿using CIS.Application.Customers.Models;
-using CIS.Application.Legacy;
+﻿using CIS.Application.Legacy;
 using CIS.Application.Orders.Contracts;
 using CIS.Application.Orders.Contracts.Import;
-using CIS.Application.Orders.Import;
-using CIS.Application.Orders.Import.Contracts;
-using CIS.Application.Orders.Repositories;
-using CIS.Application.Orders.Services;
+using CIS.Application.Orders.Migration;
+using CIS.Application.Orders.Migration.Contracts;
 using CIS.Application.Shared.Services;
 using CIS.Library.Shared.Services;
 using Microsoft.EntityFrameworkCore;
@@ -16,25 +13,40 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentValidation;
+using CIS.Application.Shared.Infrastructure;
+using CIS.Application.Orders.Infrastructure.Models;
+using CIS.Application.Orders.Import;
+using CIS.Application.Orders.Import.Contracts;
 
 namespace CIS.Application.Orders
 {
     internal static class OrderContextInstaller
     {
-        internal static IServiceCollection AddOrderServices(
+        internal static IServiceCollection AddOrderFeature(
             this IServiceCollection services)
         {
-            services
-                .AddScoped<IMigrationMapper<LegacyCISOrderSource, SalesOrderImportDefinition>, LegacyCISSalesOrderMapper>()
-                .AddScoped<IProcessImportCommandService<ImportSalesOrderCommand>, ProcessImportSalesOrderCommandService>()
-                .AddScoped<IMigrateLegacyService<Ordre>, MigrateLegacyOrderService>()
-                .AddScoped<IValidator<ImportSalesOrderCommand>, ImportSalesOrderCommandValidator>()
-                .AddScoped<IValidator<SalesOrderImportDefinition>, SalesOrderImportDefinitionValidator>();
 
-            return services
-                .AddScoped<ISalesQueries, SalesQueries>()
-                .AddScoped<IExecuteImportService<SalesStatisticsImportDefinition>, ImportSalesStatisticsService>()
-                .AddScoped<IMigrateLegacyService<Salg>, ImportSalesStatisticsService>();
+            // Migration-related
+            services
+                .AddScoped<IMigrationMapper<LegacySystemSalesOrderSource, ImportSalesOrderDefinition>, LegacySystemSalesOrderMapper>()
+                .AddScoped<IMigrateLegacyService<Salg>, MigrateLegacySalgService>();
+                
+            services
+                .AddScoped<IMigrationMapper<LegacySystemSalesStatisticsSource, ImportSalesStatisticsDefinition>,  LegacySystemSalesStatisticsMapper>()
+                .AddScoped<IMigrateLegacyService<Ordre>, MigrateLegacyOrderService>();
+
+            // Import-related
+            services
+                .AddScoped<IValidator<ImportSalesOrderCommand>, ImportSalesOrderCommandValidator>()
+                .AddScoped<IValidator<ImportSalesOrderDefinition>, ImportSalesOrderDefinitionValidator>()
+                .AddScoped<IProcessImportCommandService<ImportSalesOrderCommand>, ProcessImportSalesOrderCommandService>();
+
+            services
+                .AddScoped<IValidator<ImportSalesStatisticsCommand>, ImportSalesStatisticsCommandValidator>()
+                .AddScoped<IValidator<ImportSalesStatisticsDefinition>, ImportSalesStatisticsDefinitionValidator>()
+                .AddScoped<IProcessImportCommandService<ImportSalesStatisticsCommand>, ProcessImportSalesStatisticsCommandService>();
+
+            return services;
         }
 
         internal static ModelBuilder SetupOrderModels(this ModelBuilder modelBuilder)
@@ -54,7 +66,6 @@ namespace CIS.Application.Orders
                 entity
                     .Property(x => x.CustomerName)
                     .HasMaxLength(150);
-
             });
 
             modelBuilder.Entity<SalesOrderLineDao>(entity =>

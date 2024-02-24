@@ -1,7 +1,4 @@
 ﻿using CIS.WebApp.Extensions;
-using CIS.Library.Customers.Models;
-using CIS.Library.Customers.Models.Import;
-using CIS.Library.Customers.Repositories;
 using CIS.Library.Shared.Services;
 using CIS.Library.Stores.Models;
 using CIS.WebApp.Services;
@@ -9,22 +6,25 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Radzen;
 using Radzen.Blazor;
+using CIS.Application.Stores.Infrastructure;
+using CIS.Application.Stores.Models;
+using CIS.Application.Stores.Models.Import;
 
 namespace CIS.WebApp.Components.Pages.Admin
 {
     public partial class Customers : ComponentBase
     {
         [Inject] 
-        public NotificationService NotificationService { get; set; }
+        public required NotificationService NotificationService { get; set; }
 
         [Inject]
-        public ICustomerViewRepository CustomerViewRepository { get; set; }
+        public required IStoreQueries CustomerQueries { get; set; }
 
         [Inject] 
-        public ImportService ImportService { get; set; }
+        public required ImportService ImportService { get; set; }
 
         [Inject]
-        public IExecuteImportService<CustomerImportDefinition> ImportCustomerService { get; set; }
+        public required IExecuteImportService<ImportCustomerDefinition> ImportCustomerService { get; set; }
 
         public const int OVERVIEW_TAB_INDEX = 0;
         public const int IMPORT_TAB_INDEX = 1;
@@ -36,8 +36,8 @@ namespace CIS.WebApp.Components.Pages.Admin
         private ImportState _importState = ImportState.Input;
         private bool _preViewHidden = true;
 
-        private List<CustomerImportDefinition> _customerImportDefinitions;
-        private RadzenDataGrid<CustomerImportDefinition> _importDataGrid;
+        private List<ImportCustomerDefinition> _customerImportDefinitions;
+        private RadzenDataGrid<ImportCustomerDefinition> _importDataGrid;
 
         private IReadOnlyCollection<CustomerView> _customers;
         private RadzenDataGrid<CustomerView> _overviewGrid;
@@ -54,7 +54,7 @@ namespace CIS.WebApp.Components.Pages.Admin
 
         public async Task LoadOverviewData()
         {
-            _customers = await CustomerViewRepository.List();
+            _customers = await CustomerQueries.List();
 
             if(_overviewGrid is not null)
             {
@@ -115,7 +115,7 @@ namespace CIS.WebApp.Components.Pages.Admin
                     if (!customerNumber.HasValue)
                         return;
 
-                    var importDef = new CustomerImportDefinition()
+                    var importDef = new ImportCustomerDefinition()
                     {
                         Number = customerNumber.Value,
                         Name = storeName,
@@ -124,7 +124,7 @@ namespace CIS.WebApp.Components.Pages.Admin
                         ContactPersonPhoneNumber = mobilePhone,
                         IsActive = active == 0 ? false : true,
                         CustomerGroupNumber = null,
-                        Store = new CustomerImportDefinition.StoreDefinition()
+                        Store = new ImportCustomerDefinition.StoreDefinition()
                         {
                             Name = storeName,
                             Number = storeNumber.Value,

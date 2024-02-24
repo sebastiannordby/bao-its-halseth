@@ -1,6 +1,7 @@
 ﻿@page "/admin/user-management"
 @using CIS.Application
-@using CIS.Application.Customers.Models
+@using CIS.Application.Stores.Models
+@using CIS.Application
 
 <PageTitle>Tilgangstyring</PageTitle>
 <h1 class="text-xl">Tilgangstyring</h1>
@@ -115,18 +116,18 @@
                                     @bind-Value="@NewUser.CustomerId"
                                     Data="_customers" 
                                     Style="width: 100%; max-width: 400px;" 
-                                    TextProperty="@nameof(CustomerDao.Name)"
-                                    ValueProperty="@nameof(CustomerDao.Id)">
+                                    TextProperty="@nameof(CustomerView.Name)"
+                                    ValueProperty="@nameof(CustomerView.Id)">
                                     <Template Context="custContext">
                                         @{
-                                            var customer = custContext as CustomerDao;
+                                            var customer = custContext as CustomerView;
                                         }
 
                                         @customer.Number - @customer.Name
                                     </Template>
                                     <ValueTemplate Context="custContext">
                                         @{
-                                            var customer = custContext as CustomerDao;
+                                            var customer = custContext as CustomerView;
                                         }
 
                                         @customer.Number - @customer.Name

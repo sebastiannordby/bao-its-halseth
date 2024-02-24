@@ -6,7 +6,6 @@ using CIS.Application.Shared.Extensions;
 using CIS.Application.Shared.Models;
 using CIS.Application.Shared.Repositories;
 using CIS.Application.Shared.Services;
-using CIS.Library.Customers.Models.Import;
 using CIS.Library.Products.Import;
 using CIS.Library.Shared.Services;
 using CIS.WebApp.Components.Pages;
@@ -49,15 +48,20 @@ namespace CIS.WebApp.Services
             _isRunning = true;
             using var scope = _scopeFactory.CreateScope();
 
-            var migrateSalesStatisticsService = scope.ServiceProvider.GetRequiredService<IMigrateLegacyService<Salg>>();
-            var migrateSalesOrderService = scope.ServiceProvider.GetRequiredService<IMigrateLegacyService<Ordre>>();
-            var migrateCustomerService = scope.ServiceProvider.GetRequiredService<IMigrateLegacyService<Butikkliste>>();
-            var migrateProductService = scope.ServiceProvider.GetRequiredService<IMigrateLegacyService<Vareinfo>>();
+            var services = scope.ServiceProvider;
+            var migrateSalesStatisticsService = services
+                .GetRequiredService<IMigrateLegacyService<Salg>>();
+            var migrateSalesOrderService = services
+                .GetRequiredService<IMigrateLegacyService<Ordre>>();
+            var migrateCustomerService = services
+                .GetRequiredService<IMigrateLegacyService<Butikkliste>>();
+            var migrateProductService = services
+                .GetRequiredService<IMigrateLegacyService<Vareinfo>>();
 
-            var legacyDbContext = scope.ServiceProvider
+            var legacyDbContext = services
                 .GetRequiredService<SWNDistroContext>();
 
-            var migrationTaskRepo = scope.ServiceProvider
+            var migrationTaskRepo = services
                 .GetRequiredService<IMigrationTaskRepo>();
 
             var tasks = await migrationTaskRepo.GetMigrationTasks();
@@ -65,25 +69,25 @@ namespace CIS.WebApp.Services
 
             if(uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.Products))
             {
-                await migrateProductService.Migrate();
+                await migrateProductService.Migrate(cancellationToken);
                 await migrationTaskRepo.Complete(MigrationTask.TaskType.Products);
             }
 
             if (uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.Customers))
             {
-                await migrateCustomerService.Migrate();
+                await migrateCustomerService.Migrate(cancellationToken);
                 await migrationTaskRepo.Complete(MigrationTask.TaskType.Customers);
             }
 
             if (uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.SalesOrders))
             {
-                await migrateSalesOrderService.Migrate();
+                await migrateSalesOrderService.Migrate(cancellationToken);
                 await migrationTaskRepo.Complete(MigrationTask.TaskType.SalesOrders);
             }
 
             if (uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.SalesOrderStatistics))
             {
-                await migrateSalesStatisticsService.Migrate();
+                await migrateSalesStatisticsService.Migrate(cancellationToken);
                 await migrationTaskRepo.Complete(MigrationTask.TaskType.SalesOrderStatistics);
             }
 

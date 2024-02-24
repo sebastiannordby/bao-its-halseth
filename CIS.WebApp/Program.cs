@@ -1,7 +1,6 @@
 using CIS.Application;
 using CIS.WebApp.Components;
 using CIS.WebApp.Components.Account;
-using CIS.Application;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +36,8 @@ namespace CIS.WebApp
                 builder.Configuration.GetSection("Shopify"));
 
             // Add services to the container.
-            builder.Services.AddRazorComponents()
+            builder.Services
+                .AddRazorComponents()
                 .AddInteractiveServerComponents();
 
             builder.Services
@@ -66,23 +66,25 @@ namespace CIS.WebApp
                      policy => policy.RequireRole(UserTypes.CUSTOMER));
             });
 
-            builder.Services.AddCISApplication(connectionString);
-            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-            builder.Services.AddHttpContextAccessor();
+            builder.Services
+                .AddCISApplication(connectionString);
 
             builder.Services
                 .AddSWNDistroLegacyDatabase(legacyConnectionString);
+
+            builder.Services
+                .AddCISAuthentication()
+                .AddSignInManager()
+                .AddDefaultTokenProviders(); 
+
+            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+            builder.Services.AddHttpContextAccessor();
 
             builder.Services
                 .AddSingleton<ImportLegacyDataBackgroundService>()
                 .AddSingleton<ImportLegacyDataHub>()
                 .AddScoped<ImportService>();
 
-            builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<CISDbContext>()
-                .AddSignInManager()
-                .AddDefaultTokenProviders();
 
             builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
@@ -114,7 +116,6 @@ namespace CIS.WebApp
 
             // Add additional endpoints required by the Identity /Account Razor components.
             app.MapAdditionalIdentityEndpoints();
-
             app.Run();
         }
     }

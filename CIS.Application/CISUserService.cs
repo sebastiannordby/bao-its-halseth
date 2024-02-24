@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CIS.Application.Shared;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,7 +10,13 @@ using System.Threading.Tasks;
 
 namespace CIS.Application
 {
-    public sealed class CISUserService
+    public interface ICISUserService
+    {
+        Task<ApplicationUserView> GetCurrentUser();
+        Task<Guid> GetCurrentStoreId();
+    }
+
+    internal sealed class CISUserService : ICISUserService
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -25,7 +32,7 @@ namespace CIS.Application
             _dbContext = dbContext;
         }
 
-        public async Task<ApplicationUser> GetCurrentUser()
+        public async Task<ApplicationUserView> GetCurrentUser()
         {
             if (_httpContextAccessor?.HttpContext?.User is null)
                 throw new Exception("Must be signed on");
@@ -35,7 +42,36 @@ namespace CIS.Application
             if(currentUser is null)
                 throw new Exception("Must be signed on");
 
-            return currentUser;
+            var customer = currentUser.CustomerId.HasValue ?
+                await _dbContext.Customers
+                    .AsNoTracking()    
+                    .FirstOrDefaultAsync(x => x.Id == currentUser.CustomerId) : null;
+
+            var userView = new ApplicationUserView()
+            {
+                Id = currentUser.Id,
+                UserName = currentUser.UserName,
+                NormalizedUserName = currentUser.NormalizedUserName,
+                Email = currentUser.Email,
+                NormalizedEmail = currentUser.NormalizedEmail,
+                EmailConfirmed = currentUser.EmailConfirmed,
+                PasswordHash = currentUser.PasswordHash,
+                AccessFailedCount = currentUser.AccessFailedCount,
+                ConcurrencyStamp = currentUser.ConcurrencyStamp,    
+                LockoutEnabled = currentUser.LockoutEnabled,
+                LockoutEnd = currentUser.LockoutEnd,
+                PhoneNumber = currentUser.PhoneNumber,
+                PhoneNumberConfirmed = currentUser.PhoneNumberConfirmed,
+                SecurityStamp = currentUser.SecurityStamp,
+                TwoFactorEnabled = currentUser.TwoFactorEnabled,
+                IsAdmin = currentUser.IsAdmin,
+                CustomerId = currentUser.CustomerId,
+                CustomerNumber = customer?.Number,
+                CustomerName = customer?.Name
+            };
+
+
+            return userView;
         }
 
         public async Task<Guid> GetCurrentStoreId()

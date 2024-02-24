@@ -1,7 +1,9 @@
 ﻿using CIS.Application;
+using CIS.Application.Products;
 using CIS.Application.Products.Models;
 using CIS.Application.Stores.Models;
 using CIS.Application.Stores.Services;
+using CIS.Library.Products.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,10 +15,10 @@ namespace CIS.WebApp.Components.Pages.Customer
         public required IStockCountService StockCountService { get; set; }
 
         [Inject]
-        public required CISUserService UserService { get; set; }
+        public required ICISUserService UserService { get; set; }
 
         [Inject]
-        public CISDbContext DbContext { get; set; }
+        public required IProductQueries ProductQueries { get; set; }
 
         private Guid _storeId;
         private ApplicationUser _currentUser;
@@ -24,14 +26,14 @@ namespace CIS.WebApp.Components.Pages.Customer
         private IEnumerable<StockCountView> _historyStoreCountDataSource = Enumerable.Empty<StockCountView>();
         private RegisterStockCountInput _registerInput = new();
 
-        private IEnumerable<ProductDao> _products = Enumerable.Empty<ProductDao>(); // Not to this
+        private IEnumerable<ProductView> _products = Enumerable.Empty<ProductView>(); // Not to this
 
         protected override async Task OnInitializedAsync()
         {
             _storeId = await UserService.GetCurrentStoreId();
             _currentUser = await UserService.GetCurrentUser();
 
-            _products = await DbContext.Products.ToListAsync();
+            _products = await ProductQueries.List();
 
             await FetchCurrentStoreCount();
         }

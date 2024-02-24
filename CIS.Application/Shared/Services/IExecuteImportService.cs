@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace CIS.Library.Shared.Services
 {
+    [Obsolete]
     public interface IExecuteImportService<TDefinition>
         where TDefinition : CISImportDefinition
     {

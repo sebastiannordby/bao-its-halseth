@@ -9,6 +9,6 @@ namespace CIS.Application.Shared.Services
     public interface IMigrateLegacyService<TModel>
         where TModel : class
     {
-        Task Migrate();
+        Task Migrate(CancellationToken cancellationToken);
     }
 }

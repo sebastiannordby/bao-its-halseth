@@ -1,11 +1,14 @@
 ﻿using CIS.Application.Legacy;
+using CIS.Application.Products.Import;
+using CIS.Application.Products.Import.Contracts;
+using CIS.Application.Products.Migration;
+using CIS.Application.Products.Migration.Contracts;
 using CIS.Application.Products.Models;
-using CIS.Application.Products.Repositories;
-using CIS.Application.Products.Services;
+using CIS.Application.Shared.Infrastructure;
 using CIS.Application.Shared.Services;
 using CIS.Library.Products.Import;
-using CIS.Library.Products.Repositories;
 using CIS.Library.Shared.Services;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -18,13 +21,20 @@ namespace CIS.Application.Products
 {
     internal static class ProductContextInstaller
     {
-        internal static IServiceCollection AddProductServices(
+        internal static IServiceCollection AddProductFeature(
             this IServiceCollection services)
         {
-            return services
-                .AddScoped<IExecuteImportService<ProductImportDefinition>, ImportProductService>()
-                .AddScoped<IMigrateLegacyService<Vareinfo>, ImportProductService>()
-                .AddScoped<IProductViewRepository, ProductViewRepository>();
+
+            services
+                .AddScoped<IProcessImportCommandService<ImportProductCommand>, ProcessImportProductCommandService>()
+                .AddScoped<IValidator<ImportProductCommand>, ImportProductCommandValidator>()
+                .AddScoped<IValidator<ImportProductDefinition>, ImportProductDefinitionValidator>();
+
+            services
+                .AddScoped<IMigrationMapper<LegacySystemProductSource, ImportProductDefinition>, LegacySystemProductMapper>()
+                .AddScoped<IMigrateLegacyService<Vareinfo>, MigrateLegacyProductService>();
+
+            return services;
         }
 
         internal static ModelBuilder SetupProductModels(this ModelBuilder modelBuilder)

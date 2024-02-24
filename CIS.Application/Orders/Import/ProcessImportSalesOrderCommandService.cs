@@ -1,5 +1,4 @@
-﻿using CIS.Application.Orders.Contracts;
-using CIS.Application.Orders.Import.Contracts;
+﻿using CIS.Application.Orders.Infrastructure.Models;
 using CIS.Library.Shared.Services;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +8,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using CIS.Application.Orders.Import.Contracts;
 
 namespace CIS.Application.Orders.Import
 {

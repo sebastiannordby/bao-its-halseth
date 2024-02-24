@@ -1,7 +1,5 @@
-﻿using CIS.Application.Customers;
-using CIS.Application.Customers.Models;
-using CIS.Application.Orders;
-using CIS.Application.Orders.Contracts;
+﻿using CIS.Application.Orders;
+using CIS.Application.Orders.Infrastructure.Models;
 using CIS.Application.Products;
 using CIS.Application.Products.Models;
 using CIS.Application.Shared.Models;
@@ -51,7 +49,6 @@ namespace CIS.Application
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.SetupCustomerModels();
             modelBuilder.SetupOrderModels();
             modelBuilder.SetupProductModels();
             modelBuilder.SetupStoreModels();

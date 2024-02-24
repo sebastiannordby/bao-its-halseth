@@ -13,8 +13,8 @@ using CIS.Application.Legacy;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Linq.Dynamic.Core;
-using CIS.Application.Orders.Repositories;
 using CIS.Application.Orders.Contracts;
+using CIS.Application.Orders.Infrastructure;
 using CIS.Application.Orders.Import.Contracts;
 
 namespace CIS.WebApp.Components.Pages.Admin
@@ -22,25 +22,25 @@ namespace CIS.WebApp.Components.Pages.Admin
     public partial class SalesOrders : ComponentBase, IDisposable
     {
         [Inject]
-        public IProcessImportCommandService<ImportSalesOrderCommand> ImportOrderService { get; set; }
+        public required IProcessImportCommandService<ImportSalesOrderCommand> ImportOrderService { get; set; }
 
         [Inject]
-        public NotificationService NotificationService { get; set; }
+        public required NotificationService NotificationService { get; set; }
 
         [Inject]
-        public ISalesQueries SalesOrderViewRepository { get; set; }
+        public required ISalesQueries SalesOrderViewRepository { get; set; }
 
         [Inject]
-        public ImportService ImportService { get; set; }
+        public required ImportService ImportService { get; set; }
 
-        private List<SalesOrderImportDefinition> _orderImportDefinitions;
-        private RadzenDataGrid<SalesOrderImportDefinition> _importDataGrid;
+        private List<ImportSalesOrderDefinition>? _orderImportDefinitions;
+        private RadzenDataGrid<ImportSalesOrderDefinition> _importDataGrid;
 
         private int _salesOrderCount;
-        private IReadOnlyCollection<SalesOrderView> _salesOrders;
-        private RadzenDataGrid<SalesOrderView> _overviewGrid;
+        private IReadOnlyCollection<SalesOrderView>? _salesOrders;
+        private RadzenDataGrid<SalesOrderView>? _overviewGrid;
 
-        private string _importMessages;
+        private string? _importMessages;
 
         private int ProgressPercent { get; set; }
         private bool _importDialogHidden = true;
@@ -133,7 +133,7 @@ namespace CIS.WebApp.Components.Pages.Admin
 
                 _importMessages += $"\r\nLeser - Ordre #{orderNumber} - Produkt: {productNumber}\r\n";
 
-                var orderLine = new SalesOrderImportDefinition.Line()
+                var orderLine = new ImportSalesOrderDefinition.Line()
                 {
                     CostPrice = costPrice,
                     ProductNumber = productNumber.Value,
@@ -157,7 +157,7 @@ namespace CIS.WebApp.Components.Pages.Admin
                     var parsedStoreNumber =
                         Convert.ToInt32((double)storeNumber);
 
-                    var order = new SalesOrderImportDefinition()
+                    var order = new ImportSalesOrderDefinition()
                     {
                         Number = orderNumber.Value,
                         AlternateNumber = shopifyOrderRefd,
@@ -182,6 +182,9 @@ namespace CIS.WebApp.Components.Pages.Admin
 
         private async Task ExecuteImport()
         {
+            if (_orderImportDefinitions is null)
+                return;
+
             var command = new ImportSalesOrderCommand()
             {
                 Definitions = _orderImportDefinitions

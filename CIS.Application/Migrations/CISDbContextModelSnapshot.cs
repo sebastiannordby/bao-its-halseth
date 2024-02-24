@@ -44,6 +44,9 @@ namespace CIS.Application.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -90,65 +93,7 @@ namespace CIS.Application.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("CIS.Application.Customers.Models.CustomerDao", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ContactPersonEmailAddress")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("ContactPersonName")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<string>("ContactPersonPhoneNumber")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<Guid?>("CustomerGroupId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerGroupId");
-
-                    b.ToTable("Customers");
-                });
-
-            modelBuilder.Entity("CIS.Application.Customers.Models.CustomerGroupDao", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CustomerGroups");
-                });
-
-            modelBuilder.Entity("CIS.Application.Orders.Contracts.SalesOrderDao", b =>
+            modelBuilder.Entity("CIS.Application.Orders.Infrastructure.Models.SalesOrderDao", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -195,7 +140,7 @@ namespace CIS.Application.Migrations
                     b.ToTable("SalesOrders");
                 });
 
-            modelBuilder.Entity("CIS.Application.Orders.Contracts.SalesOrderLineDao", b =>
+            modelBuilder.Entity("CIS.Application.Orders.Infrastructure.Models.SalesOrderLineDao", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -243,7 +188,7 @@ namespace CIS.Application.Migrations
                     b.ToTable("SalesOrderLines");
                 });
 
-            modelBuilder.Entity("CIS.Application.Orders.Contracts.SalesStatisticsDao", b =>
+            modelBuilder.Entity("CIS.Application.Orders.Infrastructure.Models.SalesStatisticsDao", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -382,6 +327,64 @@ namespace CIS.Application.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MigrationsTasks");
+                });
+
+            modelBuilder.Entity("CIS.Application.Stores.Models.CustomerDao", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ContactPersonEmailAddress")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ContactPersonName")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("ContactPersonPhoneNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<Guid?>("CustomerGroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerGroupId");
+
+                    b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("CIS.Application.Stores.Models.CustomerGroupDao", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CustomerGroups");
                 });
 
             modelBuilder.Entity("CIS.Application.Stores.Models.RegionDao", b =>
@@ -600,20 +603,20 @@ namespace CIS.Application.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CIS.Application.Customers.Models.CustomerDao", b =>
+            modelBuilder.Entity("CIS.Application.Orders.Infrastructure.Models.SalesOrderLineDao", b =>
                 {
-                    b.HasOne("CIS.Application.Customers.Models.CustomerGroupDao", null)
-                        .WithMany()
-                        .HasForeignKey("CustomerGroupId");
-                });
-
-            modelBuilder.Entity("CIS.Application.Orders.Contracts.SalesOrderLineDao", b =>
-                {
-                    b.HasOne("CIS.Application.Orders.Contracts.SalesOrderDao", null)
+                    b.HasOne("CIS.Application.Orders.Infrastructure.Models.SalesOrderDao", null)
                         .WithMany()
                         .HasForeignKey("SalesOrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CIS.Application.Stores.Models.CustomerDao", b =>
+                {
+                    b.HasOne("CIS.Application.Stores.Models.CustomerGroupDao", null)
+                        .WithMany()
+                        .HasForeignKey("CustomerGroupId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

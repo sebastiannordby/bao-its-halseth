@@ -10,6 +10,6 @@ namespace CIS.Application.Orders.Import.Contracts
 {
     public sealed class ImportSalesOrderCommand : CISImportCommand
     {
-        public required IEnumerable<SalesOrderImportDefinition> Definitions { get; set; }
+        public required IEnumerable<ImportSalesOrderDefinition> Definitions { get; set; }
     }
 }

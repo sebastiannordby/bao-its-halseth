@@ -11,7 +11,7 @@ namespace CIS.Application.Orders.Import.Contracts
     public class ImportSalesOrderCommandValidator : AbstractValidator<ImportSalesOrderCommand>
     {
         public ImportSalesOrderCommandValidator(
-            IValidator<SalesOrderImportDefinition> definitionValidator)
+            IValidator<ImportSalesOrderDefinition> definitionValidator)
         {
             RuleFor(x => x.Definitions)
                 .NotEmpty();

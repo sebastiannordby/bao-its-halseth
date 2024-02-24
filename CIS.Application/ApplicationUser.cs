@@ -10,5 +10,6 @@ namespace CIS.Application
     public class ApplicationUser : IdentityUser
     {
         public Guid? CustomerId { get; set; }
+        public bool IsAdmin { get; set; }
     }
 }

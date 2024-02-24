@@ -1,8 +1,7 @@
-﻿using CIS.Application.Customers;
-using CIS.Application.Customers.Repositories;
-using CIS.Application.Legacy;
+﻿using CIS.Application.Legacy;
 using CIS.Application.Orders;
 using CIS.Application.Products;
+using CIS.Application.Shared.Infrastructure;
 using CIS.Application.Shared.Models;
 using CIS.Application.Shared.Repositories;
 using CIS.Application.Shopify;
@@ -11,6 +10,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using CIS.Application;
+using Radzen;
+using CIS.Application.Shopify.Options;
+using ShopifySharp.Extensions.DependencyInjection;
+using ShopifySharp;
+using CIS.Application.Hubs;
 
 namespace CIS.Application
 {
@@ -25,11 +30,20 @@ namespace CIS.Application
             return services
                 .AddScoped<IMigrationTaskRepo, MigrationTaskRepo>()
                 .AddScoped<ImportShopifyOrderService>()
-                .AddScoped<CISUserService>()
-                .AddCustomerServices()
-                .AddStoreServices()
-                .AddProductServices()
-                .AddOrderServices();
+                .AddScoped<ICISUserService, CISUserService>()
+                .AddStoreFeature()
+                .AddProductFeature()
+                .AddOrderFeature()
+                .AddInfrastructure();
+        }
+
+        public static IdentityBuilder AddCISAuthentication(
+            this IServiceCollection services)
+        {
+            return services
+                .AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<CISDbContext>();
         }
 
         public static IServiceCollection AddSWNDistroLegacyDatabase(

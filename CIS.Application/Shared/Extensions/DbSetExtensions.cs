@@ -11,7 +11,7 @@ namespace CIS.Application.Shared.Extensions
     {
         public static async Task ProcessEntitiesInBatches<T>(
             this DbSet<T> dbSet,
-            Func<IEnumerable<T>, int, Task> processBatch,
+            Func<IReadOnlyCollection<T>, int, Task> processBatch,
             int batchSize = 50)
             where T : class
         {
