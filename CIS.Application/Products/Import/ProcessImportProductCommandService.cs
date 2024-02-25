@@ -4,6 +4,7 @@ using CIS.Application.Listeners;
 using CIS.Application.Products.Import.Contracts;
 using CIS.Application.Products.Models;
 using CIS.Library.Shared.Services;
+using FluentValidation;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -19,20 +20,25 @@ namespace CIS.Application.Products.Import
     {
         private readonly CISDbContext _dbContext;
         private readonly SWNDistroContext _swnDistroContext;
+        private readonly IValidator<ImportProductCommand> _commandValidator;
         private readonly IHubContext<ImportLegacyDataHub, IListenImportClient> _hub;
 
         public ProcessImportProductCommandService(
             CISDbContext dbContext,
             SWNDistroContext swnDistroContext,
+            IValidator<ImportProductCommand> commandValidator,
             IHubContext<ImportLegacyDataHub, IListenImportClient> hub)
         {
             _dbContext = dbContext;
             _swnDistroContext = swnDistroContext;
+            _commandValidator = commandValidator;
             _hub = hub;
         }
 
         public async Task<bool> Import(ImportProductCommand command, CancellationToken cancellationToken)
         {
+            await _commandValidator.ValidateAndThrowAsync(command);
+
             var definitions = command.Definitions;
             var products = new List<ProductDao>();
             var productPrices = new List<ProductPriceDao>();

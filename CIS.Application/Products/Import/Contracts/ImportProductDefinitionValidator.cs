@@ -12,7 +12,10 @@ namespace CIS.Application.Products.Import.Contracts
     {
         public ImportProductDefinitionValidator()
         {
-
+            RuleFor(x => x.Name)
+                .NotEmpty();
+            RuleFor(x => x.CurrencyCode)
+                .NotEmpty();
         }
     }
 }
