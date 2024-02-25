@@ -1,0 +1,41 @@
+name: Integration Tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  integration-tests:
+    runs-on: ubuntu-latest
+
+    env:
+      CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }}
+
+    services:
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        env:
+          SA_PASSWORD: "YourStrong!Passw0rd"
+          ACCEPT_EULA: "Y"
+        ports:
+          - 1433:1433
+        options: --name sqlserver
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Build Docker Image for CIS.Testing.Integration
+        run: docker build -t integration-tests -f Dockerfile.integration-tests .
+
+      - name: Start Integration Test Container
+        run: docker run -d --name myapp-container -e "ConnectionStrings__DefaultConnection=${CONNECTION_STRING}" myapp
+
+      - name: Run integration tests
+        run: docker run --network container:sqlserver integration-tests
+
+      - name: Remove containers
+        run: |
+          docker rm -f integration-tests
+          docker rm -f sqlserver
