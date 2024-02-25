@@ -1,0 +1,13 @@
+# Use the .NET SDK image to build the integration tests
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /app
+
+# Copy csproj and restore dependencies for CIS.Tests.Integration
+COPY CIS.Tests.Integration/*.csproj CIS.Tests.Integration/
+RUN dotnet restore CIS.Tests.Integration/*.csproj
+
+# Copy the entire project for CIS.Tests.Integration
+COPY CIS.Tests.Integration/ .
+
+# Run the integration tests for CIS.Tests.Integration
+CMD ["dotnet", "test", "CIS.Tests.Integration", "--logger:trx"]
