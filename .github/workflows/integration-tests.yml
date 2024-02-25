@@ -9,9 +9,6 @@ jobs:
   integration-tests:
     runs-on: ubuntu-latest
 
-    env:
-      CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }}
-
     services:
       sqlserver:
         image: mcr.microsoft.com/mssql/server:2019-latest
@@ -20,22 +17,21 @@ jobs:
           ACCEPT_EULA: "Y"
         ports:
           - 1433:1433
-        options: --name sqlserver
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Build Docker Image for CIS.Testing.Integration
-        run: docker build -t integration-tests -f Dockerfile.integration-tests .
-
-      - name: Start Integration Test Container
-        run: docker run -d --name integration-tests -e "ConnectionStrings__DefaultConnection=${CONNECTION_STRING}" integration-tests
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 8.0.x
 
       - name: Run integration tests
-        run: docker run --network container:sqlserver integration-tests
+        run: dotnet test CIS.Testing.Integration --logger:trx --results-directory:TestResults --filter FullyQualifiedName~CIS.Testing.Integration
 
-      - name: Remove containers
-        run: |
-          docker rm -f integration-tests
-          docker rm -f sqlserver
+      - name: Archive test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results
+          path: TestResults
