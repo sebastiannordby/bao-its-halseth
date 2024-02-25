@@ -30,7 +30,7 @@ jobs:
         run: docker build -t integration-tests -f Dockerfile.integration-tests .
 
       - name: Start Integration Test Container
-        run: docker run -d --name myapp-container -e "ConnectionStrings__DefaultConnection=${CONNECTION_STRING}" myapp
+        run: docker run -d --name integration-tests -e "ConnectionStrings__DefaultConnection=${CONNECTION_STRING}" integration-tests
 
       - name: Run integration tests
         run: docker run --network container:sqlserver integration-tests
