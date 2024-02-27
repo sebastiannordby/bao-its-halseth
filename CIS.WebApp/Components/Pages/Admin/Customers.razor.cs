@@ -9,6 +9,7 @@ using Radzen.Blazor;
 using CIS.Application.Stores.Infrastructure;
 using CIS.Application.Stores.Models;
 using CIS.Application.Stores.Models.Import;
+using CIS.Application.Stores.Import.Contracts;
 
 namespace CIS.WebApp.Components.Pages.Admin
 {
@@ -24,7 +25,7 @@ namespace CIS.WebApp.Components.Pages.Admin
         public required ImportService ImportService { get; set; }
 
         [Inject]
-        public required IExecuteImportService<ImportCustomerDefinition> ImportCustomerService { get; set; }
+        public required IProcessImportCommandService<ImportCustomerCommand> ImportCustomerService { get; set; }
 
         public const int OVERVIEW_TAB_INDEX = 0;
         public const int IMPORT_TAB_INDEX = 1;
@@ -75,7 +76,10 @@ namespace CIS.WebApp.Components.Pages.Admin
 
         private async Task ExecuteImport()
         {
-            var res = await ImportCustomerService.Import(_customerImportDefinitions);
+            var res = await ImportCustomerService.Import(new()
+            {
+                Definitions = _customerImportDefinitions
+            }, CancellationToken.None);
 
             if(res)
             {

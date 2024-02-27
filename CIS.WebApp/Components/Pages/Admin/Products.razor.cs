@@ -10,13 +10,14 @@ using Radzen;
 using Radzen.Blazor;
 using CIS.WebApp.Components.Dialogs;
 using CIS.Application.Products;
+using CIS.Application.Products.Import.Contracts;
 
 namespace CIS.WebApp.Components.Pages.Admin
 {
     public partial class Products : ComponentBase
     {
         [Inject]
-        public required IExecuteImportService<ImportProductDefinition> ProductImportService { get; set; }
+        public required IProcessImportCommandService<ImportProductCommand> ProductImportService { get; set; }
 
         [Inject]
         public required ImportService ImportService { get; set; }
@@ -92,8 +93,10 @@ namespace CIS.WebApp.Components.Pages.Admin
 
         private async Task ExecuteImport()
         {
-            var result = await ProductImportService
-                .Import(_productImportDefinitions);
+            var result = await ProductImportService.Import(new() 
+            { 
+                Definitions = _productImportDefinitions 
+            }, CancellationToken.None);
 
             if(result)
             {
