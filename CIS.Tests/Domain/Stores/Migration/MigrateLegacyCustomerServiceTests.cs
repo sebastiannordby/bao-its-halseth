@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CIS.Application.Stores;
+using CIS.Application.Features.Stores;
 
 namespace CIS.Tests.Domain.Stores.Migration
 {

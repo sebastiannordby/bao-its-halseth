@@ -1,6 +1,4 @@
 ﻿using CIS.Application.Legacy;
-using CIS.Application.Orders.Migration.Contracts;
-using CIS.Application.Orders.Infrastructure.Models;
 using CIS.Application.Shared.Extensions;
 using CIS.Application.Shared.Services;
 using CIS.Library.Shared.Services;
@@ -14,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Formats.Asn1.AsnWriter;
 using ShopifyOrder = ShopifySharp.Order;
+using CIS.Application.Features.Orders.Infrastructure.Models;
 
 namespace CIS.Application.Shopify
 {

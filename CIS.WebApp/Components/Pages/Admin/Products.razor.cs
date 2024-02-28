@@ -1,7 +1,5 @@
 ﻿using CIS.WebApp.Components;
 using CIS.WebApp.Extensions;
-using CIS.Library.Products.Import;
-using CIS.Library.Products.Models;
 using CIS.Library.Shared.Services;
 using CIS.WebApp.Services;
 using Microsoft.AspNetCore.Components;
@@ -9,8 +7,10 @@ using Microsoft.AspNetCore.Components.Forms;
 using Radzen;
 using Radzen.Blazor;
 using CIS.WebApp.Components.Dialogs;
-using CIS.Application.Products;
-using CIS.Application.Products.Import.Contracts;
+using CIS.Application.Features.Products;
+using CIS.Application.Features.Products.Models;
+using CIS.Application.Features.Products.Import.Contracts;
+using CIS.Application.Features.Products.Models.Import;
 
 namespace CIS.WebApp.Components.Pages.Admin
 {

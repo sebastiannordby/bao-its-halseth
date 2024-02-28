@@ -1,6 +1,6 @@
 ﻿using CIS.Application;
-using CIS.Application.Stores.Infrastructure;
-using CIS.Application.Stores.Models;
+using CIS.Application.Features.Stores.Infrastructure;
+using CIS.Application.Features.Stores.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

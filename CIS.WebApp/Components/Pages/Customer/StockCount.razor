@@ -1,7 +1,6 @@
 ﻿@page "/customer/stock-count"
-@using CIS.Application.Products.Models
-@using CIS.Application.Stores.Models
-
+@using CIS.Application.Features.Products.Models
+@using CIS.Application.Features.Stores.Models
 
 <PageTitle>Varetelling</PageTitle>
 <h1 class="text-xl">Varetelling</h1>
@@ -67,18 +66,18 @@
                                 @bind-Value="@_registerInput.ProductId"
                                 Data="_products" 
                                 Style="width: 100%; max-width: 400px;"
-                                TextProperty="@nameof(ProductDao.Name)"
-                                ValueProperty="@nameof(ProductDao.Id)">
+                                TextProperty="@nameof(ProductView.Name)"
+                                ValueProperty="@nameof(ProductView.Id)">
                                 <Template Context="custContext">
                                     @{
-                                        var model = custContext as ProductDao;
+                                        var model = custContext as ProductView;
                                     }
 
                                     @model.Number - @model.Name
                                 </Template>
                                 <ValueTemplate Context="custContext">
                                     @{
-                                        var model = custContext as ProductDao;
+                                        var model = custContext as ProductView;
                                     }
 
                                     @model.Number - @model.Name

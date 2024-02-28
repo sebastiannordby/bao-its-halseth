@@ -1,7 +1,7 @@
-﻿using CIS.Application.Hubs;
+﻿using CIS.Application.Features.Products;
+using CIS.Application.Hubs;
 using CIS.Application.Legacy;
 using CIS.Application.Listeners;
-using CIS.Application.Products;
 using CIS.Application.Shared.Services;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;

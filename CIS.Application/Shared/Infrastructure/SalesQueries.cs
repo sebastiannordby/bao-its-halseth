@@ -1,6 +1,5 @@
-﻿using CIS.Application.Orders.Contracts;
-using CIS.Application.Orders.Infrastructure;
-using CIS.Library.Orders.Models;
+﻿using CIS.Application.Features.Orders.Contracts;
+using CIS.Application.Features.Orders.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Radzen;
 

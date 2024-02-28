@@ -1,9 +1,9 @@
 ﻿using Bogus;
+using CIS.Application.Features.Products;
+using CIS.Application.Features.Products.Migration.Contracts;
+using CIS.Application.Features.Products.Models.Import;
 using CIS.Application.Legacy;
-using CIS.Application.Products;
-using CIS.Application.Products.Migration.Contracts;
 using CIS.Application.Shared.Services;
-using CIS.Library.Products.Import;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

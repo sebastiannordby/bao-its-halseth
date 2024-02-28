@@ -1,5 +1,4 @@
-﻿using CIS.Application.Orders.Contracts;
-using CIS.Library.Shared.Services;
+﻿using CIS.Library.Shared.Services;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
@@ -8,8 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CIS.Application.Orders;
-using CIS.Application.Orders.Import.Contracts;
+using CIS.Application.Features.Orders;
+using CIS.Application.Features.Orders.Contracts;
+using CIS.Application.Features.Orders.Import.Contracts;
 
 namespace CIS.Tests.Domain.Orders
 {
@@ -33,7 +33,7 @@ namespace CIS.Tests.Domain.Orders
         {
             var command = new ImportSalesOrderCommand()
             {
-                Definitions = Enumerable.Empty<Application.Orders.Contracts.ImportSalesOrderDefinition>()
+                Definitions = Enumerable.Empty<ImportSalesOrderDefinition>()
             };
 
             await Assert.ThrowsAnyAsync<ValidationException>(async() =>
@@ -47,9 +47,9 @@ namespace CIS.Tests.Domain.Orders
         {
             var command = new ImportSalesOrderCommand()
             {
-                Definitions = new List<Application.Orders.Contracts.ImportSalesOrderDefinition>()
+                Definitions = new List<ImportSalesOrderDefinition>()
                 {
-                    Activator.CreateInstance<Application.Orders.Contracts.ImportSalesOrderDefinition>()
+                    Activator.CreateInstance<ImportSalesOrderDefinition>()
                 }
             };
 

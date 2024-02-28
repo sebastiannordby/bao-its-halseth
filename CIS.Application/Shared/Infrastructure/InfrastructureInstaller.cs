@@ -1,6 +1,6 @@
-﻿using CIS.Application.Orders.Infrastructure;
-using CIS.Application.Products;
-using CIS.Application.Stores.Infrastructure;
+﻿using CIS.Application.Features.Orders.Infrastructure;
+using CIS.Application.Features.Products;
+using CIS.Application.Features.Stores.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

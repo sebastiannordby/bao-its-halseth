@@ -1,10 +1,10 @@
-﻿using CIS.Application.Orders;
-using CIS.Application.Orders.Infrastructure.Models;
-using CIS.Application.Products;
-using CIS.Application.Products.Models;
+﻿using CIS.Application.Features.Orders;
+using CIS.Application.Features.Orders.Infrastructure.Models;
+using CIS.Application.Features.Products;
+using CIS.Application.Features.Products.Models;
+using CIS.Application.Features.Stores;
+using CIS.Application.Features.Stores.Models;
 using CIS.Application.Shared.Models;
-using CIS.Application.Stores;
-using CIS.Application.Stores.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

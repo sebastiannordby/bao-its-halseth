@@ -1,4 +1,4 @@
-﻿using CIS.Library.Products.Models;
+﻿using CIS.Application.Features.Products.Models;
 using Microsoft.AspNetCore.Components;
 
 namespace CIS.WebApp.Components.Dialogs

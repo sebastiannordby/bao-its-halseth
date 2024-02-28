@@ -1,5 +1,4 @@
-﻿using CIS.Application.Orders.Migration.Contracts;
-using CIS.Application.Shared.Services;
+﻿using CIS.Application.Shared.Services;
 using CIS.Library.Shared.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -7,13 +6,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CIS.Application.Orders;
 using CIS.Application.Listeners;
 using NSubstitute;
 using Microsoft.AspNetCore.SignalR;
 using CIS.Application.Hubs;
 using CIS.Application.Legacy;
-using CIS.Application.Orders.Contracts;
+using CIS.Application.Features.Orders;
+using CIS.Application.Features.Orders.Contracts;
+using CIS.Application.Features.Orders.Migration.Contracts;
 
 namespace CIS.Tests.Domain.Orders.Migration
 {

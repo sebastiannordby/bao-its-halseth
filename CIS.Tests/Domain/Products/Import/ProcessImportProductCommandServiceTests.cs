@@ -1,6 +1,6 @@
-﻿using CIS.Application.Products;
-using CIS.Application.Products.Import.Contracts;
-using CIS.Library.Products.Import;
+﻿using CIS.Application.Features.Products;
+using CIS.Application.Features.Products.Import.Contracts;
+using CIS.Application.Features.Products.Models.Import;
 using CIS.Library.Shared.Services;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;

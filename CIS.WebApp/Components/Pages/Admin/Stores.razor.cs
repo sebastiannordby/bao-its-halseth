@@ -1,5 +1,5 @@
-﻿using CIS.Library.Stores.Models;
-using CIS.Library.Stores.Repositories;
+﻿using CIS.Application.Features.Stores.Models;
+using CIS.Application.Features.Stores.Services;
 using Microsoft.AspNetCore.Components;
 
 namespace CIS.WebApp.Components.Pages.Admin

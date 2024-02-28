@@ -1,15 +1,14 @@
 ﻿using CIS.WebApp.Extensions;
 using CIS.Library.Shared.Services;
-using CIS.Library.Stores.Models;
 using CIS.WebApp.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Radzen;
 using Radzen.Blazor;
-using CIS.Application.Stores.Infrastructure;
-using CIS.Application.Stores.Models;
-using CIS.Application.Stores.Models.Import;
-using CIS.Application.Stores.Import.Contracts;
+using CIS.Application.Features.Stores.Infrastructure;
+using CIS.Application.Features.Stores.Models;
+using CIS.Application.Features.Stores.Import.Contracts;
+using CIS.Application.Features.Stores.Models.Import;
 
 namespace CIS.WebApp.Components.Pages.Admin
 {

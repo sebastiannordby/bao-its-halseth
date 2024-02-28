@@ -7,9 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CIS.Application.Stores.Migration.Contracts;
-using CIS.Application.Stores.Models.Import;
-using CIS.Application.Stores;
+using CIS.Application.Features.Stores;
+using CIS.Application.Features.Stores.Migration.Contracts;
+using CIS.Application.Features.Stores.Models.Import;
 
 namespace CIS.Tests.Domain.Stores.Migration
 {

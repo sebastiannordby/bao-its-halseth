@@ -1,9 +1,8 @@
 ﻿using CIS.Application;
-using CIS.Application.Products;
-using CIS.Application.Products.Models;
-using CIS.Application.Stores.Models;
-using CIS.Application.Stores.Services;
-using CIS.Library.Products.Models;
+using CIS.Application.Features.Products;
+using CIS.Application.Features.Products.Models;
+using CIS.Application.Features.Stores.Models;
+using CIS.Application.Features.Stores.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 

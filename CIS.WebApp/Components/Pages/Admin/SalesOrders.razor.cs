@@ -8,14 +8,13 @@ using LicenseContext = OfficeOpenXml.LicenseContext;
 using CIS.WebApp.Extensions;
 using CIS.WebApp.Services;
 using OfficeOpenXml.Style;
-using CIS.Library.Orders.Models;
 using CIS.Application.Legacy;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Linq.Dynamic.Core;
-using CIS.Application.Orders.Contracts;
-using CIS.Application.Orders.Infrastructure;
-using CIS.Application.Orders.Import.Contracts;
+using CIS.Application.Features.Orders.Contracts;
+using CIS.Application.Features.Orders.Infrastructure;
+using CIS.Application.Features.Orders.Import.Contracts;
 
 namespace CIS.WebApp.Components.Pages.Admin
 {

@@ -1,11 +1,8 @@
 ﻿using CIS.Application.Legacy;
-using CIS.Application.Orders;
-using CIS.Application.Products;
 using CIS.Application.Shared.Infrastructure;
 using CIS.Application.Shared.Models;
 using CIS.Application.Shared.Repositories;
 using CIS.Application.Shopify;
-using CIS.Application.Stores;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +13,9 @@ using CIS.Application.Shopify.Options;
 using ShopifySharp.Extensions.DependencyInjection;
 using ShopifySharp;
 using CIS.Application.Hubs;
+using CIS.Application.Features.Stores;
+using CIS.Application.Features.Orders;
+using CIS.Application.Features.Products;
 
 namespace CIS.Application
 {

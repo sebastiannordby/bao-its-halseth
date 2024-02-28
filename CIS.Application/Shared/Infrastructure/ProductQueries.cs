@@ -1,5 +1,5 @@
-﻿using CIS.Application.Products;
-using CIS.Library.Products.Models;
+﻿using CIS.Application.Features.Products;
+using CIS.Application.Features.Products.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -35,6 +35,7 @@ namespace CIS.Application.Shared.Infrastructure
                     .DefaultIfEmpty()
 
                 select new ProductView(
+                    product.Id,
                     product.Number,
                     product.Name,
                     product.AlternateName,
