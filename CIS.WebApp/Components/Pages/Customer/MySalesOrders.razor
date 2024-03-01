@@ -1,8 +1,65 @@
 ﻿@page "/customer/my-orders"
 @attribute [Authorize(Policy = UserTypes.CUSTOMER)]
 @using CIS.Application
+@using CIS.Application.Features.Orders.Contracts
 @using Microsoft.AspNetCore.Authorization
 
-<h3>Mine bestillinger</h3>
+<PageTitle>Mine bestillinger</PageTitle>
+<h1 class="text-xl">Mine bestillinger</h1>
 
-
+<RadzenTabs Style="height: 100%" RenderMode="TabRenderMode.Server">
+    <Tabs>
+        <RadzenTabsItem Text="Oversikt">
+            <RadzenDataGrid 
+                TItem="SalesOrderView"
+                Data="_salesOrders"
+                Count="_salesOrderCount"
+                LoadData="LoadSalesOrders"
+                FilterMode="FilterMode.Advanced"
+                AllowFiltering="true"
+                AllowPaging="true"
+                AllowSorting="true"
+                AllowMultiColumnSorting="true"
+                AllowColumnResize="true"
+                AllowColumnPicking="true"
+                AllowGrouping="true"
+                PageSize="100"
+                Style="height: 100%">
+                <Columns>
+                    <RadzenDataGridColumn 
+                        TItem="SalesOrderView" 
+                        Title="#" 
+                        Property="@nameof(SalesOrderView.Number)" />
+                    <RadzenDataGridColumn 
+                        TItem="SalesOrderView" 
+                        Title="Dato"
+                        Property="@nameof(SalesOrderView.OrderDate)" />
+                    <RadzenDataGridColumn 
+                        TItem="SalesOrderView" 
+                        Title="Alternativt #" 
+                        Property="@nameof(SalesOrderView.AlternateNumber)" />
+                    <RadzenDataGridColumn 
+                        TItem="SalesOrderView" 
+                        Title="Referanse"
+                        Property="@nameof(SalesOrderView.Reference)" />
+                    <RadzenDataGridColumn 
+                        TItem="SalesOrderView" 
+                        Title="Levert dato" 
+                        Property="@nameof(SalesOrderView.DeliveredDate)" />
+                    <RadzenDataGridColumn 
+                        TItem="SalesOrderView" 
+                        Title="Butikk#" 
+                        Property="@nameof(SalesOrderView.StoreNumber)" />
+                    <RadzenDataGridColumn 
+                        TItem="SalesOrderView" 
+                        Title="Butikk"
+                        Property="@nameof(SalesOrderView.StoreName)" />
+                    <RadzenDataGridColumn 
+                        TItem="SalesOrderView"
+                        Title="Slettet" 
+                        Property="@nameof(SalesOrderView.IsDeleted)" />
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>

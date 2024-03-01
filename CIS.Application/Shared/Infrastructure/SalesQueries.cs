@@ -1,7 +1,9 @@
 ﻿using CIS.Application.Features.Orders.Contracts;
 using CIS.Application.Features.Orders.Infrastructure;
+using CIS.Application.Features.Orders.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Radzen;
+using System.Runtime.CompilerServices;
 
 namespace CIS.Application.Shared.Infrastructure
 {
@@ -122,28 +124,24 @@ namespace CIS.Application.Shared.Infrastructure
 
         public async Task<IReadOnlyCollection<SalesOrderView>> List(int pageSize, int pageIndex)
         {
-            var orderList = await (
-                from order in _dbContext.SalesOrders
-                    .AsNoTracking()
-                    .Where(x => !x.IsDeleted)
+            var orderList = await _dbContext.SalesOrders
+                .AsViewQuery()
+                .Skip(pageSize * pageIndex)
+                .Take(pageSize)
+                .ToListAsync();
 
-                select new SalesOrderView()
-                {
-                    Id = order.Id,
-                    Number = order.Number,
-                    AlternateNumber = order.AlternateNumber,
-                    OrderDate = order.OrderDate,
-                    Reference = order.Reference,
-                    DeliveredDate = order.DeliveredDate,
-                    StoreNumber = order.StoreNumber,
-                    StoreName = order.StoreName,
-                    CustomerNumber = order.CustomerNumber,
-                    CustomerName = order.CustomerName,
-                    IsDeleted = order.IsDeleted,
-                }
-            ).Skip(pageSize * pageIndex)
-             .Take(pageSize)
-             .ToListAsync();
+            return orderList.AsReadOnly();
+        }
+
+        public async Task<IReadOnlyCollection<SalesOrderView>> List(
+            int customerNumber, int pageSize, int pageIndex)
+        {
+            var orderList = await _dbContext.SalesOrders
+                .Where(x => x.CustomerNumber == customerNumber)
+                .AsViewQuery()
+                .Skip(pageSize * pageIndex)
+                .Take(pageSize)
+                .ToListAsync();
 
             return orderList.AsReadOnly();
         }
@@ -172,6 +170,33 @@ namespace CIS.Application.Shared.Infrastructure
             ;
 
             return orderQuery;
+        }
+    }
+
+    internal static class Extensions
+    {
+        internal static IQueryable<SalesOrderView> AsViewQuery(this IQueryable<SalesOrderDao> orders)
+        {
+            var orderViewsQuery = (
+                from order in orders.AsNoTracking()
+
+                select new SalesOrderView()
+                {
+                    Id = order.Id,
+                    Number = order.Number,
+                    AlternateNumber = order.AlternateNumber,
+                    OrderDate = order.OrderDate,
+                    Reference = order.Reference,
+                    DeliveredDate = order.DeliveredDate,
+                    StoreNumber = order.StoreNumber,
+                    StoreName = order.StoreName,
+                    CustomerNumber = order.CustomerNumber,
+                    CustomerName = order.CustomerName,
+                    IsDeleted = order.IsDeleted,
+                }
+            );
+
+            return orderViewsQuery;
         }
     }
 }

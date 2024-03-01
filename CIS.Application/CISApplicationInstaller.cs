@@ -24,8 +24,8 @@ namespace CIS.Application
         public static IServiceCollection AddCISApplication(
             this IServiceCollection services, string connectionString)
         {
-            services.AddDbContext<CISDbContext>(options =>
-                options.UseSqlServer(connectionString), ServiceLifetime.Transient);
+            services.AddDbContextPool<CISDbContext>(options =>
+                options.UseSqlServer(connectionString));
 
             return services
                 .AddScoped<IMigrationTaskRepo, MigrationTaskRepo>()
