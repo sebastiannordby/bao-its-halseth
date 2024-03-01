@@ -27,12 +27,14 @@ namespace CIS.WebApp.Components.Pages.Customer
 
         private IEnumerable<ProductView> _products = Enumerable.Empty<ProductView>(); // Not to this
 
+        private CancellationTokenSource _cts = new();
+
         protected override async Task OnInitializedAsync()
         {
-            _storeId = await UserService.GetCurrentStoreId();
-            _currentUser = await UserService.GetCurrentUser();
+            _storeId = await UserService.GetCurrentStoreId(_cts.Token);
+            _currentUser = await UserService.GetCurrentUser(_cts.Token);
 
-            _products = await ProductQueries.List();
+            _products = await ProductQueries.List(_cts.Token);
 
             await FetchCurrentStoreCount();
         }
@@ -40,10 +42,10 @@ namespace CIS.WebApp.Components.Pages.Customer
         private async Task FetchCurrentStoreCount()
         {
             _currentStoreCountDataSource = await StockCountService
-                .GetByStore(_storeId);
+                .GetByStore(_storeId, _cts.Token);
 
             _historyStoreCountDataSource = await StockCountService
-                .GetHistoryByStore(_storeId);
+                .GetHistoryByStore(_storeId, _cts.Token);
         }
 
         private async Task ExecuteRegisterStockCount()
@@ -52,7 +54,8 @@ namespace CIS.WebApp.Components.Pages.Customer
                 _registerInput.ProductId,
                 _storeId,
                 _registerInput.Quantity,
-                _currentUser.UserName ?? "UGYLDIG");
+                _currentUser.UserName ?? "UGYLDIG",
+                _cts.Token);
 
             _registerInput = new();
             await FetchCurrentStoreCount();

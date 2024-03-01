@@ -18,19 +18,20 @@ namespace CIS.Application.Shared.Infrastructure
             _dbContext = dbContext;
         }
 
-        public async Task Complete(MigrationTask.TaskType taskType)
+        public async Task Complete(
+            MigrationTask.TaskType taskType, CancellationToken cancellationToken)
         {
             await _dbContext.MigrationsTasks
                 .Where(x => x.Type == taskType)
                 .ExecuteUpdateAsync(x =>
-                    x.SetProperty(x => x.Executed, true));
+                    x.SetProperty(x => x.Executed, true), cancellationToken);
         }
 
-        public async Task<IEnumerable<MigrationTask>> GetMigrationTasks()
+        public async Task<IEnumerable<MigrationTask>> GetMigrationTasks(CancellationToken cancellationToken)
         {
             var migrationTasks = await _dbContext.MigrationsTasks
                 .AsNoTracking()
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             return migrationTasks;
         }

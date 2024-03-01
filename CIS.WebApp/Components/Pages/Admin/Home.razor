@@ -1,5 +1,6 @@
 ﻿@page "/admin/home"
-@attribute [Authorize]
+@attribute [Authorize(Policy = UserTypes.ADMINISTRATOR)]
+@using CIS.Application
 @using CIS.Application.Features.Orders.Contracts
 @using Microsoft.AspNetCore.Authorization
 

@@ -1,6 +1,9 @@
 @page "/admin/sales-orders"
+@attribute [Authorize(Policy = UserTypes.ADMINISTRATOR)]
+@using CIS.Application
 @using CIS.Application.Features.Orders.Contracts
 @using CIS.Application.Legacy
+@using Microsoft.AspNetCore.Authorization
 
 <PageTitle>Bestillinger</PageTitle>
 <h1 class="text-xl">Bestillinger</h1>

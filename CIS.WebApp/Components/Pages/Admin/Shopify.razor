@@ -1,5 +1,8 @@
 ﻿@page "/admin/shopify"
+@attribute [Authorize(Policy = UserTypes.ADMINISTRATOR)]
+@using CIS.Application
 @using CIS.Application.Shopify
+@using Microsoft.AspNetCore.Authorization
 @using ShopifySharp
 
 <PageTitle>Shopify</PageTitle>

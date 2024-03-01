@@ -52,20 +52,22 @@ namespace CIS.WebApp.Components.Pages.Admin
         private HubConnection _hubConnection;
         private bool _importDone;
 
+        private CancellationTokenSource _cts = new();
+
         protected override async Task OnInitializedAsync()
         {
             if(!BackgroundImportService.IsRunning)
             {
-                _migrationTasks = await MigrationTaskRepo.GetMigrationTasks();
+                _migrationTasks = await MigrationTaskRepo.GetMigrationTasks(_cts.Token);
                 _uncompletedMigrationTasks = _migrationTasks
                     .Where(x => !x.Executed)
                     .Select(x => x.Type)
                     .ToList();
 
-                _orderCount = await LegacyDbContext.Ordres.CountAsync();
-                _customerCount = await LegacyDbContext.Butikklistes.CountAsync();
-                _productCount = await LegacyDbContext.Vareinfos.CountAsync();
-                _salesStatisticsCount = await LegacyDbContext.Salgs.CountAsync();
+                _orderCount = await LegacyDbContext.Ordres.CountAsync(_cts.Token);
+                _customerCount = await LegacyDbContext.Butikklistes.CountAsync(_cts.Token);
+                _productCount = await LegacyDbContext.Vareinfos.CountAsync(_cts.Token);
+                _salesStatisticsCount = await LegacyDbContext.Salgs.CountAsync(_cts.Token);
             }
             else
             {
@@ -96,7 +98,7 @@ namespace CIS.WebApp.Components.Pages.Admin
                 await InvokeAsync(StateHasChanged);
             });
 
-            await _hubConnection.StartAsync();
+            await _hubConnection.StartAsync(_cts.Token);
             _logMessages = new List<string>();
             _isImporting = true;
         }
@@ -120,6 +122,9 @@ namespace CIS.WebApp.Components.Pages.Admin
             {
                 _hubConnection.DisposeAsync();
             }
+
+            _cts.Cancel();
+            _cts.Dispose();
         }
     }
 }

@@ -72,11 +72,12 @@ namespace CIS.WebApp.Components.Pages.Admin
                 query = query.OrderBy(args.OrderBy);
             }
 
-            _salesOrderCount = query.Count();
+            _salesOrderCount = await query
+                .CountAsync(_cts.Token);
             _salesOrders = await query
                 .Skip(args.Skip ?? 0)
                 .Take(args.Top ?? 100)
-                .ToListAsync();
+                .ToListAsync(_cts.Token);
         }
 
         private async Task LoadOverviewData()

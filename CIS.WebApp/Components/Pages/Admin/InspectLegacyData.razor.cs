@@ -10,19 +10,21 @@ namespace CIS.WebApp.Components.Pages.Admin
     public partial class InspectLegacyData : ComponentBase
     {
         [Inject]
-        public SWNDistroContext LegacyDbContext { get; set; }
+        public required SWNDistroContext LegacyDbContext { get; set; }
 
         private int _legacyOrdersCount;
-        private IEnumerable<Ordre> _legacyOrders;
+        private IEnumerable<Ordre> _legacyOrders = Enumerable.Empty<Ordre>();
 
         private int _legacyStoresCount;
-        private IEnumerable<Butikkliste> _legacyStores;
+        private IEnumerable<Butikkliste> _legacyStores = Enumerable.Empty<Butikkliste>();
 
         private int _legacyProductCount;
-        private IEnumerable<Vareinfo> _legacyProducts;
+        private IEnumerable<Vareinfo> _legacyProducts = Enumerable.Empty<Vareinfo>();
 
         private int _legacySalesStatisticsCount;
-        private IEnumerable<Salg> _legacySalesStatistics;
+        private IEnumerable<Salg> _legacySalesStatistics = Enumerable.Empty<Salg>();
+
+        private CancellationTokenSource _cts = new();
 
         private async Task LoadLegacySalesStatistics(LoadDataArgs args)
         {
@@ -39,11 +41,12 @@ namespace CIS.WebApp.Components.Pages.Admin
                 query = query.OrderBy(args.OrderBy);
             }
 
-            _legacySalesStatisticsCount = await query.CountAsync();
+            _legacySalesStatisticsCount = await query
+                .CountAsync(_cts.Token);
             _legacySalesStatistics = await query
                 .Skip(args.Skip ?? 0)
                 .Take(args.Top ?? 100)
-                .ToListAsync();
+                .ToListAsync(_cts.Token);
         }
 
         private async Task LoadLegacyOrders(LoadDataArgs args)
@@ -61,11 +64,12 @@ namespace CIS.WebApp.Components.Pages.Admin
                 query = query.OrderBy(args.OrderBy);
             }
 
-            _legacyOrdersCount = await query.CountAsync();
+            _legacyOrdersCount = await query
+                .CountAsync(_cts.Token);
             _legacyOrders = await query
                 .Skip(args.Skip ?? 0)
                 .Take(args.Top ?? 100)
-                .ToListAsync();
+                .ToListAsync(_cts.Token);
         }
 
         private async Task LoadLegacyStores(LoadDataArgs args)
@@ -83,11 +87,12 @@ namespace CIS.WebApp.Components.Pages.Admin
                 query = query.OrderBy(args.OrderBy);
             }
 
-            _legacyStoresCount = await query.CountAsync();
+            _legacyStoresCount = await query
+                .CountAsync(_cts.Token);
             _legacyStores = await query
                 .Skip(args.Skip ?? 0)
                 .Take(args.Top ?? 100)
-                .ToListAsync();
+                .ToListAsync(_cts.Token);
         }
 
         private async Task LoadLegacyProducts(LoadDataArgs args)
@@ -105,11 +110,12 @@ namespace CIS.WebApp.Components.Pages.Admin
                 query = query.OrderBy(args.OrderBy);
             }
 
-            _legacyProductCount = await query.CountAsync();
+            _legacyProductCount = await query
+                .CountAsync(_cts.Token);
             _legacyProducts = await query
                 .Skip(args.Skip ?? 0)
                 .Take(args.Top ?? 100)
-                .ToListAsync();
+                .ToListAsync(_cts.Token);
         }
     }
 }

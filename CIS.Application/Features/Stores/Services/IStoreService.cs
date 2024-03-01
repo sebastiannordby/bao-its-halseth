@@ -10,6 +10,6 @@ namespace CIS.Application.Features.Stores.Services
 {
     public interface IStoreService
     {
-        Task<IReadOnlyCollection<StoreView>> List();
+        Task<IReadOnlyCollection<StoreView>> List(CancellationToken cancellationToken);
     }
 }

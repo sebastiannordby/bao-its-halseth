@@ -1,4 +1,7 @@
 ﻿@page "/customer/my-orders"
+@attribute [Authorize(Policy = UserTypes.CUSTOMER)]
+@using CIS.Application
+@using Microsoft.AspNetCore.Authorization
 
 <h3>Mine bestillinger</h3>
 

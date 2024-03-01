@@ -5,7 +5,7 @@ using ShopifySharp;
 
 namespace CIS.WebApp.Components.Pages.Admin
 {
-    public partial class Shopify : ComponentBase
+    public partial class Shopify : ComponentBase, IDisposable
     {
         [Inject]
         public required IShopifyClientService ShopifyService { get; set; }
@@ -16,10 +16,12 @@ namespace CIS.WebApp.Components.Pages.Admin
         private IEnumerable<Order> _orders = Enumerable.Empty<Order>();
         private int _ordersCount;
 
+        private CancellationTokenSource _cts = new();
+
         private async Task LoadOrders(LoadDataArgs args)
         {
             var orders = await ShopifyService
-                .GetOrdersAsync(CancellationToken.None);
+                .GetOrdersAsync(_cts.Token);
 
             _orders = orders;
             _ordersCount = orders.Count();
@@ -28,10 +30,16 @@ namespace CIS.WebApp.Components.Pages.Admin
         private async Task LoadDraftOrders(LoadDataArgs args)
         {
             var draftOrders = await ShopifyService
-                .GetDraftOrdersAsync(CancellationToken.None);
+                .GetDraftOrdersAsync(_cts.Token);
 
             _draftOrders = draftOrders;
             _draftOrdersCount = draftOrders.Count();
+        }
+
+        public void Dispose()
+        {
+            _cts.Cancel();
+            _cts.Dispose();
         }
     }
 }

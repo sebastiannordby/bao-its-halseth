@@ -12,8 +12,8 @@ namespace CIS.Application
 {
     public interface ICISUserService
     {
-        Task<ApplicationUserView> GetCurrentUser();
-        Task<Guid> GetCurrentStoreId();
+        Task<ApplicationUserView> GetCurrentUser(CancellationToken cancellationToken);
+        Task<Guid> GetCurrentStoreId(CancellationToken cancellationToken);
     }
 
     internal sealed class CISUserService : ICISUserService
@@ -32,7 +32,8 @@ namespace CIS.Application
             _dbContext = dbContext;
         }
 
-        public async Task<ApplicationUserView> GetCurrentUser()
+        public async Task<ApplicationUserView> GetCurrentUser(
+            CancellationToken cancellationToken)
         {
             if (_httpContextAccessor?.HttpContext?.User is null)
                 throw new Exception("Must be signed on");
@@ -45,7 +46,7 @@ namespace CIS.Application
             var customer = currentUser.CustomerId.HasValue ?
                 await _dbContext.Customers
                     .AsNoTracking()    
-                    .FirstOrDefaultAsync(x => x.Id == currentUser.CustomerId) : null;
+                    .FirstOrDefaultAsync(x => x.Id == currentUser.CustomerId, cancellationToken) : null;
 
             var userView = new ApplicationUserView()
             {
@@ -74,13 +75,13 @@ namespace CIS.Application
             return userView;
         }
 
-        public async Task<Guid> GetCurrentStoreId()
+        public async Task<Guid> GetCurrentStoreId(CancellationToken cancellationToken)
         {
-            var currentUser = await GetCurrentUser();
+            var currentUser = await GetCurrentUser(cancellationToken);
             var storeId = await _dbContext.Stores
                 .Where(x => x.OwnerCustomerId == currentUser.CustomerId)
                 .Select(x => x.Id)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(cancellationToken);
 
             return storeId;
         }

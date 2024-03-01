@@ -1,5 +1,8 @@
 ﻿@page "/admin/stores"
+@attribute [Authorize(Policy = UserTypes.ADMINISTRATOR)]
+@using CIS.Application
 @using CIS.Application.Features.Stores.Models
+@using Microsoft.AspNetCore.Authorization
 
 <PageTitle>Butikker</PageTitle>
 

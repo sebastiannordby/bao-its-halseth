@@ -10,7 +10,7 @@ namespace CIS.Application.Shared.Repositories
 {
     public interface IMigrationTaskRepo
     {
-        Task<IEnumerable<MigrationTask>> GetMigrationTasks();
-        Task Complete(MigrationTask.TaskType taskType);
+        Task<IEnumerable<MigrationTask>> GetMigrationTasks(CancellationToken cancellationToken);
+        Task Complete(MigrationTask.TaskType taskType, CancellationToken cancellationToken);
     }
 }

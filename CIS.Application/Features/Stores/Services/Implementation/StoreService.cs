@@ -18,7 +18,7 @@ namespace CIS.Application.Features.Stores.Services.Implementation
             _dbContext = dbContext;
         }
 
-        public async Task<IReadOnlyCollection<StoreView>> List()
+        public async Task<IReadOnlyCollection<StoreView>> List(CancellationToken cancellationToken)
         {
             var storesList = await (
                 from store in _dbContext.Stores
@@ -49,7 +49,7 @@ namespace CIS.Application.Features.Stores.Services.Implementation
                     CustomerGroupName = customerGroup != null ?
                         customerGroup.Name : null,
                 }
-            ).ToListAsync();
+            ).ToListAsync(cancellationToken);
 
             return storesList.AsReadOnly();
         }

@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CIS.WebApp.Components.Pages.Admin
 {
-    public partial class UserManagement : ComponentBase
+    public partial class UserManagement : ComponentBase, IDisposable
     {
         [Inject]
         public required UserManager<ApplicationUser> UserManager { get; set; }
@@ -29,6 +29,8 @@ namespace CIS.WebApp.Components.Pages.Admin
         private IEnumerable<string> _roles = Enumerable.Empty<string>();
         private IEnumerable<CustomerView> _customers = Enumerable.Empty<CustomerView>();
 
+        private CancellationTokenSource _cts = new();
+
         protected override async Task OnInitializedAsync()
         {
             await FetchCustomers();
@@ -39,7 +41,7 @@ namespace CIS.WebApp.Components.Pages.Admin
         private async Task FetchUsers()
         {
             var users = await UserManager.Users
-                .ToListAsync();
+                .ToListAsync(_cts.Token);
 
             var userViews = users.Select(user =>
             {
@@ -64,13 +66,14 @@ namespace CIS.WebApp.Components.Pages.Admin
             var roles = await RoleManager.Roles
                 .AsNoTracking()
                 .Select(x => x.Name)
-                .ToListAsync();
+                .ToListAsync(_cts.Token);
+
             _roles = roles;
         }
 
         private async Task FetchCustomers()
         {
-            _customers = await CustomerQueries.List();
+            _customers = await CustomerQueries.List(_cts.Token);
         }
 
         private string GetRoleDisplayName(string role)
@@ -136,6 +139,12 @@ namespace CIS.WebApp.Components.Pages.Admin
 
             NewUser = new();
             await FetchUsers();
+        }
+
+        public void Dispose()
+        {
+            _cts.Cancel();
+            _cts.Dispose();
         }
 
         private class NewUserModel

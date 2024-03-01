@@ -1,4 +1,7 @@
 ﻿@page "/customer/stock-count"
+@attribute [Authorize(Policy = UserTypes.CUSTOMER)]
+@using CIS.Application
+@using Microsoft.AspNetCore.Authorization
 @using CIS.Application.Features.Products.Models
 @using CIS.Application.Features.Stores.Models
 

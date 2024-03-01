@@ -62,31 +62,31 @@ namespace CIS.WebApp.Services
             var migrationTaskRepo = services
                 .GetRequiredService<IMigrationTaskRepo>();
 
-            var tasks = await migrationTaskRepo.GetMigrationTasks();
+            var tasks = await migrationTaskRepo.GetMigrationTasks(cancellationToken);
             var uncompletedTasks = tasks.Where(x => !x.Executed);
 
             if(uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.Products))
             {
                 await migrateProductService.Migrate(cancellationToken);
-                await migrationTaskRepo.Complete(MigrationTask.TaskType.Products);
+                await migrationTaskRepo.Complete(MigrationTask.TaskType.Products, cancellationToken);
             }
 
             if (uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.Customers))
             {
                 await migrateCustomerService.Migrate(cancellationToken);
-                await migrationTaskRepo.Complete(MigrationTask.TaskType.Customers);
+                await migrationTaskRepo.Complete(MigrationTask.TaskType.Customers, cancellationToken);
             }
 
             if (uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.SalesOrders))
             {
                 await migrateSalesOrderService.Migrate(cancellationToken);
-                await migrationTaskRepo.Complete(MigrationTask.TaskType.SalesOrders);
+                await migrationTaskRepo.Complete(MigrationTask.TaskType.SalesOrders, cancellationToken);
             }
 
             if (uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.SalesOrderStatistics))
             {
                 await migrateSalesStatisticsService.Migrate(cancellationToken);
-                await migrationTaskRepo.Complete(MigrationTask.TaskType.SalesOrderStatistics);
+                await migrationTaskRepo.Complete(MigrationTask.TaskType.SalesOrderStatistics, cancellationToken);
             }
 
             await _hubContext.Clients.All.Finished();

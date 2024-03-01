@@ -1,8 +1,11 @@
 ﻿@page "/admin/products"
+@attribute [Authorize(Policy = UserTypes.ADMINISTRATOR)]
+@using CIS.Application
 @using CIS.Application.Features.Products.Models
 @using CIS.Application.Features.Products.Models.Import
 @using CIS.WebApp.Extensions
 @using CIS.WebApp.Services
+@using Microsoft.AspNetCore.Authorization
 @using OfficeOpenXml
 
 <PageTitle>Varer</PageTitle>

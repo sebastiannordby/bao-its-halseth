@@ -22,7 +22,8 @@ namespace CIS.Application.Features.Stores.Services.Implementation
             Guid productId,
             Guid storeId,
             int quantity,
-            string countedByPersonFullName)
+            string countedByPersonFullName,
+            CancellationToken cancellationToken)
         {
             var stockCount = new StockCountDao()
             {
@@ -33,23 +34,19 @@ namespace CIS.Application.Features.Stores.Services.Implementation
                 CountedDateTime = DateTime.Now
             };
 
-            await _dbContext.StockCounts.AddAsync(stockCount);
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.StockCounts.AddAsync(stockCount, cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public Task AddStockCount(Guid productId, Guid storeId, int quantity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IReadOnlyCollection<StockCountView>> GetByStore(Guid storeId)
+        public async Task<IReadOnlyCollection<StockCountView>> GetByStore(
+            Guid storeId, CancellationToken cancellationToken)
         {
             var newestStockCounts = await _dbContext.StockCounts
                 .AsNoTracking()
                 .Where(x => x.StoreId == storeId)
                 .GroupBy(x => x.ProductId)
                 .Select(g => g.OrderByDescending(x => x.CountedDateTime).First())
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             var stockCountViews = (
                 from newestStockCount in newestStockCounts
@@ -68,7 +65,8 @@ namespace CIS.Application.Features.Stores.Services.Implementation
             return stockCountViews;
         }
 
-        public async Task<IReadOnlyCollection<StockCountView>> GetHistoryByStore(Guid storeId)
+        public async Task<IReadOnlyCollection<StockCountView>> GetHistoryByStore(
+            Guid storeId, CancellationToken cancellationToken)
         {
             var stockCountViews = await (
                 from stockCount in _dbContext.StockCounts
@@ -84,7 +82,7 @@ namespace CIS.Application.Features.Stores.Services.Implementation
                     CountedByPersonFullName = stockCount.CountedByPersonFullName,
                     CountedDateTime = stockCount.CountedDateTime
                 }
-            ).OrderByDescending(x => x.CountedDateTime).ToListAsync();
+            ).OrderByDescending(x => x.CountedDateTime).ToListAsync(cancellationToken);
 
             return stockCountViews;
         }

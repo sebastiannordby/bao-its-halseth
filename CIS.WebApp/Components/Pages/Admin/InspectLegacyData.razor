@@ -1,5 +1,8 @@
 ﻿@page "/admin/inspect-legacy-data"
+@attribute [Authorize(Policy = UserTypes.ADMINISTRATOR)]
+@using CIS.Application
 @using CIS.Application.Legacy
+@using Microsoft.AspNetCore.Authorization
 
 <div class="h-full bg-white p-4">
     <h3 class="text-xl mb-1">Inspiser</h3>
