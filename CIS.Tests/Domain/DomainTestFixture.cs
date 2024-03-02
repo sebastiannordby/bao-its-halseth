@@ -33,6 +33,8 @@ namespace CIS.Tests.Domain
                 });
             });
 
+            serviceCollection.AddLogging();
+
             return serviceCollection;
         }
 

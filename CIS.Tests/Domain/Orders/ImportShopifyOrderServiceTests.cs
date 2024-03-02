@@ -1,5 +1,8 @@
-﻿using CIS.Application.Shopify;
+﻿using Castle.Core.Logging;
+using CIS.Application.Shared.Services;
+using CIS.Application.Shopify;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 using ShopifySharp;
 using System;
@@ -13,7 +16,8 @@ namespace CIS.Tests.Domain.Orders
 {
     public class ImportShopifyOrderServiceTests : IClassFixture<DomainTestFixture>
     {
-        private readonly ImportShopifyOrderService _sut;
+        private readonly IExecuteImportFromShopify<ShopifyOrder> _sut;
+        private readonly ILogger<ImportShopifyOrderService> _loggerMock;
         private readonly IShopifyClientService _clientServiceMock;
 
         public ImportShopifyOrderServiceTests(DomainTestFixture fixture)
@@ -26,7 +30,7 @@ namespace CIS.Tests.Domain.Orders
             serviceCollection.AddSingleton(_clientServiceMock);
 
             var services = serviceCollection.BuildServiceProvider();
-            _sut = services.GetRequiredService<ImportShopifyOrderService>();
+            _sut = services.GetRequiredService<IExecuteImportFromShopify<ShopifyOrder>>();
         }
 
         [Fact]
@@ -34,7 +38,10 @@ namespace CIS.Tests.Domain.Orders
         {
             try
             {
-                var shopifyOrders = new List<ShopifyOrder>();
+                var shopifyOrders = new List<ShopifyOrder>() 
+                { 
+                    new ShopifyOrder()
+                };
 
                 _clientServiceMock
                     .GetOrdersAsync(
