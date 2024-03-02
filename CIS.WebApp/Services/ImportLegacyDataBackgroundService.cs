@@ -32,7 +32,7 @@ namespace CIS.WebApp.Services
 
         public ImportLegacyDataBackgroundService(
             IServiceScopeFactory scopeFactory,
-            IHubContext<ImportLegacyDataHub, IListenImportClient> hubContext)
+            IHubContext<ImportLegacyDataHub, IListenImportClient> hubContext = null)
         {
             _scopeFactory = scopeFactory;
             _hubContext = hubContext;

@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using static System.Formats.Asn1.AsnWriter;
 using ShopifyOrder = ShopifySharp.Order;
 using CIS.Application.Features.Orders.Infrastructure.Models;
+using Microsoft.Extensions.Logging;
 
 namespace CIS.Application.Shopify
 {
@@ -20,45 +21,52 @@ namespace CIS.Application.Shopify
     {
         private readonly CISDbContext _dbContext;
         private readonly IShopifyClientService _shopifyClientService;
+        private readonly ILogger<ImportShopifyOrderService> _logger;
 
         public ImportShopifyOrderService(
             CISDbContext dbContext,
-            IShopifyClientService shopifyClientService)
+            IShopifyClientService shopifyClientService,
+            ILogger<ImportShopifyOrderService> logger)
         {
             _dbContext = dbContext;
             _shopifyClientService = shopifyClientService;
+            _logger = logger;
         }
 
         public async Task ExecuteShopifyImport(CancellationToken cancellationToken = default)
         {
-            var latestOrderDate = _dbContext.SalesOrders
-                .Max(x => x.OrderDate);
-
-            var shopifyOrders = await _shopifyClientService.GetOrdersAsync(
-                cancellationToken);
+            var shopifyOrders = await _shopifyClientService
+                .GetOrdersAsync(cancellationToken);
 
             var ordersToInsert = new List<SalesOrderDao>();
             var orderLinesToInsert = new List<SalesOrderLineDao>();
 
             foreach (var shopifyOrder in shopifyOrders)
             {
+                var orderExists = await _dbContext.SalesOrders
+                    .AnyAsync(x => x.Number == shopifyOrder.Number, cancellationToken);
+                if (orderExists)
+                    continue;
+
                 var newOrder = new SalesOrderDao()
                 {
                     Id = Guid.NewGuid(),
-                    Number = shopifyOrder.OrderNumber ?? 0,
+                    Number = shopifyOrder.Number ?? 0,
                     AlternateNumber = shopifyOrder.OrderNumber?.ToString(),
                     CustomerName = shopifyOrder.Customer.FirstName,
                     StoreName = shopifyOrder.Customer.LastName,
                     OrderDate = shopifyOrder.CreatedAt.HasValue ?
-                        DateOnly.FromDateTime(shopifyOrder.CreatedAt.Value.DateTime) : DateOnly.FromDateTime(DateTime.Now),
+                        shopifyOrder.CreatedAt.Value.DateTime : DateTime.Now,
                 };
 
+                ordersToInsert.Add(newOrder);
+
                 var newOrderLines = new List<SalesOrderLineDao>();
-                var shopifyProductsIdsUsed = shopifyOrder.LineItems
-                    .Select(x => x.ProductId);
+                var shopifySkuNumbers = shopifyOrder.LineItems
+                    .Select(x => x.SKU.ToString());
                 var productQuery = _dbContext.Products
                     .AsNoTracking()
-                    .Where(x => shopifyProductsIdsUsed.Contains(x.AlternateNumber));
+                    .Where(x => shopifySkuNumbers.Contains(x.SuppliersProductNumber));
 
                 var productDetails = await (
                     from product in productQuery
@@ -69,12 +77,12 @@ namespace CIS.Application.Shopify
                         Product = product,
                         Price = price
                     }
-                ).ToListAsync();
+                ).ToListAsync(cancellationToken);
 
                 foreach (var shopifyLine in shopifyOrder.LineItems)
                 {
                     var productDetail = productDetails
-                        .First(x => x.Product.AlternateNumber == shopifyLine.Id);
+                        .First(x => x.Product.SuppliersProductNumber == shopifyLine.SKU.ToString());
 
                     var newOrderLine = new SalesOrderLineDao()
                     {
@@ -89,11 +97,18 @@ namespace CIS.Application.Shopify
                         CurrencyCode = "NOK",
                         SalesOrderId = newOrder.Id
                     };
-                }
 
-                await _dbContext.SalesOrders.AddAsync(newOrder);
-                await _dbContext.AddRangeAsync(newOrderLines);
-                await _dbContext.SaveChangesAsync();
+                    orderLinesToInsert.Add(newOrderLine);
+                }
+            }
+
+            if(ordersToInsert.Count > 0)
+            {
+                _logger.LogInformation("Inserting Orders={0} and OrderLines={1}", 
+                    ordersToInsert.Count, orderLinesToInsert.Count);
+                await _dbContext.SalesOrders.AddRangeAsync(ordersToInsert, cancellationToken);
+                await _dbContext.AddRangeAsync(orderLinesToInsert, cancellationToken);
+                await _dbContext.SaveChangesAsync(cancellationToken);
             }
         }
     }

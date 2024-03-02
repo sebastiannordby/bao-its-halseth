@@ -11,10 +11,10 @@ namespace CIS.Application.Features.Orders.Contracts
     {
         public int Number { get; set; }
         public string? AlternateNumber { get; set; } // ordrenrNett
-        public DateOnly OrderDate { get; set; } // dato
+        public DateTime OrderDate { get; set; } // dato
         public string? Reference { get; set; } // orderref
 
-        public DateOnly DeliveredDate { get; set; }
+        public DateTime? DeliveredDate { get; set; }
 
         public int StoreNumber { get; set; }
         public required string StoreName { get; set; }

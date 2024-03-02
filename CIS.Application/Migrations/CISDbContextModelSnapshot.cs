@@ -93,7 +93,7 @@ namespace CIS.Application.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("CIS.Application.Orders.Infrastructure.Models.SalesOrderDao", b =>
+            modelBuilder.Entity("CIS.Application.Features.Orders.Infrastructure.Models.SalesOrderDao", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -111,8 +111,8 @@ namespace CIS.Application.Migrations
                     b.Property<int>("CustomerNumber")
                         .HasColumnType("int");
 
-                    b.Property<DateOnly>("DeliveredDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("DeliveredDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -120,8 +120,8 @@ namespace CIS.Application.Migrations
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
-                    b.Property<DateOnly>("OrderDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Reference")
                         .HasMaxLength(100)
@@ -140,7 +140,7 @@ namespace CIS.Application.Migrations
                     b.ToTable("SalesOrders");
                 });
 
-            modelBuilder.Entity("CIS.Application.Orders.Infrastructure.Models.SalesOrderLineDao", b =>
+            modelBuilder.Entity("CIS.Application.Features.Orders.Infrastructure.Models.SalesOrderLineDao", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -188,7 +188,7 @@ namespace CIS.Application.Migrations
                     b.ToTable("SalesOrderLines");
                 });
 
-            modelBuilder.Entity("CIS.Application.Orders.Infrastructure.Models.SalesStatisticsDao", b =>
+            modelBuilder.Entity("CIS.Application.Features.Orders.Infrastructure.Models.SalesStatisticsDao", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -226,7 +226,7 @@ namespace CIS.Application.Migrations
                     b.ToTable("SalesStatistics");
                 });
 
-            modelBuilder.Entity("CIS.Application.Products.Models.ProductDao", b =>
+            modelBuilder.Entity("CIS.Application.Features.Products.Models.ProductDao", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -269,7 +269,7 @@ namespace CIS.Application.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("CIS.Application.Products.Models.ProductGroupDao", b =>
+            modelBuilder.Entity("CIS.Application.Features.Products.Models.ProductGroupDao", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -288,7 +288,7 @@ namespace CIS.Application.Migrations
                     b.ToTable("ProductGroups");
                 });
 
-            modelBuilder.Entity("CIS.Application.Products.Models.ProductPriceDao", b =>
+            modelBuilder.Entity("CIS.Application.Features.Products.Models.ProductPriceDao", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -312,24 +312,7 @@ namespace CIS.Application.Migrations
                     b.ToTable("ProductPrices");
                 });
 
-            modelBuilder.Entity("CIS.Application.Shared.Models.MigrationTask", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("Executed")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MigrationsTasks");
-                });
-
-            modelBuilder.Entity("CIS.Application.Stores.Models.CustomerDao", b =>
+            modelBuilder.Entity("CIS.Application.Features.Stores.Models.CustomerDao", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -368,7 +351,7 @@ namespace CIS.Application.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("CIS.Application.Stores.Models.CustomerGroupDao", b =>
+            modelBuilder.Entity("CIS.Application.Features.Stores.Models.CustomerGroupDao", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -387,7 +370,7 @@ namespace CIS.Application.Migrations
                     b.ToTable("CustomerGroups");
                 });
 
-            modelBuilder.Entity("CIS.Application.Stores.Models.RegionDao", b =>
+            modelBuilder.Entity("CIS.Application.Features.Stores.Models.RegionDao", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -406,7 +389,7 @@ namespace CIS.Application.Migrations
                     b.ToTable("Regions");
                 });
 
-            modelBuilder.Entity("CIS.Application.Stores.Models.StockCountDao", b =>
+            modelBuilder.Entity("CIS.Application.Features.Stores.Models.StockCountDao", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -433,7 +416,7 @@ namespace CIS.Application.Migrations
                     b.ToTable("StockCounts");
                 });
 
-            modelBuilder.Entity("CIS.Application.Stores.Models.StoreDao", b =>
+            modelBuilder.Entity("CIS.Application.Features.Stores.Models.StoreDao", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -468,6 +451,47 @@ namespace CIS.Application.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Stores");
+                });
+
+            modelBuilder.Entity("CIS.Application.Shared.Models.LogEntry", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Level")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LogEntries");
+                });
+
+            modelBuilder.Entity("CIS.Application.Shared.Models.MigrationTask", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Executed")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MigrationsTasks");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -603,18 +627,18 @@ namespace CIS.Application.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CIS.Application.Orders.Infrastructure.Models.SalesOrderLineDao", b =>
+            modelBuilder.Entity("CIS.Application.Features.Orders.Infrastructure.Models.SalesOrderLineDao", b =>
                 {
-                    b.HasOne("CIS.Application.Orders.Infrastructure.Models.SalesOrderDao", null)
+                    b.HasOne("CIS.Application.Features.Orders.Infrastructure.Models.SalesOrderDao", null)
                         .WithMany()
                         .HasForeignKey("SalesOrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CIS.Application.Stores.Models.CustomerDao", b =>
+            modelBuilder.Entity("CIS.Application.Features.Stores.Models.CustomerDao", b =>
                 {
-                    b.HasOne("CIS.Application.Stores.Models.CustomerGroupDao", null)
+                    b.HasOne("CIS.Application.Features.Stores.Models.CustomerGroupDao", null)
                         .WithMany()
                         .HasForeignKey("CustomerGroupId");
                 });

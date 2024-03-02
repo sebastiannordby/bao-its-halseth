@@ -52,8 +52,8 @@ namespace CIS.Application.Features.Orders.Migration
                     StoreName = storeName,
                     CustomerNumber = legOrder.Butikknr ?? 0,
                     CustomerName = storeName,
-                    DeliveredDate = DateOnly.FromDateTime(DateTime.Now),
-                    OrderDate = DateOnly.FromDateTime(DateTime.Now),
+                    DeliveredDate = legOrder.LevertDato,
+                    OrderDate = legOrder.Dato ?? DateTime.Now,
                     Reference = legOrder.Ordreref as string,
                     IsDeleted = (legOrder.Ordretype ?? "").Equals("Slettet", StringComparison.OrdinalIgnoreCase)
                 };

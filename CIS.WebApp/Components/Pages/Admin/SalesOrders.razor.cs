@@ -165,8 +165,8 @@ namespace CIS.WebApp.Components.Pages.Admin
                         StoreName = null,
                         CustomerNumber = parsedStoreNumber,
                         CustomerName = null,
-                        DeliveredDate = DateOnly.FromDateTime(DateTime.Now),
-                        OrderDate = DateOnly.FromDateTime(DateTime.Now),
+                        DeliveredDate = DateTime.Now,
+                        OrderDate = DateTime.Now,
                         Reference = reference as string,
                         IsDeleted = isDeleted
                     };

@@ -24,8 +24,8 @@ namespace CIS.Application
 
         public CISUserService(
             UserManager<ApplicationUser> userManager,
-            IHttpContextAccessor httpContextAccessor,
-            CISDbContext dbContext)
+            CISDbContext dbContext,
+            IHttpContextAccessor httpContextAccessor = null)
         {
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;

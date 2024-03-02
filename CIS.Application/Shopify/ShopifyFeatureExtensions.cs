@@ -1,6 +1,8 @@
-﻿using CIS.Application.Shopify.Options;
+﻿using CIS.Application.Shared.Services;
+using CIS.Application.Shopify.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ShopifySharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +17,7 @@ namespace CIS.Application.Shopify
         {
             IShopifyClientService.RegisterShopifyClientService(services);
 
-            services.AddScoped<ImportShopifyOrderService>();
+            services.AddScoped<IExecuteImportFromShopify<Order>, ImportShopifyOrderService>();
 
             return services;
         }

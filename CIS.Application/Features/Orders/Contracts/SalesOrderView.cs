@@ -11,10 +11,10 @@ namespace CIS.Application.Features.Orders.Contracts
         public Guid Id { get; set; }
         public int Number { get; set; }
         public string? AlternateNumber { get; set; }
-        public DateOnly OrderDate { get; set; }
+        public DateTime OrderDate { get; set; }
         public string? Reference { get; set; }
 
-        public DateOnly DeliveredDate { get; set; }
+        public DateTime? DeliveredDate { get; set; }
 
         public int StoreNumber { get; set; }
         public required string StoreName { get; set; }

@@ -16,25 +16,73 @@ using CIS.Application.Hubs;
 using CIS.Application.Features.Stores;
 using CIS.Application.Features.Orders;
 using CIS.Application.Features.Products;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 
 namespace CIS.Application
 {
     public static class CISApplicationInstaller
     {
-        public static IServiceCollection AddCISApplication(
-            this IServiceCollection services, string connectionString)
+        public static IServiceCollection AddAllCISFeatures(
+            this IServiceCollection services)
         {
-            services.AddDbContextPool<CISDbContext>(options =>
-                options.UseSqlServer(connectionString));
-
             return services
                 .AddScoped<IMigrationTaskRepo, MigrationTaskRepo>()
-                .AddScoped<ImportShopifyOrderService>()
                 .AddScoped<ICISUserService, CISUserService>()
                 .AddStoreFeature()
                 .AddProductFeature()
                 .AddOrderFeature()
                 .AddInfrastructure();
+        }
+
+        public static IServiceCollection AddCISApplication(
+            this IServiceCollection services, string connectionString)
+        {
+            services.AddCISDatabase(connectionString);
+
+            return services
+                .AddScoped<IMigrationTaskRepo, MigrationTaskRepo>()
+                .AddScoped<ICISUserService, CISUserService>()
+                .AddStoreFeature()
+                .AddProductFeature()
+                .AddOrderFeature()
+                .AddInfrastructure();
+        }
+
+        public static IServiceCollection AddCISDatabase(
+            this IServiceCollection services, string connectionString)
+        {
+            services.AddDbContext<CISDbContext>(options =>
+                options.UseSqlServer(connectionString));
+
+            return services;
+        }
+
+        public static IServiceCollection AddCISShopifySharp(
+            this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<ShopifyClientServiceOptions>(
+                configuration.GetSection("Shopify"));
+            services.AddShopifySharp<LeakyBucketExecutionPolicy>();
+            services.AddShopifyFeature();
+
+            return services;
+        }
+
+        public static void AddCISLogging(this IServiceCollection services)
+        {
+            services.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.AddConsole();
+
+                //loggingBuilder.Services.AddSingleton<ILoggerProvider>(provider =>
+                //{
+                //    using var scope = provider.CreateScope();
+                //    var dbContext = scope.ServiceProvider.GetRequiredService<CISDbContext>();
+
+                //    return new CISDbLoggerProvider(dbContext);
+                //});
+            });
         }
 
         public static IdentityBuilder AddCISAuthentication(

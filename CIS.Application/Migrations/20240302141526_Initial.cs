@@ -66,6 +66,21 @@ namespace CIS.Application.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LogEntries",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Level = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LogEntries", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MigrationsTasks",
                 columns: table => new
                 {
@@ -146,9 +161,9 @@ namespace CIS.Application.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Number = table.Column<int>(type: "int", nullable: false),
                     AlternateNumber = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    OrderDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Reference = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    DeliveredDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    DeliveredDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     StoreNumber = table.Column<int>(type: "int", maxLength: 150, nullable: false),
                     StoreName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CustomerNumber = table.Column<int>(type: "int", nullable: false),
@@ -441,6 +456,9 @@ namespace CIS.Application.Migrations
 
             migrationBuilder.DropTable(
                 name: "Customers");
+
+            migrationBuilder.DropTable(
+                name: "LogEntries");
 
             migrationBuilder.DropTable(
                 name: "MigrationsTasks");

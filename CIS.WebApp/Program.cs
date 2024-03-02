@@ -34,6 +34,9 @@ namespace CIS.WebApp
             builder.Services.AddShopifyFeature();
             builder.Services.Configure<ShopifyClientServiceOptions>(
                 builder.Configuration.GetSection("Shopify"));
+            builder.Services.AddShopifySharp<LeakyBucketExecutionPolicy>();
+
+            builder.Services.AddSignalR();
 
             // Add services to the container.
             builder.Services
@@ -42,10 +45,6 @@ namespace CIS.WebApp
 
             builder.Services
                 .AddRadzenComponents();
-
-            builder.Services.AddSignalR();
-
-            builder.Services.AddShopifySharp<LeakyBucketExecutionPolicy>();
 
             builder.Services.AddCascadingAuthenticationState();
             builder.Services.AddScoped<IdentityUserAccessor>();
