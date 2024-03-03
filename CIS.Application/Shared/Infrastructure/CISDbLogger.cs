@@ -44,9 +44,6 @@ namespace CIS.Application.Shared.Infrastructure
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
-            if (logLevel < LogLevel.Information)
-                return;
-
             using (var scope = _serviceProvider.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<CISDbContext>();

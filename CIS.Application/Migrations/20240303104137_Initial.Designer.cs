@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CIS.Application.Migrations
 {
     [DbContext(typeof(CISDbContext))]
-    [Migration("20240303094633_FixedFieldSalesOrderLine")]
-    partial class FixedFieldSalesOrderLine
+    [Migration("20240303104137_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -368,11 +368,11 @@ namespace CIS.Application.Migrations
                     ProductNumber = table.Column<int>(type: "int", nullable: false),
                     ProductName = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     EAN = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    Quantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    QuantityDelivered = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    CostPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    PurchasePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    StorePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Quantity = table.Column<decimal>(type: "decimal(18,5)", nullable: false),
+                    QuantityDelivered = table.Column<decimal>(type: "decimal(18,5)", nullable: false),
+                    CostPrice = table.Column<decimal>(type: "decimal(18,5)", nullable: true),
+                    PurchasePrice = table.Column<decimal>(type: "decimal(18,5)", nullable: true),
+                    StorePrice = table.Column<decimal>(type: "decimal(18,5)", nullable: true),
                     CurrencyCode = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false)
                 },
                 constraints: table =>

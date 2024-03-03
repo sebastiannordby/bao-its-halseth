@@ -6,10 +6,17 @@ services:
     build:
       context: .
       dockerfile: CIS.WebApp/Dockerfile
+    networks:
+      - cis-network
 
   cis.integration:
     image: ${DOCKER_REGISTRY-}cisintegration
     build:
       context: .
       dockerfile: CIS.Integration/Dockerfile
+    networks:
+      - cis-network
 
+networks:
+  cis-network:
+    driver: bridge

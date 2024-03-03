@@ -20,6 +20,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging.Console;
 using Serilog;
+using Microsoft.AspNetCore.Builder;
+using Serilog.Events;
+using System;
 
 namespace CIS.Application
 {
@@ -55,7 +58,14 @@ namespace CIS.Application
             this IServiceCollection services, string connectionString)
         {
             services.AddDbContext<CISDbContext>(options =>
-                options.UseSqlServer(connectionString), ServiceLifetime.Scoped);
+            {
+                options.UseSqlServer(connectionString);
+                options.UseLoggerFactory(LoggerFactory.Create(builder =>
+                {
+                    builder.AddConsole();
+                }));
+
+            }, ServiceLifetime.Scoped);
 
             return services;
         }
@@ -76,7 +86,8 @@ namespace CIS.Application
             services.AddLogging(loggingBuilder =>
             {
                 loggingBuilder.AddConsole();
-                loggingBuilder.Services.AddSingleton<ILoggerProvider, CISDbLoggerProvider>();
+                loggingBuilder.Services
+                    .AddSingleton<ILoggerProvider, CISDbLoggerProvider>();
             });
         }
 
@@ -93,7 +104,14 @@ namespace CIS.Application
             this IServiceCollection services, string connectionString)
         {
             services.AddDbContext<SWNDistroContext>(
-                options => options.UseSqlServer(connectionString));
+                options =>
+                {
+                    options.UseSqlServer(connectionString);
+                    options.UseLoggerFactory(LoggerFactory.Create(builder =>
+                    {
+                        builder.AddConsole();
+                    }));
+                });
 
             return services;
         }
