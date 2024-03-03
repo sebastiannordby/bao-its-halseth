@@ -32,19 +32,13 @@ namespace CIS.Application.Shared.Infrastructure
 
         public async Task<IEnumerable<MigrationTask>> GetMigrationTasks(CancellationToken cancellationToken)
         {
-            //todo: fix så det ikke kræasjer, blir kalt i både navmenu og admin/home samtidig
-
              return await _dbContext.MigrationsTasks
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
         }
 
 
-        public async Task<bool> HasMigrated(CancellationToken cancellationToken)
-        {
-            var migTask = await GetMigrationTasks(cancellationToken);
-            return migTask.Where(s => !s.Executed).Any();
-        }
+      
 
         public async Task<bool> IsAllMigrationsExecuted(CancellationToken cancellationToken)
         {

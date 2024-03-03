@@ -16,6 +16,9 @@ namespace CIS.WebApp.Components.Pages.Admin
         [Inject]
         public required ISalesQueries SalesQueries { get; set; }
 
+        [CascadingParameter]
+        public bool ShowMigrationPage { get;set; }
+
         private IReadOnlyCollection<MostSoldProductView> _mostSoldProducts = 
             ReadOnlyCollection<MostSoldProductView>.Empty;
         
@@ -30,16 +33,12 @@ namespace CIS.WebApp.Components.Pages.Admin
             { MigrationTask.TaskType.SalesOrders, "Bestillinger" }
         };
 
-        private bool _showMigrationPage = true;
 
         private CancellationTokenSource _cts = new();
 
         protected override async Task OnInitializedAsync()
         {
-            _showMigrationPage = await MigrationTaskRepo
-                .IsAllMigrationsExecuted(_cts.Token) == false;
-
-            if (!_showMigrationPage)
+            if (ShowMigrationPage)
             {
                 _mostSoldProducts = await SalesQueries
                     .GetMostSoldProduct(5);
