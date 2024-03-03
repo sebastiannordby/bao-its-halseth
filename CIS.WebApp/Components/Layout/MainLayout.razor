@@ -82,7 +82,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _showMigrationPage = await MigrationTaskRepo.IsAllMigrationsExecuted(cts.Token) == false;
+        _showMigrationPage = await MigrationTaskRepo.IsAllMigrationsExecuted(cts.Token);
         StateHasChanged();
     }
 
