@@ -5,19 +5,9 @@ using Microsoft.AspNetCore.Components;
 
 namespace CIS.WebApp.Components.Layout
 {
-    public partial class NavMenu : IDisposable
+    public partial class NavMenu 
     {
-        [Inject]
-        public required IMigrationTaskRepo MigrationTaskRepo { get; set; }
-
-        [CascadingParameter] public bool ShowMigrationPage { get; set; }
-
-        private readonly CancellationTokenSource _cts = new();
-
-        public void Dispose()
-        {
-            _cts.Cancel();
-            _cts.Dispose();
-        }
+        [CascadingParameter(Name = "ShowMigrationPage")] 
+        public bool ShowMigrationPage { get; set; }
     }
 }

@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 
 namespace CIS.WebApp.Components.Pages.Admin
 {
-    public partial class Home : IDisposable
+    public partial class Home 
     {
         [Inject]
         public required IMigrationTaskRepo MigrationTaskRepo { get; set; }
@@ -16,7 +16,7 @@ namespace CIS.WebApp.Components.Pages.Admin
         [Inject]
         public required ISalesQueries SalesQueries { get; set; }
 
-        [CascadingParameter]
+        [CascadingParameter(Name = "ShowMigrationPage")]
         public bool ShowMigrationPage { get;set; }
 
         private IReadOnlyCollection<MostSoldProductView> _mostSoldProducts = 
@@ -34,23 +34,15 @@ namespace CIS.WebApp.Components.Pages.Admin
         };
 
 
-        private CancellationTokenSource _cts = new();
-
         protected override async Task OnInitializedAsync()
         {
-            if (ShowMigrationPage)
+            if (!ShowMigrationPage)
             {
                 _mostSoldProducts = await SalesQueries
                     .GetMostSoldProduct(5);
                 _bestCustomerStores = await SalesQueries
                     .GetMostBoughtViews(5);
             }
-        }
-
-        public void Dispose()
-        {
-            _cts.Cancel();
-            _cts.Dispose();
         }
     }
 }

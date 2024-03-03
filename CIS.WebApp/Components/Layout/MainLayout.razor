@@ -82,8 +82,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _showMigrationPage = await MigrationTaskRepo.IsAllMigrationsExecuted(cts.Token);
-        StateHasChanged();
+        _showMigrationPage = await MigrationTaskRepo.IsAllMigrationsExecuted(cts.Token) == false;
+        await InvokeAsync(StateHasChanged);
     }
 
 
