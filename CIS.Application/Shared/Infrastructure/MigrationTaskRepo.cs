@@ -1,8 +1,11 @@
 ﻿using CIS.Application.Shared.Models;
 using CIS.Application.Shared.Repositories;
 using Microsoft.EntityFrameworkCore;
+using ShopifySharp.GraphQL;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,11 +32,18 @@ namespace CIS.Application.Shared.Infrastructure
 
         public async Task<IEnumerable<MigrationTask>> GetMigrationTasks(CancellationToken cancellationToken)
         {
-            var migrationTasks = await _dbContext.MigrationsTasks
+            //todo: fix så det ikke kræasjer, blir kalt i både navmenu og admin/home samtidig
+
+             return await _dbContext.MigrationsTasks
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
+        }
 
-            return migrationTasks;
+
+        public async Task<bool> HasMigrated(CancellationToken cancellationToken)
+        {
+            var migTask = await GetMigrationTasks(cancellationToken);
+            return migTask.Where(s => !s.Executed).Any();
         }
 
         public async Task<bool> IsAllMigrationsExecuted(CancellationToken cancellationToken)
