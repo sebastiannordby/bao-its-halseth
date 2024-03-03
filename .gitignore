@@ -49,3 +49,5 @@
 /CIS.Tests.Integration/swn_distro_sanitized.bak
 /CIS.Integration/bin/Debug/net8.0
 /CIS.Integration/obj
+/bin/Debug
+/obj

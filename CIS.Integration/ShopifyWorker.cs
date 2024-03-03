@@ -24,7 +24,8 @@ namespace CIS.Integration
                     var logger = scope.ServiceProvider
                         .GetRequiredService<ILogger<ShopifyWorker>>();
 
-                    logger.LogDebug("Worker running at: {time}", DateTimeOffset.Now);
+                    logger.LogDebug("(ShopifyWorker) Worker running at: {time}", 
+                        DateTimeOffset.Now);
 
                     await orderService.ExecuteShopifyImport(stoppingToken);
                     await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);

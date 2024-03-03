@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Formats.Asn1.AsnWriter;
 using ShopifyOrder = ShopifySharp.Order;
 using CIS.Application.Features.Orders.Infrastructure.Models;
 using Microsoft.Extensions.Logging;
@@ -104,8 +103,12 @@ namespace CIS.Application.Shopify
 
             if(ordersToInsert.Count > 0)
             {
-                _logger.LogInformation("Inserting Orders={0} and OrderLines={1}", 
-                    ordersToInsert.Count, orderLinesToInsert.Count);
+                _logger.LogInformation(
+                    "({0}) Inserting Orders={1} and OrderLines={2}",
+                    nameof(ImportShopifyOrderService),
+                    ordersToInsert.Count, 
+                    orderLinesToInsert.Count);
+
                 await _dbContext.SalesOrders.AddRangeAsync(ordersToInsert, cancellationToken);
                 await _dbContext.AddRangeAsync(orderLinesToInsert, cancellationToken);
                 await _dbContext.SaveChangesAsync(cancellationToken);

@@ -12,5 +12,6 @@ namespace CIS.Application.Shared.Repositories
     {
         Task<IEnumerable<MigrationTask>> GetMigrationTasks(CancellationToken cancellationToken);
         Task Complete(MigrationTask.TaskType taskType, CancellationToken cancellationToken);
+        Task<bool> IsAllMigrationsExecuted(CancellationToken cancellationToken);
     }
 }

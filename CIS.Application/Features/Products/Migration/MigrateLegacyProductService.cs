@@ -9,6 +9,7 @@ using CIS.Application.Shared.Services;
 using CIS.Library.Shared.Services;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,21 +24,25 @@ namespace CIS.Application.Features.Products.Migration
         private readonly IProcessImportCommandService<ImportProductCommand> _importService;
         private readonly IHubContext<ImportLegacyDataHub, IListenImportClient> _hub;
         private readonly IMigrationMapper<LegacySystemProductSource, ImportProductDefinition> _mapper;
+        private readonly ILogger<MigrateLegacyProductService> _logger;
 
         public MigrateLegacyProductService(
             SWNDistroContext swnDistroContext,
             IHubContext<ImportLegacyDataHub, IListenImportClient> hub,
             IProcessImportCommandService<ImportProductCommand> importService,
-            IMigrationMapper<LegacySystemProductSource, ImportProductDefinition> mapper)
+            IMigrationMapper<LegacySystemProductSource, ImportProductDefinition> mapper,
+            ILogger<MigrateLegacyProductService> logger)
         {
             _swnDistroContext = swnDistroContext;
             _hub = hub;
             _importService = importService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task Migrate(CancellationToken cancellationToken)
         {
+            _logger.LogInformation("Migrating products from SWNDistro to CIS started.");
             await _hub.Clients.All.ReceiveMessage("Importering av varer påbegynt.");
 
             await _swnDistroContext.Vareinfos.ProcessEntitiesInBatches(async (products, percentage) =>
@@ -64,6 +69,7 @@ namespace CIS.Application.Features.Products.Migration
             });
 
             await _hub.Clients.All.ReceiveMessage("Importering av varer vellykket.");
+            _logger.LogInformation("Migrating products from SWNDistro to CIS ended successfully.");
         }
     }
 }

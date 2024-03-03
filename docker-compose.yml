@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  cis.webapp:
+    image: ${DOCKER_REGISTRY-}ciswebapp
+    build:
+      context: .
+      dockerfile: CIS.WebApp/Dockerfile
+
+  cis.integration:
+    image: ${DOCKER_REGISTRY-}cisintegration
+    build:
+      context: .
+      dockerfile: CIS.Integration/Dockerfile
+

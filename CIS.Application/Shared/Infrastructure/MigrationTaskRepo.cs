@@ -35,5 +35,13 @@ namespace CIS.Application.Shared.Infrastructure
 
             return migrationTasks;
         }
+
+        public async Task<bool> IsAllMigrationsExecuted(CancellationToken cancellationToken)
+        {
+            var result = await _dbContext.MigrationsTasks
+                .AnyAsync(x => !x.Executed, cancellationToken);
+
+            return !result;
+        }
     }
 }

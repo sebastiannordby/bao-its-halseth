@@ -23,8 +23,8 @@ namespace CIS.Integration
             builder.Services.AddHostedService<ShopifyWorker>();
             builder.Services.AddCISShopifySharp(builder.Configuration);
             builder.Services.AddSWNDistroLegacyDatabase(legacyConnectionString);
-            builder.Services.AddCISDatabase(connectionString);
             builder.Services.AddCISLogging();
+            builder.Services.AddCISDatabase(connectionString);
 
             var host = builder.Build();
             host.Run();

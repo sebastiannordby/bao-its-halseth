@@ -60,9 +60,15 @@ namespace CIS.Application.Features.Products
             modelBuilder.Entity<ProductPriceDao>(entity =>
             {
                 entity.HasKey(x => x.Id);
-                entity.Property(x => x.PurchasePrice).HasColumnType("decimal(18, 5)");
-                entity.Property(x => x.CostPrice).HasColumnType("decimal(18, 5)");
-                entity.Property(x => x.StorePrice).HasColumnType("decimal(18, 5)");
+                entity
+                    .Property(x => x.PurchasePrice)
+                    .HasColumnType("decimal(18, 5)");
+                entity
+                    .Property(x => x.CostPrice)
+                    .HasColumnType("decimal(18, 5)");
+                entity
+                    .Property(x => x.StorePrice)
+                    .HasColumnType("decimal(18, 5)");
             });
 
             return modelBuilder;

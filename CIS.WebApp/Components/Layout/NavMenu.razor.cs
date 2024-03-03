@@ -10,18 +10,13 @@ namespace CIS.WebApp.Components.Layout
         [Inject]
         public required IMigrationTaskRepo MigrationTaskRepo { get; set; }
 
-        private bool _showMigrationPage;
-
         private readonly CancellationTokenSource _cts = new();
+        private bool _showMigrationPage;
 
         protected override async Task OnInitializedAsync()
         {
-            var migrationTasks = await MigrationTaskRepo
-                .GetMigrationTasks(_cts.Token);
-
-            _showMigrationPage = migrationTasks
-                .Where(x => !x.Executed)
-                .Any();
+            _showMigrationPage = await MigrationTaskRepo
+                .IsAllMigrationsExecuted(_cts.Token) == false;
         }
 
         public void Dispose()

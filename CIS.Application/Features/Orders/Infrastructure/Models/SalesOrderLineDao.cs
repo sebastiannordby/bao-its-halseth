@@ -13,8 +13,8 @@ namespace CIS.Application.Features.Orders.Infrastructure.Models
         public int ProductNumber { get; set; }
         public required string ProductName { get; set; }
         public string? EAN { get; set; }
-        public decimal Quantity { get; set; }
-        public decimal QuantityDelivered { get; set; }
+        public int Quantity { get; set; }
+        public int QuantityDelivered { get; set; }
         public decimal? CostPrice { get; set; }
         public decimal? PurchasePrice { get; set; }
         public decimal? StorePrice { get; set; }

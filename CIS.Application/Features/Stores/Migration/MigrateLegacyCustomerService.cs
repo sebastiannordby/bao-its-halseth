@@ -9,6 +9,7 @@ using CIS.Application.Shared.Services;
 using CIS.Library.Shared.Services;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -26,23 +27,27 @@ namespace CIS.Application.Features.Stores.Migration
         private readonly IHubContext<ImportLegacyDataHub, IListenImportClient> _hub;
         private readonly IProcessImportCommandService<ImportCustomerCommand> _importService;
         private readonly IMigrationMapper<LegacySystemCustomerSource, ImportCustomerDefinition> _mapper;
+        private readonly ILogger<MigrateLegacyCustomerService> _logger;
 
         public MigrateLegacyCustomerService(
             CISDbContext dbContext,
             SWNDistroContext swnDistroContext,
             IHubContext<ImportLegacyDataHub, IListenImportClient> hub,
             IProcessImportCommandService<ImportCustomerCommand> importService,
-            IMigrationMapper<LegacySystemCustomerSource, ImportCustomerDefinition> mapper)
+            IMigrationMapper<LegacySystemCustomerSource, ImportCustomerDefinition> mapper,
+            ILogger<MigrateLegacyCustomerService> logger)
         {
             _dbContext = dbContext;
             _swnDistroContext = swnDistroContext;
             _hub = hub;
             _importService = importService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task Migrate(CancellationToken cancellationToken)
         {
+            _logger.LogInformation("Migrating customers and stores from SWNDistro to CIS started.");
             await _hub.Clients.All.ReceiveMessage("Importering av kunder/butikker påbegynt.");
 
             await _swnDistroContext.Butikklistes.ProcessEntitiesInBatches(async (customers, percentage) =>
@@ -67,7 +72,9 @@ namespace CIS.Application.Features.Stores.Migration
 
                 await _hub.Clients.All.ReceiveMessage(message);
             });
-        }
 
+            await _hub.Clients.All.ReceiveMessage("Importering av kunder/butikker vellykket.");
+            _logger.LogInformation("Migrating customers and stores from SWNDistro to CIS ended successfully.");
+        }
     }
 }

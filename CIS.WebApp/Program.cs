@@ -71,6 +71,8 @@ namespace CIS.WebApp
             builder.Services
                 .AddSWNDistroLegacyDatabase(legacyConnectionString);
 
+            builder.Services.AddCISLogging();
+
             builder.Services
                 .AddCISAuthentication()
                 .AddSignInManager()
@@ -84,8 +86,8 @@ namespace CIS.WebApp
                 .AddSingleton<ImportLegacyDataHub>()
                 .AddScoped<ImportService>();
 
-
-            builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+            builder.Services
+                .AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
             var app = builder.Build();
 

@@ -4,22 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CIS.Application.Shared.Models;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace CIS.Application.Shared.Infrastructure
 {
     public class CISDbLoggerProvider : ILoggerProvider
     {
-        private readonly CISDbContext _dbContext;
+        private readonly IServiceProvider _serviceProvider;
 
-        public CISDbLoggerProvider(CISDbContext dbContext)
+        public CISDbLoggerProvider(IServiceProvider serviceProvider)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+            _serviceProvider = serviceProvider;
         }
 
         public ILogger CreateLogger(string categoryName)
         {
-            return new CISDbLogger(_dbContext);
+            return new CISDbLogger(_serviceProvider);
         }
 
         public void Dispose()
@@ -30,24 +31,25 @@ namespace CIS.Application.Shared.Infrastructure
 
     public class CISDbLogger : ILogger
     {
-        private readonly CISDbContext _dbContext;
+        private readonly IServiceProvider _serviceProvider;
 
-        public CISDbLogger(CISDbContext dbContext)
+        public CISDbLogger(IServiceProvider serviceProvider)
         {
-            _dbContext = dbContext;
+            _serviceProvider = serviceProvider;
         }
 
         public IDisposable BeginScope<TState>(TState state) => null;
 
-        public bool IsEnabled(LogLevel logLevel) => true; // Log all levels
+        public bool IsEnabled(LogLevel logLevel) => true;
 
-        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
             if (logLevel < LogLevel.Information)
                 return;
 
-            Task.Run(async () =>
+            using (var scope = _serviceProvider.CreateScope())
             {
+                var dbContext = scope.ServiceProvider.GetRequiredService<CISDbContext>();
                 var message = formatter(state, exception);
                 var logEntry = new LogEntry
                 {
@@ -56,9 +58,9 @@ namespace CIS.Application.Shared.Infrastructure
                     Message = message
                 };
 
-                await _dbContext.LogEntries.AddAsync(logEntry);
-                await _dbContext.SaveChangesAsync();
-            });
+                dbContext.LogEntries.Add(logEntry);
+                dbContext.SaveChanges();
+            }
         }
     }
 }

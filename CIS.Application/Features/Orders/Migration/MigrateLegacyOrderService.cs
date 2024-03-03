@@ -10,6 +10,7 @@ using CIS.Application.Shopify;
 using CIS.Library.Shared.Services;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,24 +26,28 @@ namespace CIS.Application.Features.Orders.Migration
         private readonly IProcessImportCommandService<ImportSalesOrderCommand> _processImportService;
         private readonly IMigrationMapper<LegacySystemSalesOrderSource, ImportSalesOrderDefinition> _migrationMapper;
         private readonly IHubContext<ImportLegacyDataHub, IListenImportClient> _hub;
+        private readonly ILogger<MigrateLegacyOrderService> _logger;
 
         public MigrateLegacyOrderService(
             CISDbContext dbContext,
             SWNDistroContext swnDbContext,
             IProcessImportCommandService<ImportSalesOrderCommand> processImportService,
             IMigrationMapper<LegacySystemSalesOrderSource, ImportSalesOrderDefinition> migrationMapper,
-            IHubContext<ImportLegacyDataHub, IListenImportClient> hub)
+            IHubContext<ImportLegacyDataHub, IListenImportClient> hub,
+            ILogger<MigrateLegacyOrderService> logger)
         {
             _dbContext = dbContext;
             _swnDbContext = swnDbContext;
             _processImportService = processImportService;
             _migrationMapper = migrationMapper;
             _hub = hub;
+            _logger = logger;
         }
 
         public async Task Migrate(CancellationToken cancellationToken)
         {
-            await _hub.Clients.All.ReceiveMessage("Importering av ordre/bestillinger påbegynt.");
+            _logger.LogInformation("Migrating orders from SWNDistro to CIS started.");
+            await _hub.Clients.All.ReceiveMessage("Migrering av ordre/bestillinger påbegynt.");
 
             var allOrderGroupingsQuery = _swnDbContext.Ordres
                 .AsNoTracking()
@@ -89,6 +94,7 @@ namespace CIS.Application.Features.Orders.Migration
             });
 
             await _hub.Clients.All.ReceiveMessage("Importering av ordre/bestillinger vellykket.");
+            _logger.LogInformation("Migrating orders from SWNDistro to CIS ended successfully.");
         }
 
         private class OrderGroupingStruct

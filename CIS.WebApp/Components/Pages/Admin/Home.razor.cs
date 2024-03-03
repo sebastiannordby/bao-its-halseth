@@ -11,17 +11,11 @@ namespace CIS.WebApp.Components.Pages.Admin
     public partial class Home : IDisposable
     {
         [Inject]
-        public IMigrationTaskRepo MigrationTaskRepo { get; set; }
+        public required IMigrationTaskRepo MigrationTaskRepo { get; set; }
 
         [Inject]
-        public ISalesQueries SalesQueries { get; set; }
+        public required ISalesQueries SalesQueries { get; set; }
 
-        private IEnumerable<MigrationTask> _migrationTasks = 
-            Enumerable.Empty<MigrationTask>();
-        
-        private IEnumerable<MigrationTask> _uncompletedMigrationTasks = 
-            Enumerable.Empty<MigrationTask>();
-        
         private IReadOnlyCollection<MostSoldProductView> _mostSoldProducts = 
             ReadOnlyCollection<MostSoldProductView>.Empty;
         
@@ -42,12 +36,8 @@ namespace CIS.WebApp.Components.Pages.Admin
 
         protected override async Task OnInitializedAsync()
         {
-            _migrationTasks = await MigrationTaskRepo
-                .GetMigrationTasks(_cts.Token);
-            _uncompletedMigrationTasks = _migrationTasks
-                .Where(x => !x.Executed);
-
-            _showMigrationPage = _uncompletedMigrationTasks.Any();
+            _showMigrationPage = await MigrationTaskRepo
+                .IsAllMigrationsExecuted(_cts.Token) == false;
 
             if (!_showMigrationPage)
             {

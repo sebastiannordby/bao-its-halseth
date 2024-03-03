@@ -50,7 +50,6 @@ namespace CIS.Application
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
             modelBuilder.SetupOrderModels();
             modelBuilder.SetupProductModels();
             modelBuilder.SetupStoreModels();

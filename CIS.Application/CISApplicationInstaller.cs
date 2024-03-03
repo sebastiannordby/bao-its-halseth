@@ -18,6 +18,8 @@ using CIS.Application.Features.Orders;
 using CIS.Application.Features.Products;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging.Console;
+using Serilog;
 
 namespace CIS.Application
 {
@@ -53,7 +55,7 @@ namespace CIS.Application
             this IServiceCollection services, string connectionString)
         {
             services.AddDbContext<CISDbContext>(options =>
-                options.UseSqlServer(connectionString));
+                options.UseSqlServer(connectionString), ServiceLifetime.Scoped);
 
             return services;
         }
@@ -74,14 +76,7 @@ namespace CIS.Application
             services.AddLogging(loggingBuilder =>
             {
                 loggingBuilder.AddConsole();
-
-                //loggingBuilder.Services.AddSingleton<ILoggerProvider>(provider =>
-                //{
-                //    using var scope = provider.CreateScope();
-                //    var dbContext = scope.ServiceProvider.GetRequiredService<CISDbContext>();
-
-                //    return new CISDbLoggerProvider(dbContext);
-                //});
+                loggingBuilder.Services.AddSingleton<ILoggerProvider, CISDbLoggerProvider>();
             });
         }
 
@@ -187,7 +182,7 @@ namespace CIS.Application
             }
             catch(Exception e)
             {
-
+                var db = e;
             }
         }
     }
