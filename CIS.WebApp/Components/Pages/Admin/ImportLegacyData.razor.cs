@@ -78,7 +78,7 @@ namespace CIS.WebApp.Components.Pages.Admin
         private async Task SetToImportingState()
         {
             _hubConnection = new HubConnectionBuilder()
-                .WithUrl(NavigationManager.ToAbsoluteUri("/import-legacy-hub")) // Replace "/myHub" with the appropriate endpoint URL
+                .WithUrl(NavigationManager.ToAbsoluteUri("/import-legacy-hub")) 
                 .Build();
 
             _hubConnection.On<string>(nameof(IListenImportClient.ReceiveMessage), async msg =>
