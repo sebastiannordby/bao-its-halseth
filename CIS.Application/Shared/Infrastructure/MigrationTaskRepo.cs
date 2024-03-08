@@ -32,7 +32,7 @@ namespace CIS.Application.Shared.Infrastructure
 
         public async Task<IEnumerable<MigrationTask>> GetMigrationTasks(CancellationToken cancellationToken)
         {
-             var migrationTasks = await _dbContext.MigrationsTasks
+            var migrationTasks = await _dbContext.MigrationsTasks
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
 
