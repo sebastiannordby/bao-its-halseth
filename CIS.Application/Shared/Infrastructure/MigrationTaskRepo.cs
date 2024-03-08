@@ -1,11 +1,8 @@
 ﻿using CIS.Application.Shared.Models;
 using CIS.Application.Shared.Repositories;
 using Microsoft.EntityFrameworkCore;
-using ShopifySharp.GraphQL;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
