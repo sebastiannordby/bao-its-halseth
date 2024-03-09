@@ -1,0 +1,38 @@
+name: Deploy to Azure
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x.x'
+ 
+      - name: Log in to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Read ACR name from secrets # No Danger
+        run: echo "::set-env name=ACR_NAME::cisapplication
+          
+      - name: Log in to Azure Container Registry
+        run: az acr login --name ${{ env.ACR_NAME }}
+
+      - name: Build and push Docker image to Azure Container Registry
+        if: github.ref == 'refs/heads/main'
+        run: |
+          docker build -t ${{ env.ACR_NAME }}.azurecr.io/cisapp:${{ env.REPO }}-${{ github.sha }} -t ${{ env.ACR_NAME }}.azurecr.io/cisapp:latest ./CIS.WebApp
+          docker push ${{ env.ACR_NAME }}.azurecr.io/cisapp:${{ env.REPO }}-${{ github.sha }}
+          docker push ${{ env.ACR_NAME }}.azurecr.io/cisapp:latest
+          
