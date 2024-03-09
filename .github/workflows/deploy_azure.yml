@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  publish-acr:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,7 +24,7 @@ jobs:
       - name: Build and push Docker image to Azure Container Registry
         if: github.ref == 'refs/heads/main'
         run: |
-          docker build -t cisapplication.azurecr.io/cisapp:${{ env.REPO }}-${{ github.sha }} -t cisapplication.azurecr.io/cisapp:latest ./CIS.WebApp
-          docker push cisapplication.azurecr.io/cisapp:${{ env.REPO }}-${{ github.sha }}
+          docker build -t cisapplication.azurecr.io/cisapp:${{ github.sha }} -t cisapplication.azurecr.io/cisapp:latest ./CIS.WebApp
+          docker push cisapplication.azurecr.io/cisapp:${{ github.sha }}
           docker push cisapplication.azurecr.io/cisapp:latest
           
