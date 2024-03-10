@@ -54,7 +54,11 @@ jobs:
           echo "::add-mask::${{fromJson(secrets.CISCONFIG).BACKEND_RG_NAME}}"
           echo "::add-mask::${{fromJson(secrets.CISCONFIG).BACKEND_STORAGE_ACCOUNT_NAME}}"
           echo "::add-mask::${{fromJson(secrets.CISCONFIG).BACKEND_CONTAINER_NAME}}"
-          echo "::add-mask::${{fromJson(secrets.CISCONFIG).BACKEND_KEY}}"        
+          echo "::add-mask::${{fromJson(secrets.CISCONFIG).BACKEND_KEY}}"
+          echo "::add-mask::${{fromJson(secrets.AZURE_CREDENTIALS).clientId}}"        
+          echo "::add-mask::${{fromJson(secrets.AZURE_CREDENTIALS).clientSecret}}"        
+          echo "::add-mask::${{fromJson(secrets.AZURE_CREDENTIALS).subscriptionId}}"        
+          echo "::add-mask::${{fromJson(secrets.AZURE_CREDENTIALS).tenantId}}"        
           terraform init \
             -backend-config="resource_group_name=${{fromJson(secrets.CISCONFIG).BACKEND_RG_NAME}}" \
             -backend-config="storage_account_name=${{fromJson(secrets.CISCONFIG).BACKEND_STORAGE_ACCOUNT_NAME}}" \
@@ -74,6 +78,10 @@ jobs:
           echo "::add-mask::${{fromJson(secrets.CISCONFIG).DB_PASSWORD}}"
           echo "::add-mask::${{fromJson(secrets.CISCONFIG).ACR_USERNAME}}"
           echo "::add-mask::${{fromJson(secrets.CISCONFIG).ACR_PASSWORD}}"        
+          echo "::add-mask::${{fromJson(secrets.AZURE_CREDENTIALS).clientId}}"        
+          echo "::add-mask::${{fromJson(secrets.AZURE_CREDENTIALS).clientSecret}}"        
+          echo "::add-mask::${{fromJson(secrets.AZURE_CREDENTIALS).subscriptionId}}"        
+          echo "::add-mask::${{fromJson(secrets.AZURE_CREDENTIALS).tenantId}}"        
           terraform apply -auto-approve -input=false \
             -var="db_server_username=${{fromJson(secrets.CISCONFIG).DB_USERNAME}}" \
             -var="db_server_password=${{fromJson(secrets.CISCONFIG).DB_PASSWORD}}" \
@@ -81,4 +89,8 @@ jobs:
             -var="acr_password=${{fromJson(secrets.CISCONFIG).ACR_PASSWORD}}"
         env:
           TF_LOG: ERROR          
+          ARM_CLIENT_ID: ${{fromJson(secrets.AZURE_CREDENTIALS).clientId}}
+          ARM_CLIENT_SECRET: ${{fromJson(secrets.AZURE_CREDENTIALS).clientSecret}}
+          ARM_SUBSCRIPTION_ID: ${{fromJson(secrets.AZURE_CREDENTIALS).subscriptionId}}
+          ARM_TENANT_ID: ${{fromJson(secrets.AZURE_CREDENTIALS).tenantId}}
      
