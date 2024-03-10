@@ -72,7 +72,7 @@ namespace CIS.WebApp
             builder.Services
                 .AddCISApplication(connectionString)
                 .AddSWNDistroLegacyDatabase(legacyConnectionString)
-                .AddShopifyAutomaticIntegration()
+                //.AddShopifyAutomaticIntegration()
                 .AddCISLogging();
 
             builder.Services
