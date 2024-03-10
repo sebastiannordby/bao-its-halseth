@@ -51,7 +51,7 @@
 /CIS.Integration/obj
 /bin/Debug
 /obj
-/bin/Debug
-/CIS.Integration/bin/Debug/net8.0
-/CIS.Integration/obj
-/obj
+/Infrastructure/.terraform/providers/registry.terraform.io/hashicorp/azurerm/3.95.0/windows_amd64
+/Infrastructure/.terraform.lock.hcl
+/Infrastructure/terraform.tfstate
+/Infrastructure/terraform.tfstate.backup
