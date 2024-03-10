@@ -19,7 +19,9 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Log in to Azure Container Registry
-        run: az acr login --name cisapplication
+        run: |
+          echo "::add-mask::${{ secrets.AZURE_CREDENTIALS }}"
+          az acr login --name cisapplication
 
       - name: Build and push Docker image to Azure Container Registry
         if: github.ref == 'refs/heads/main'
@@ -36,6 +38,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Log in to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
@@ -44,6 +51,10 @@ jobs:
       - name: Terraform Init
         working-directory: ./Infrastructure
         run: |
+          echo "::add-mask::${{fromJson(secrets.CISCONFIG).BACKEND_RG_NAME}}"
+          echo "::add-mask::${{fromJson(secrets.CISCONFIG).BACKEND_STORAGE_ACCOUNT_NAME}}"
+          echo "::add-mask::${{fromJson(secrets.CISCONFIG).BACKEND_CONTAINER_NAME}}"
+          echo "::add-mask::${{fromJson(secrets.CISCONFIG).BACKEND_KEY}}"        
           terraform init \
             -backend-config="resource_group_name=${{fromJson(secrets.CISCONFIG).BACKEND_RG_NAME}}" \
             -backend-config="storage_account_name=${{fromJson(secrets.CISCONFIG).BACKEND_STORAGE_ACCOUNT_NAME}}" \
@@ -59,6 +70,10 @@ jobs:
       - name: Terraform Apply
         working-directory: ./Infrastructure
         run: |
+          echo "::add-mask::${{fromJson(secrets.CISCONFIG).DB_USERNAME}}"
+          echo "::add-mask::${{fromJson(secrets.CISCONFIG).DB_PASSWORD}}"
+          echo "::add-mask::${{fromJson(secrets.CISCONFIG).ACR_USERNAME}}"
+          echo "::add-mask::${{fromJson(secrets.CISCONFIG).ACR_PASSWORD}}"        
           terraform apply -auto-approve -input=false \
             -var="db_server_username=${{fromJson(secrets.CISCONFIG).DB_USERNAME}}" \
             -var="db_server_password=${{fromJson(secrets.CISCONFIG).DB_PASSWORD}}" \
