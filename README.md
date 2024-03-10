@@ -1,8 +1,11 @@
 # CIS - Custom Install Software
 
-[![Unit Tests](https://github.com/sebastiannordby/bao-its-halseth/actions/workflows/dotnet.yml/badge.svg)](https://github.com/sebastiannordby/bao-its-halseth/actions/workflows/dotnet.yml)
-[![Integration Tests](https://github.com/sebastiannordby/bao-its-halseth/actions/workflows/integration-tests.yml/badge.svg)](https://github.com/sebastiannordby/bao-its-halseth/actions/workflows/integration-tests.yml)
+
 [![CodeQL Analysis](https://img.shields.io/static/v1?label=CodeQL%20Analysis&message=Passing&color=brightgreen)](https://github.com/sebastiannordby/bao-its-halseth/actions/workflows/codeql-analysis.yml)
+
+[![Unit & Integration Tests](https://github.com/sebastiannordby/bao-its-halseth/actions/workflows/testing.yml/badge.svg)](https://github.com/sebastiannordby/bao-its-halseth/actions/workflows/testing.yml)
+
+[![Deploy to Azure](https://github.com/sebastiannordby/bao-its-halseth/actions/workflows/deploy_azure.yml/badge.svg)](https://github.com/sebastiannordby/bao-its-halseth/actions/workflows/deploy_azure.yml)
 
 ## From Legacy to Cloud - Integration between Shopify and SAP
 
