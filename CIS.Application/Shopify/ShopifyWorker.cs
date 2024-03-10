@@ -1,8 +1,11 @@
 using CIS.Application.Shared.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using ShopifyOrder = ShopifySharp.Order;
 
-namespace CIS.Integration
+namespace CIS.Application.Shopify
 {
     public class ShopifyWorker : BackgroundService
     {
@@ -28,8 +31,9 @@ namespace CIS.Integration
                         DateTimeOffset.Now);
 
                     await orderService.ExecuteShopifyImport(stoppingToken);
-                    await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
                 }
+
+                await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
             }
         }
     }

@@ -70,6 +70,13 @@ namespace CIS.Application
             return services;
         }
 
+        public static IServiceCollection AddShopifyAutomaticIntegration(
+            this IServiceCollection services)
+        {
+            return services
+                .AddHostedService<ShopifyWorker>();
+        }
+
         public static IServiceCollection AddCISShopifySharp(
             this IServiceCollection services, IConfiguration configuration)
         {

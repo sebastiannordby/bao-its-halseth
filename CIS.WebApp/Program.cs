@@ -38,7 +38,6 @@ namespace CIS.WebApp
 
             builder.Services.AddSignalR();
 
-            // Add services to the container.
             builder.Services
                 .AddRazorComponents()
                 .AddInteractiveServerComponents();
@@ -66,28 +65,25 @@ namespace CIS.WebApp
             });
 
             builder.Services
-                .AddCISApplication(connectionString);
-
-            builder.Services
-                .AddSWNDistroLegacyDatabase(legacyConnectionString);
-
-            builder.Services.AddCISLogging();
-
-            builder.Services
-                .AddCISAuthentication()
-                .AddSignInManager()
-                .AddDefaultTokenProviders(); 
-
-            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-            builder.Services.AddHttpContextAccessor();
-
-            builder.Services
                 .AddSingleton<ImportLegacyDataBackgroundService>()
                 .AddSingleton<ImportLegacyDataHub>()
                 .AddScoped<ImportService>();
 
             builder.Services
-                .AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+                .AddCISApplication(connectionString)
+                .AddSWNDistroLegacyDatabase(legacyConnectionString)
+                .AddShopifyAutomaticIntegration()
+                .AddCISLogging();
+
+            builder.Services
+                .AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>()
+                .AddHttpContextAccessor()
+                .AddCISAuthentication()
+                .AddSignInManager()
+                .AddDefaultTokenProviders();
+
+            builder.Services
+                .AddDatabaseDeveloperPageExceptionFilter();
 
             var app = builder.Build();
 

@@ -10,25 +10,23 @@
 <AuthorizeView Policy="@UserTypes.ADMINISTRATOR">
     <Authorized>
         <RadzenLayout>
-            <CascadingValue TValue="bool" Value="_showMigrationPage" Name="ShowMigrationPage">
-                <RadzenHeader style="background-color: #4CAF50; color: white;">
-                    <div class="flex items-center justify-between px-4 h-full">
-                        <div class="text-xl font-semibold">CIS - Custom Install Software</div>
-                        <div class="flex items-center space-x-4">
-                            <span class="material-symbols-sharp">account_circle</span>
-                            <label>@context?.User?.Identity?.Name</label>
-                        </div>
+            <RadzenHeader style="background-color: #4CAF50; color: white;">
+                <div class="flex items-center justify-between px-4 h-full">
+                    <div class="text-xl font-semibold">CIS - Custom Install Software</div>
+                    <div class="flex items-center space-x-4">
+                        <span class="material-symbols-sharp">account_circle</span>
+                        <label>@context?.User?.Identity?.Name</label>
                     </div>
-                </RadzenHeader>
-                <RadzenSidebar>
-                    <NavMenu />
-                </RadzenSidebar>
-                <RadzenBody>
-                    <RadzenContentContainer>
-                            @Body
-                    </RadzenContentContainer>
-                </RadzenBody>
-            </CascadingValue>
+                </div>
+            </RadzenHeader>
+            <RadzenSidebar>
+                <NavMenu />
+            </RadzenSidebar>
+            <RadzenBody>
+                <RadzenContentContainer>
+                        @Body
+                </RadzenContentContainer>
+            </RadzenBody>
         </RadzenLayout>
     </Authorized>
 </AuthorizeView>
@@ -69,22 +67,3 @@
     <a class="dismiss">🗙</a>
 </div>
 
-
-@code{
-
-    [Inject] public required IMigrationTaskRepo MigrationTaskRepo { get; set; }
-
-
-
-    private bool _showMigrationPage = true;
-
-    private readonly CancellationTokenSource cts = new();
-
-    protected override async Task OnInitializedAsync()
-    {
-        _showMigrationPage = await MigrationTaskRepo.IsAllMigrationsExecuted(cts.Token) == false;
-        await InvokeAsync(StateHasChanged);
-    }
-
-
-}

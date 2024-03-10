@@ -7,7 +7,7 @@ using System.Linq.Dynamic.Core;
 
 namespace CIS.WebApp.Components.Pages.Admin
 {
-    public partial class InspectLegacyData : ComponentBase
+    public partial class InspectLegacyData : ComponentBase, IDisposable
     {
         [Inject]
         public required SWNDistroContext LegacyDbContext { get; set; }
@@ -116,6 +116,12 @@ namespace CIS.WebApp.Components.Pages.Admin
                 .Skip(args.Skip ?? 0)
                 .Take(args.Top ?? 100)
                 .ToListAsync(_cts.Token);
+        }
+
+        public void Dispose()
+        {
+            _cts.Cancel();
+            _cts.Dispose();
         }
     }
 }
