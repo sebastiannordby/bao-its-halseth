@@ -14,7 +14,7 @@ using CIS.Application.Features.Products.Models.Import;
 
 namespace CIS.WebApp.Components.Pages.Admin
 {
-    public partial class Products : ComponentBase
+    public partial class Products : ComponentBase, IDisposable
     {
         [Inject]
         public required IProcessImportCommandService<ImportProductCommand> ProductImportService { get; set; }
@@ -36,14 +36,16 @@ namespace CIS.WebApp.Components.Pages.Admin
 
         private int _selectedTabIndex = OVERVIEW_TAB_INDEX;
 
-        private IReadOnlyCollection<ProductView> _products;
-        private RadzenDataGrid<ProductView> _overviewGrid;
+        private IReadOnlyCollection<ProductView>? _products;
+        private RadzenDataGrid<ProductView>? _overviewGrid;
 
-        private List<ImportProductDefinition> _productImportDefinitions;
-        private RadzenDataGrid<ImportProductDefinition> _importDataGrid;
+        private List<ImportProductDefinition>? _productImportDefinitions;
+        private RadzenDataGrid<ImportProductDefinition>? _importDataGrid;
 
         private bool _showDetailDialog;
-        private ProductView _detailDialogProduct;
+        private ProductView? _detailDialogProduct;
+
+        private CancellationTokenSource _cts = new();
 
         protected override async Task OnInitializedAsync()
         {
@@ -52,7 +54,7 @@ namespace CIS.WebApp.Components.Pages.Admin
 
         private async Task LoadOverviewData()
         {
-            _products = await ProductQueries.List();
+            _products = await ProductQueries.List(_cts.Token);
 
             if(_overviewGrid is not null)
             {
@@ -93,6 +95,9 @@ namespace CIS.WebApp.Components.Pages.Admin
 
         private async Task ExecuteImport()
         {
+            if (_productImportDefinitions is null)
+                return;
+
             var result = await ProductImportService.Import(new() 
             { 
                 Definitions = _productImportDefinitions 
@@ -171,6 +176,12 @@ namespace CIS.WebApp.Components.Pages.Admin
 
             await InvokeAsync(StateHasChanged);
             await _importDataGrid.RefreshDataAsync();
+        }
+
+        public void Dispose()
+        {
+            _cts.Cancel();
+            _cts.Dispose();
         }
     }
 }

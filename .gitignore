@@ -55,3 +55,7 @@
 /Infrastructure/.terraform.lock.hcl
 /Infrastructure/terraform.tfstate
 /Infrastructure/terraform.tfstate.backup
+/CIS.WebApp/bin/Release/net8.0
+/CIS.Tests/bin/Release/net8.0
+/CIS.Tests.Integration/bin/Release/net8.0
+/CIS.Application/bin/Release/net8.0

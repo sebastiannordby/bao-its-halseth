@@ -31,18 +31,58 @@
                     Style="height: 100%">
                     <Columns>
                         <RadzenDataGridColumn TItem="Order" Property="@(nameof(Order.OrderNumber))" Title="#" />
-                        <RadzenDataGridColumn TItem="Order" Property="@(nameof(Order.Name))" Title="Navn" />
+                        <RadzenDataGridColumn TItem="Order" Property="@(nameof(Order.Name))" Title="Navn">
+                            <Template>
+                                @if (_showSensitiveInfo)
+                                {
+                                    <label>@context.Name</label>
+                                }
+                                else
+                                {
+                                    <label>*********</label>
+                                }
+                            </Template>
+                        </RadzenDataGridColumn>
                         <RadzenDataGridColumn TItem="Order" Property="@(nameof(Order.BillingAddress))" Title="Billing address">
                             <Template>
-                                <label>@context.BillingAddress.Address1 (@context.BillingAddress.Province) (@context.BillingAddress.City)</label>
+                                @if (_showSensitiveInfo)
+                                {
+                                    <label>@context.BillingAddress.Address1 (@context.BillingAddress.Province) (@context.BillingAddress.City)</label>
+                                }
+                                else
+                                {
+                                    <label>*********</label>
+                                }
                             </Template>
                         </RadzenDataGridColumn>
                         <RadzenDataGridColumn TItem="Order" Property="@(nameof(Order.Customer))" Title="Kunde" Context="item">
                             <Template>
-                                <label>@item.Customer.FirstName @item.Customer.LastName</label>
+                                @if(_showSensitiveInfo)
+                                {
+                                    <label>@item.Customer.FirstName @item.Customer.LastName</label>
+                                }
+                                else
+                                {
+                                    <label>*********</label>
+                                }
                             </Template>
                         </RadzenDataGridColumn>
-                        <RadzenDataGridColumn TItem="Order" Property="@(nameof(Order.Email))" Title="E-post" />
+                        <RadzenDataGridColumn 
+                            TItem="Order" 
+                            Property="@(nameof(Order.Email))" 
+                            Title="E-post" 
+                            Context="item">
+                            <Template>
+                                @if(_showSensitiveInfo)
+                                {
+                                    <label>@item.Email</label>
+                                }
+                                else
+                                {
+                                    <label>*********</label>
+                                }
+                            </Template>
+                        </RadzenDataGridColumn>
                         <RadzenDataGridColumn TItem="Order" Property="@(nameof(Order.Currency))" Title="Valuta" />
                         <RadzenDataGridColumn TItem="Order" Property="@(nameof(Order.SubtotalPrice))" Title="Subtotal pris" />
                         <RadzenDataGridColumn TItem="Order" Property="@(nameof(Order.TotalPrice))" Title="Total pris" />
@@ -67,18 +107,54 @@
                     Style="height: 100%">
                     <Columns>
                         <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.OrderId))" Title="Id" />
-                        <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.Name))" Title="Navn" />
+                        <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.Name))" Title="Navn">
+                            <Template>
+                                @if (_showSensitiveInfo)
+                                {
+                                    <label>@context.Name</label>
+                                }
+                                else
+                                {
+                                    <label>*********</label>
+                                }
+                            </Template>
+                        </RadzenDataGridColumn>
                         <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.BillingAddress))" Title="Billing address" >
                             <Template>
-                                <label>@context.BillingAddress.Address1 (@context.BillingAddress.Province) (@context.BillingAddress.City)</label>
+                                @if (_showSensitiveInfo)
+                                {
+                                    <label>@context.BillingAddress.Address1 (@context.BillingAddress.Province) (@context.BillingAddress.City)</label>
+                                }
+                                else
+                                {
+                                    <label>*********</label>
+                                }
                             </Template>
                         </RadzenDataGridColumn>
                         <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.Customer))" Title="Kunde" Context="item">
                             <Template>
-                                <label>@item.Customer.FirstName @item.Customer.LastName</label>
+                                @if (_showSensitiveInfo)
+                                {
+                                    <label>@item.Customer.FirstName @item.Customer.LastName</label>
+                                }
+                                else
+                                {
+                                    <label>*********</label>
+                                }
                             </Template>
                         </RadzenDataGridColumn>
-                        <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.Email))" Title="Navn" />
+                        <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.Email))" Title="E-post" Context="item">
+                            <Template>
+                                @if (_showSensitiveInfo)
+                                {
+                                    <label>@item.Email</label>
+                                }
+                                else
+                                {
+                                    <label>*********</label>
+                                }
+                            </Template>
+                        </RadzenDataGridColumn>
                         <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.Currency))" Title="Valuta" />
                         <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.SubtotalPrice))" Title="Subtotal pris" />
                         <RadzenDataGridColumn TItem="DraftOrder" Property="@(nameof(DraftOrder.TotalPrice))" Title="Total pris" />

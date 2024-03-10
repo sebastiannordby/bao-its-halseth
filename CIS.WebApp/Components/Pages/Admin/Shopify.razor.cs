@@ -18,6 +18,17 @@ namespace CIS.WebApp.Components.Pages.Admin
 
         private CancellationTokenSource _cts = new();
 
+        private bool _showSensitiveInfo = false;
+
+        protected override void OnInitialized()
+        {
+            #if DEBUG
+                _showSensitiveInfo = true;
+            #else
+                _showSensitiveInfo = false;
+            #endif
+        }
+
         private async Task LoadOrders(LoadDataArgs args)
         {
             var orders = await ShopifyService

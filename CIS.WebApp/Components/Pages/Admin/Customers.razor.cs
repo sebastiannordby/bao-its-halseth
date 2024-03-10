@@ -12,7 +12,7 @@ using CIS.Application.Features.Stores.Models.Import;
 
 namespace CIS.WebApp.Components.Pages.Admin
 {
-    public partial class Customers : ComponentBase
+    public partial class Customers : ComponentBase, IDisposable
     {
         [Inject] 
         public required NotificationService NotificationService { get; set; }
@@ -31,7 +31,7 @@ namespace CIS.WebApp.Components.Pages.Admin
 
         private int _selectedTabIndex = OVERVIEW_TAB_INDEX;
 
-        private string _importMessages;
+        private string? _importMessages;
         private List<CustomerView> _preViewCustomers = new();
         private ImportState _importState = ImportState.Input;
         private bool _preViewHidden = true;
@@ -41,6 +41,8 @@ namespace CIS.WebApp.Components.Pages.Admin
 
         private IReadOnlyCollection<CustomerView> _customers;
         private RadzenDataGrid<CustomerView> _overviewGrid;
+
+        private readonly CancellationTokenSource _cts = new();
 
         protected override async Task OnInitializedAsync()
         {
@@ -54,7 +56,7 @@ namespace CIS.WebApp.Components.Pages.Admin
 
         public async Task LoadOverviewData()
         {
-            _customers = await CustomerQueries.List();
+            _customers = await CustomerQueries.List(_cts.Token);
 
             if(_overviewGrid is not null)
             {
@@ -78,7 +80,7 @@ namespace CIS.WebApp.Components.Pages.Admin
             var res = await ImportCustomerService.Import(new()
             {
                 Definitions = _customerImportDefinitions
-            }, CancellationToken.None);
+            }, _cts.Token);
 
             if(res)
             {
@@ -149,6 +151,12 @@ namespace CIS.WebApp.Components.Pages.Admin
 
             await InvokeAsync(StateHasChanged);
             await _importDataGrid.RefreshDataAsync();
+        }
+
+        public void Dispose()
+        {
+            _cts.Cancel();
+            _cts.Dispose();
         }
     }
 }
