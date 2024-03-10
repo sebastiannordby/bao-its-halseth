@@ -26,7 +26,7 @@ jobs:
       - name: Build and push Docker image to Azure Container Registry
         if: github.ref == 'refs/heads/main'
         run: |
-          docker build -t cisapplication.azurecr.io/cisapp:${{ github.sha }} -t cisapplication.azurecr.io/cisapp:latest -f CIS.WebApp/Dockerfile .
+          docker build -t cisapplication.azurecr.io/cisapp:latest -f CIS.WebApp/Dockerfile .
           docker push cisapplication.azurecr.io/cisapp:${{ github.sha }}
           docker push cisapplication.azurecr.io/cisapp:latest
           
