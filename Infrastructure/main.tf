@@ -42,8 +42,8 @@ resource "azurerm_app_service_plan" "cisappserviceplan" {
   reserved = true
 
   sku {
-    tier = "Basic"
-    size = "B1"
+    tier = "Free"
+    size = "F1"
   }
 }
 
