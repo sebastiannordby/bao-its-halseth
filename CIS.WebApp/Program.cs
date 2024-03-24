@@ -72,7 +72,7 @@ namespace CIS.WebApp
             builder.Services
                 .AddCISApplication(connectionString)
                 .AddSWNDistroLegacyDatabase(legacyConnectionString)
-                //.AddShopifyAutomaticIntegration()
+                //.AddCISScheduling()
                 .AddCISLogging();
 
             builder.Services
@@ -102,9 +102,12 @@ namespace CIS.WebApp
             }
 
             app.UseHttpsRedirection();
+
             await app.InitializeDatabase(
                 requiresMigrationFromLegacy: true,
                 insertTestUser: true);
+            //app.UseCISScheduling();
+
             app.UseStaticFiles();
             app.UseAntiforgery();
 

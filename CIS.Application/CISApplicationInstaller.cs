@@ -23,6 +23,8 @@ using Serilog;
 using Microsoft.AspNetCore.Builder;
 using Serilog.Events;
 using System;
+using Coravel.Scheduling.Schedule;
+using Coravel;
 
 namespace CIS.Application
 {
@@ -70,11 +72,22 @@ namespace CIS.Application
             return services;
         }
 
-        public static IServiceCollection AddShopifyAutomaticIntegration(
+        public static IServiceCollection AddCISScheduling(
             this IServiceCollection services)
         {
             return services
-                .AddHostedService<ShopifyWorker>();
+                .AddScheduler()
+                .AddScoped<ImportShopifyOrderTimedWorker>();
+        }
+
+        public static void UseCISScheduling(this IApplicationBuilder app)
+        {
+            app.ApplicationServices.UseScheduler(options =>
+            {
+                options
+                    .Schedule<ImportShopifyOrderTimedWorker>()
+                    .EveryTenMinutes();
+            });
         }
 
         public static IServiceCollection AddCISShopifySharp(
