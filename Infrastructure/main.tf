@@ -31,7 +31,7 @@ resource "azurerm_sql_database" "swn" {
   location = data.azurerm_resource_group.cis.location
   server_name = azurerm_mssql_server.db_server.name
   edition = "Basic"
-  collation = "SQL_Latin1_General_CP1_CI_AS"
+  collation = "Danish_Norwegian_CI_AS"
 }
 
 resource "azurerm_app_service_plan" "cisappserviceplan" {
@@ -42,8 +42,8 @@ resource "azurerm_app_service_plan" "cisappserviceplan" {
   reserved = true
 
   sku {
-    tier = "Free"
-    size = "F1"
+    tier = "Basic"
+    size = "B1"
   }
 }
 
@@ -53,7 +53,7 @@ locals {
 }
 
 resource "azurerm_linux_web_app" "cisappservice" {
-  name = "cis-app-service"
+  name = "cis-appservice"
   location = data.azurerm_resource_group.cis.location
   resource_group_name = data.azurerm_resource_group.cis.name
   service_plan_id = azurerm_app_service_plan.cisappserviceplan.id
