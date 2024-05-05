@@ -21,7 +21,7 @@ resource "azurerm_sql_database" "cis" {
   resource_group_name = data.azurerm_resource_group.cis.name
   location = data.azurerm_resource_group.cis.location
   server_name = azurerm_mssql_server.db_server.name
-  edition = "Standard"
+  edition = "Basic"
   collation = "SQL_Latin1_General_CP1_CI_AS"
 }
 
@@ -30,7 +30,7 @@ resource "azurerm_sql_database" "swn" {
   resource_group_name = data.azurerm_resource_group.cis.name
   location = data.azurerm_resource_group.cis.location
   server_name = azurerm_mssql_server.db_server.name
-  edition = "Standard"
+  edition = "Basic"
   collation = "Danish_Norwegian_CI_AS"
 }
 
