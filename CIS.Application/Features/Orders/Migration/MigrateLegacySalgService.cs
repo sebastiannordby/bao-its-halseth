@@ -1,36 +1,28 @@
 ﻿using CIS.Application.Features.Orders.Contracts;
 using CIS.Application.Features.Orders.Import.Contracts;
 using CIS.Application.Features.Orders.Migration.Contracts;
-using CIS.Application.Hubs;
 using CIS.Application.Legacy;
-using CIS.Application.Listeners;
 using CIS.Application.Shared.Extensions;
 using CIS.Application.Shared.Services;
 using CIS.Library.Shared.Services;
-using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CIS.Application.Features.Orders.Migration
 {
     internal class MigrateLegacySalgService : IMigrateLegacyService<Salg>
     {
         private readonly SWNDistroContext _swnDbContext;
-        private readonly IHubContext<ImportLegacyDataHub, IListenImportClient> _hub;
+        private readonly INotifyClientService _notifyClient;
         private readonly IMigrationMapper<LegacySystemSalesStatisticsSource, ImportSalesStatisticsDefinition> _migrationMapper;
         private readonly IProcessImportCommandService<ImportSalesStatisticsCommand> _importService;
 
         public MigrateLegacySalgService(
             SWNDistroContext swnDbContext,
-            IHubContext<ImportLegacyDataHub, IListenImportClient> hub,
+            INotifyClientService notifyClientService,
             IMigrationMapper<LegacySystemSalesStatisticsSource, ImportSalesStatisticsDefinition> migrationMapper,
             IProcessImportCommandService<ImportSalesStatisticsCommand> importService)
         {
             _swnDbContext = swnDbContext;
-            _hub = hub;
+            _notifyClient = notifyClientService;
             _importService = importService;
             _migrationMapper = migrationMapper;
             _importService = importService;
@@ -38,7 +30,7 @@ namespace CIS.Application.Features.Orders.Migration
 
         public async Task Migrate(CancellationToken cancellationToken)
         {
-            await _hub.Clients.All.ReceiveMessage("Importering av salgstall påbegynt.");
+            await _notifyClient.SendPlainText("Importering av salgstall påbegynt.");
 
             await _swnDbContext.Salgs.ProcessEntitiesInBatches(async (sales, percentage) =>
             {
@@ -55,10 +47,10 @@ namespace CIS.Application.Features.Orders.Migration
                 var successMsg = success ? "Vellykket" : "Feilet";
                 var message = $"({percentage}%)({successMsg}) Salgstall..\n";
 
-                await _hub.Clients.All.ReceiveMessage(message);
+                await _notifyClient.SendPlainText(message);
             }, 1500);
 
-            await _hub.Clients.All.ReceiveMessage("Importering av salgstall vellykket.");
+            await _notifyClient.SendPlainText("Importering av salgstall vellykket.");
         }
     }
 }

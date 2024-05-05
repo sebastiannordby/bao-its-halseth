@@ -1,17 +1,8 @@
 ﻿using CIS.Application.Features.Products.Import.Contracts;
 using CIS.Application.Features.Products.Models;
-using CIS.Application.Hubs;
-using CIS.Application.Legacy;
-using CIS.Application.Listeners;
 using CIS.Library.Shared.Services;
 using FluentValidation;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CIS.Application.Features.Products.Import
 {
@@ -19,20 +10,14 @@ namespace CIS.Application.Features.Products.Import
         IProcessImportCommandService<ImportProductCommand>
     {
         private readonly CISDbContext _dbContext;
-        private readonly SWNDistroContext _swnDistroContext;
         private readonly IValidator<ImportProductCommand> _commandValidator;
-        private readonly IHubContext<ImportLegacyDataHub, IListenImportClient> _hub;
 
         public ProcessImportProductCommandService(
             CISDbContext dbContext,
-            SWNDistroContext swnDistroContext,
-            IValidator<ImportProductCommand> commandValidator,
-            IHubContext<ImportLegacyDataHub, IListenImportClient> hub)
+            IValidator<ImportProductCommand> commandValidator)
         {
             _dbContext = dbContext;
-            _swnDistroContext = swnDistroContext;
             _commandValidator = commandValidator;
-            _hub = hub;
         }
 
         public async Task<bool> Import(ImportProductCommand command, CancellationToken cancellationToken)

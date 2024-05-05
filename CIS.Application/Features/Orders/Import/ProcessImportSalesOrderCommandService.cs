@@ -1,12 +1,5 @@
 ﻿using CIS.Library.Shared.Services;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using CIS.Application.Features.Orders.Import.Contracts;
 using CIS.Application.Features.Orders.Infrastructure.Models;
 
@@ -15,9 +8,6 @@ namespace CIS.Application.Features.Orders.Import
     internal class ProcessImportSalesOrderCommandService :
         IProcessImportCommandService<ImportSalesOrderCommand>
     {
-        private Dictionary<int, string> _storeNames = new();
-        private Dictionary<int, string> _productNames = new();
-
         private readonly CISDbContext _dbContext;
         private readonly IValidator<ImportSalesOrderCommand> _commandValidator;
 
@@ -85,7 +75,7 @@ namespace CIS.Application.Features.Orders.Import
 
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }

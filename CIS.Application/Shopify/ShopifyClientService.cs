@@ -41,7 +41,8 @@ namespace CIS.Application.Shopify
                 _draftOrderService = draftOrderServiceFactory.Create(_apiCredentials);
             }
 
-            public async Task<IEnumerable<Order>> GetOrdersAsync(CancellationToken cancellationToken)
+            public async Task<IEnumerable<Order>> GetOrdersAsync(
+                CancellationToken cancellationToken)
             {
                 var filter = new OrderListFilter()
                 {

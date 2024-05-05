@@ -4,11 +4,6 @@ using CIS.Application.Features.Products.Models.Import;
 using CIS.Library.Shared.Services;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CIS.Tests.Domain.Products.Import
 {
@@ -21,8 +16,8 @@ namespace CIS.Tests.Domain.Products.Import
             var serviceCollection = fixture.GetServiceCollection();
             serviceCollection.AddProductFeature();
 
-            fixture.AddLegacyHubMock(serviceCollection);
-            
+            fixture.AddNotifyClientServiceMock(serviceCollection);
+
             var services = serviceCollection.BuildServiceProvider();
             _sut = services.GetRequiredService<IProcessImportCommandService<ImportProductCommand>>();
         }
@@ -35,7 +30,7 @@ namespace CIS.Tests.Domain.Products.Import
                 Definitions = new List<ImportProductDefinition>()
             };
 
-            await Assert.ThrowsAsync<ValidationException>(async() =>
+            await Assert.ThrowsAsync<ValidationException>(async () =>
             {
                 await _sut.Import(command, CancellationToken.None);
             });
