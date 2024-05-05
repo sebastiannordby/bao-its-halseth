@@ -1,18 +1,8 @@
 ﻿using CIS.Application.Features.Stores.Import.Contracts;
 using CIS.Application.Features.Stores.Models;
-using CIS.Application.Hubs;
-using CIS.Application.Legacy;
-using CIS.Application.Listeners;
 using CIS.Library.Shared.Services;
 using FluentValidation;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CIS.Application.Features.Stores.Import
 {
@@ -20,19 +10,13 @@ namespace CIS.Application.Features.Stores.Import
         IProcessImportCommandService<ImportCustomerCommand>
     {
         private readonly CISDbContext _dbContext;
-        private readonly SWNDistroContext _swnDistroContext;
         private readonly IValidator<ImportCustomerCommand> _commandValidator;
-        private readonly IHubContext<ImportLegacyDataHub, IListenImportClient> _hub;
 
         public ProcessImportCustomerCommandService(
             CISDbContext dbContext,
-            SWNDistroContext swnDistroContext,
-            IHubContext<ImportLegacyDataHub, IListenImportClient> hub,
             IValidator<ImportCustomerCommand> commandValidator)
         {
             _dbContext = dbContext;
-            _swnDistroContext = swnDistroContext;
-            _hub = hub;
             _commandValidator = commandValidator;
         }
 

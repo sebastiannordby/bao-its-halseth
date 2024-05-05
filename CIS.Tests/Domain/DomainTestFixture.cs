@@ -1,16 +1,9 @@
 ﻿using CIS.Application;
-using CIS.Application.Hubs;
+using CIS.Application.Features;
 using CIS.Application.Legacy;
-using CIS.Application.Listeners;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CIS.Tests.Domain
 {
@@ -21,14 +14,16 @@ namespace CIS.Tests.Domain
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddDbContext<CISDbContext>(options =>
             {
-                options.UseInMemoryDatabase(nameof(DomainTestFixture), b => {
+                options.UseInMemoryDatabase(nameof(DomainTestFixture), b =>
+                {
                     b.EnableNullChecks(false);
                 });
             });
 
             serviceCollection.AddDbContext<SWNDistroContext>(options =>
             {
-                options.UseInMemoryDatabase($"Legacy_{nameof(DomainTestFixture)}", b => {
+                options.UseInMemoryDatabase($"Legacy_{nameof(DomainTestFixture)}", b =>
+                {
                     b.EnableNullChecks(false);
                 });
             });
@@ -38,12 +33,12 @@ namespace CIS.Tests.Domain
             return serviceCollection;
         }
 
-        public IHubContext<ImportLegacyDataHub, IListenImportClient> AddLegacyHubMock(ServiceCollection services)
+        public INotifyClientService AddNotifyClientServiceMock(ServiceCollection services)
         {
-            var hubMock = Substitute.For<IHubContext<ImportLegacyDataHub, IListenImportClient>>();
-            services.AddSingleton(hubMock);
+            var notifyClientServiceMock = Substitute.For<INotifyClientService>();
+            services.AddSingleton(notifyClientServiceMock);
 
-            return hubMock;
+            return notifyClientServiceMock;
         }
 
         public void Dispose()

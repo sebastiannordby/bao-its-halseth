@@ -1,19 +1,11 @@
-﻿using CIS.Application.Shared.Services;
-using CIS.Library.Shared.Services;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CIS.Application.Listeners;
-using NSubstitute;
-using Microsoft.AspNetCore.SignalR;
-using CIS.Application.Hubs;
-using CIS.Application.Legacy;
+﻿using CIS.Application.Features;
 using CIS.Application.Features.Orders;
 using CIS.Application.Features.Orders.Contracts;
 using CIS.Application.Features.Orders.Migration.Contracts;
+using CIS.Application.Legacy;
+using CIS.Application.Shared.Services;
+using Microsoft.Extensions.DependencyInjection;
+using NSubstitute;
 
 namespace CIS.Tests.Domain.Orders.Migration
 {
@@ -21,14 +13,14 @@ namespace CIS.Tests.Domain.Orders.Migration
     {
         private readonly IMigrateLegacyService<Ordre> _sut;
         private readonly IMigrationMapper<LegacySystemSalesOrderSource, ImportSalesOrderDefinition> _sutMapper;
-        private readonly IHubContext<ImportLegacyDataHub, IListenImportClient> _hubMock;
+        private readonly INotifyClientService _notifyClientService;
 
         public MigrateLegacyOrderServiceTests(DomainTestFixture fixture)
         {
             var serviceCollection = fixture.GetServiceCollection();
             serviceCollection.AddOrderFeature();
 
-            _hubMock = fixture.AddLegacyHubMock(serviceCollection);
+            _notifyClientService = fixture.AddNotifyClientServiceMock(serviceCollection);
 
             var services = serviceCollection.BuildServiceProvider();
 
@@ -40,9 +32,9 @@ namespace CIS.Tests.Domain.Orders.Migration
         public async Task ShouldSendMessages()
         {
             await _sut.Migrate(CancellationToken.None);
-            await _hubMock.Clients.All
+            await _notifyClientService
                 .Received()
-                .ReceiveMessage(Arg.Any<string>());
+                .SendPlainText(Arg.Any<string>());
         }
     }
 }
