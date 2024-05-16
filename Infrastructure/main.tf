@@ -16,7 +16,7 @@ resource "azurerm_mssql_server" "db_server" {
   administrator_login_password = var.db_server_password
 }
 
-resource "azurerm_sql_database" "cis" {
+resource "azurerm_mssql_database" "cis" {
   name = "CIS"
   resource_group_name = data.azurerm_resource_group.cis.name
   location = data.azurerm_resource_group.cis.location
@@ -25,7 +25,7 @@ resource "azurerm_sql_database" "cis" {
   collation = "SQL_Latin1_General_CP1_CI_AS"
 }
 
-resource "azurerm_sql_database" "swn" {
+resource "azurerm_mssql_database" "swn" {
   name = "swn_distro"
   resource_group_name = data.azurerm_resource_group.cis.name
   location = data.azurerm_resource_group.cis.location
