@@ -18,20 +18,24 @@ resource "azurerm_mssql_server" "db_server" {
 
 resource "azurerm_mssql_database" "cis" {
   name = "CIS"
-  resource_group_name = data.azurerm_resource_group.cis.name
-  location = data.azurerm_resource_group.cis.location
-  server_name = azurerm_mssql_server.db_server.name
-  edition = "Standard"
+  server_id = azurerm_mssql_server.db_server.id
+  sku_name = "S0"
   collation = "SQL_Latin1_General_CP1_CI_AS"
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_mssql_database" "swn" {
   name = "swn_distro"
-  resource_group_name = data.azurerm_resource_group.cis.name
-  location = data.azurerm_resource_group.cis.location
-  server_name = azurerm_mssql_server.db_server.name
-  edition = "Standard"
+  server_id = azurerm_mssql_server.db_server.id
+  sku_name = "S0"
   collation = "Danish_Norwegian_CI_AS"
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_app_service_plan" "cisappserviceplan" {
