@@ -52,8 +52,8 @@ resource "azurerm_app_service_plan" "cisappserviceplan" {
 }
 
 locals {
-  connection_string_cis = "Server=${azurerm_mssql_server.db_server.fully_qualified_domain_name};Database=${azurerm_mssql_server.cis.name};User ID=${azurerm_mssql_server.db_server.administrator_login};Password=${azurerm_mssql_server.db_server.administrator_login_password};MultipleActiveResultSets=True;TrustServerCertificate=True;"
-  connection_string_swn = "Server=${azurerm_mssql_server.db_server.fully_qualified_domain_name};Database=${azurerm_mssql_server.swn.name};User ID=${azurerm_mssql_server.db_server.administrator_login};Password=${azurerm_mssql_server.db_server.administrator_login_password};MultipleActiveResultSets=True;TrustServerCertificate=True;"
+  connection_string_cis = "Server=${azurerm_mssql_server.db_server.fully_qualified_domain_name};Database=${azurerm_mssql_database.cis.name};User ID=${azurerm_mssql_server.db_server.administrator_login};Password=${azurerm_mssql_server.db_server.administrator_login_password};MultipleActiveResultSets=True;TrustServerCertificate=True;"
+  connection_string_swn = "Server=${azurerm_mssql_server.db_server.fully_qualified_domain_name};Database=${azurerm_mssql_database.swn.name};User ID=${azurerm_mssql_server.db_server.administrator_login};Password=${azurerm_mssql_server.db_server.administrator_login_password};MultipleActiveResultSets=True;TrustServerCertificate=True;"
 }
 
 resource "azurerm_linux_web_app" "cisappservice" {
