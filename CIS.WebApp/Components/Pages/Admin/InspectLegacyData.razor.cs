@@ -29,6 +29,7 @@ namespace CIS.WebApp.Components.Pages.Admin
         private async Task LoadLegacySalesStatistics(LoadDataArgs args)
         {
             var query = LegacyDbContext.Salgs
+                .AsNoTracking()
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(args.Filter))
@@ -52,6 +53,7 @@ namespace CIS.WebApp.Components.Pages.Admin
         private async Task LoadLegacyOrders(LoadDataArgs args)
         {
             var query = LegacyDbContext.Ordres
+                .AsNoTracking()
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(args.Filter))
@@ -75,6 +77,7 @@ namespace CIS.WebApp.Components.Pages.Admin
         private async Task LoadLegacyStores(LoadDataArgs args)
         {
             var query = LegacyDbContext.Butikklistes
+                .AsNoTracking()
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(args.Filter))
@@ -98,6 +101,7 @@ namespace CIS.WebApp.Components.Pages.Admin
         private async Task LoadLegacyProducts(LoadDataArgs args)
         {
             var query = LegacyDbContext.Vareinfos
+                .AsNoTracking()
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(args.Filter))

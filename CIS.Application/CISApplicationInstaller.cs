@@ -25,6 +25,7 @@ using Serilog.Events;
 using System;
 using Coravel.Scheduling.Schedule;
 using Coravel;
+using CIS.Application.Features.Shared;
 
 namespace CIS.Application
 {
@@ -50,6 +51,7 @@ namespace CIS.Application
             return services
                 .AddScoped<IMigrationTaskRepo, MigrationTaskRepo>()
                 .AddScoped<ICISUserService, CISUserService>()
+                .AddSharedFeature()
                 .AddStoreFeature()
                 .AddProductFeature()
                 .AddOrderFeature()

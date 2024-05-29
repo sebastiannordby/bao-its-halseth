@@ -40,13 +40,13 @@ namespace CIS.WebApp.Components.Pages.Admin
 
         private async Task FetchUsers()
         {
-            var users = await UserManager.Users
-                .ToListAsync(_cts.Token);
+            var users = (await UserManager.Users
+                .ToListAsync(_cts.Token)) ?? new();
 
             var userViews = users.Select(user =>
             {
                 var customer = user.CustomerId.HasValue ?  _customers
-                    .First(x => x.Id == user.CustomerId) : null;
+                    .FirstOrDefault(x => x.Id == user.CustomerId) : null;
 
                 return new UserView()
                 {

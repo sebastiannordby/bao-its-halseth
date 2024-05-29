@@ -13,9 +13,16 @@
             <RadzenHeader style="background-color: #4CAF50; color: white;">
                 <div class="flex items-center justify-between px-4 h-full">
                     <div class="text-xl font-semibold">CIS - Custom Install Software</div>
-                    <div class="flex items-center space-x-4">
-                        <span class="material-symbols-sharp">account_circle</span>
-                        <label>@context?.User?.Identity?.Name</label>
+                    
+                    <div class="flex items-center text-sm gap-2">
+                        <div class="flex items-center space-x-4">
+                            <span class="material-symbols-sharp">account_circle</span>
+                            <label>@context?.User?.Identity?.Name</label>
+                        </div>
+                        <span>|</span>
+                        <NavLink href=@($"Logout?redirectUri=Account/Login") Match="NavLinkMatch.Prefix">
+                            Logg ut
+                        </NavLink>
                     </div>
                 </div>
             </RadzenHeader>

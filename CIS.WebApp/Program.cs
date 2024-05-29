@@ -82,6 +82,8 @@ namespace CIS.WebApp
                 .AddSignInManager()
                 .AddDefaultTokenProviders();
 
+            builder.Services.AddRazorPages();
+
             builder.Services
                 .AddDatabaseDeveloperPageExceptionFilter();
 
@@ -113,6 +115,8 @@ namespace CIS.WebApp
 
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();
+
+            app.MapRazorPages();
 
             // Add additional endpoints required by the Identity /Account Razor components.
             app.MapAdditionalIdentityEndpoints();
