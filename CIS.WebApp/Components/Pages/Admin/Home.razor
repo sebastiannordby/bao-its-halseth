@@ -24,7 +24,9 @@
     }
     else
     {
-        <h1 class="text-2xl">Hei, Ole-Hermann!</h1>
+        <AuthorizeView>
+            <h1 class="text-2xl">Hei, @context.User.Identity.Name!</h1>
+        </AuthorizeView>
 
         @if(_mostSoldProducts?.Any() == true)
         {
