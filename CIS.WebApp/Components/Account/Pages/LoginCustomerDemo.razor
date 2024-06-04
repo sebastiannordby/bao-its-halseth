@@ -1,4 +1,4 @@
-﻿@page "/Account/Login"
+﻿@page "/Account/Login/Kunde"
 
 @using System.ComponentModel.DataAnnotations
 @using CIS.Application.Features.Shared
@@ -120,11 +120,11 @@
     {
         [Required]
         [EmailAddress]
-        public string Email { get; set; } = DemoConstants.ADMIN_USERNAME;
+        public string Email { get; set; } = DemoConstants.CUSTOMER_USERNAME;
 
         [Required]
         [DataType(DataType.Password)]
-        public string Password { get; set; } = DemoConstants.ADMIN_PASSWORD;
+        public string Password { get; set; } = DemoConstants.CUSTOMER_PASSWORD;
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; } = true;

@@ -1,3 +1,5 @@
+using CIS.Application;
+using CIS.Application.Features.Shared;
 using CIS.Application.Hubs;
 using CIS.Application.Legacy;
 using CIS.Application.Listeners;
@@ -58,6 +60,8 @@ namespace CIS.WebApp.Services
 
             var legacyDbContext = services
                 .GetRequiredService<SWNDistroContext>();
+            var demoService = services
+                .GetRequiredService<DemoService>();
 
             var migrationTaskRepo = services
                 .GetRequiredService<IMigrationTaskRepo>();
@@ -88,6 +92,8 @@ namespace CIS.WebApp.Services
                 await migrateSalesStatisticsService.Migrate(cancellationToken);
                 await migrationTaskRepo.Complete(MigrationTask.TaskType.SalesOrderStatistics, cancellationToken);
             }
+
+            await demoService.EnsureCustomerWithMostOrderHasUser();
 
             await _hubContext.Clients.All.Finished();
 
