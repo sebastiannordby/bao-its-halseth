@@ -47,44 +47,46 @@ namespace CIS.Application.Features.Shared
         
         public async Task EnsureCustomerWithMostOrderHasUser()
         {
-            // FOR DEMO PURPOSES
-            var customerWithMostOrders = (
-                from order in _dbContext.SalesOrders
-                join customer in _dbContext.Customers
-                    on order.CustomerNumber equals customer.Number
-                group order by order.CustomerNumber into groupedOrders
-                orderby groupedOrders.Count() descending
-                select new
+            if(!_dbContext.Users.Any(x => x.UserName == DemoConstants.CUSTOMER_USERNAME))
+            {
+                var customerWithMostOrders = (
+                        from order in _dbContext.SalesOrders
+                        join customer in _dbContext.Customers
+                            on order.CustomerNumber equals customer.Number
+                        group order by order.CustomerNumber into groupedOrders
+                        orderby groupedOrders.Count() descending
+                        select new
+                        {
+                            CustomerId = groupedOrders.Key,
+                            OrderCount = groupedOrders.Count()
+                        }
+                    ).FirstOrDefault();
+
+                var findCustomer = customerWithMostOrders != null ?
+                    _dbContext.Customers
+                    .First(x => x.Number == customerWithMostOrders.CustomerId) : null;
+
+                var user = new ApplicationUser
                 {
-                    CustomerId = groupedOrders.Key,
-                    OrderCount = groupedOrders.Count()
-                }
-            ).FirstOrDefault();
+                    UserName = DemoConstants.CUSTOMER_USERNAME,
+                    Email = DemoConstants.CUSTOMER_PASSWORD,
+                    LockoutEnabled = false,
+                    TwoFactorEnabled = false,
+                    CustomerId = findCustomer?.Id
+                };
+                var result = await _userManager.CreateAsync(user, DemoConstants.CUSTOMER_PASSWORD);
+                var emailConfirmationCode = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var confirmEmailRes = await _userManager.ConfirmEmailAsync(user, emailConfirmationCode);
 
-            var findCustomer = customerWithMostOrders != null ?
-                _dbContext.Customers
-                .First(x => x.Number == customerWithMostOrders.CustomerId) : null;
+                var role = new IdentityUserRole<string>()
+                {
+                    RoleId = UserTypes.CUSTOMER,
+                    UserId = user.Id
+                };
 
-            var user = new ApplicationUser
-            {
-                UserName = DemoConstants.CUSTOMER_USERNAME,
-                Email = DemoConstants.CUSTOMER_PASSWORD,
-                LockoutEnabled = false,
-                TwoFactorEnabled = false,
-                CustomerId = findCustomer?.Id
-            };
-            var result = await _userManager.CreateAsync(user, DemoConstants.CUSTOMER_PASSWORD);
-            var emailConfirmationCode = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var confirmEmailRes = await _userManager.ConfirmEmailAsync(user, emailConfirmationCode);
-
-            var role = new IdentityUserRole<string>()
-            {
-                RoleId = UserTypes.CUSTOMER,
-                UserId = user.Id
-            };
-
-            await _dbContext.UserRoles.AddAsync(role);
-            await _dbContext.SaveChangesAsync();
+                await _dbContext.UserRoles.AddAsync(role);
+                await _dbContext.SaveChangesAsync();
+            }
         }
     }
 }
