@@ -46,58 +46,64 @@ namespace CIS.WebApp.Services
                 return;
 
             _isRunning = true;
-            using var scope = _scopeFactory.CreateScope();
 
-            var services = scope.ServiceProvider;
-            var migrateSalesStatisticsService = services
-                .GetRequiredService<IMigrateLegacyService<Salg>>();
-            var migrateSalesOrderService = services
-                .GetRequiredService<IMigrateLegacyService<Ordre>>();
-            var migrateCustomerService = services
-                .GetRequiredService<IMigrateLegacyService<Butikkliste>>();
-            var migrateProductService = services
-                .GetRequiredService<IMigrateLegacyService<Vareinfo>>();
-
-            var legacyDbContext = services
-                .GetRequiredService<SWNDistroContext>();
-            var demoService = services
-                .GetRequiredService<DemoService>();
-
-            var migrationTaskRepo = services
-                .GetRequiredService<IMigrationTaskRepo>();
-
-            var tasks = await migrationTaskRepo.GetMigrationTasks(cancellationToken);
-            var uncompletedTasks = tasks.Where(x => !x.Executed);
-
-            if(uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.Products))
+            try
             {
-                await migrateProductService.Migrate(cancellationToken);
-                await migrationTaskRepo.Complete(MigrationTask.TaskType.Products, cancellationToken);
-            }
+                using var scope = _scopeFactory.CreateScope();
 
-            if (uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.Customers))
+                var services = scope.ServiceProvider;
+                var migrateSalesStatisticsService = services
+                    .GetRequiredService<IMigrateLegacyService<Salg>>();
+                var migrateSalesOrderService = services
+                    .GetRequiredService<IMigrateLegacyService<Ordre>>();
+                var migrateCustomerService = services
+                    .GetRequiredService<IMigrateLegacyService<Butikkliste>>();
+                var migrateProductService = services
+                    .GetRequiredService<IMigrateLegacyService<Vareinfo>>();
+
+                var legacyDbContext = services
+                    .GetRequiredService<SWNDistroContext>();
+                var demoService = services
+                    .GetRequiredService<DemoService>();
+
+                var migrationTaskRepo = services
+                    .GetRequiredService<IMigrationTaskRepo>();
+
+                var tasks = await migrationTaskRepo.GetMigrationTasks(cancellationToken);
+                var uncompletedTasks = tasks.Where(x => !x.Executed);
+
+                if (uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.Products))
+                {
+                    await migrateProductService.Migrate(cancellationToken);
+                    await migrationTaskRepo.Complete(MigrationTask.TaskType.Products, cancellationToken);
+                }
+
+                if (uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.Customers))
+                {
+                    await migrateCustomerService.Migrate(cancellationToken);
+                    await migrationTaskRepo.Complete(MigrationTask.TaskType.Customers, cancellationToken);
+                }
+
+                if (uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.SalesOrders))
+                {
+                    await migrateSalesOrderService.Migrate(cancellationToken);
+                    await migrationTaskRepo.Complete(MigrationTask.TaskType.SalesOrders, cancellationToken);
+                }
+
+                if (uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.SalesOrderStatistics))
+                {
+                    await migrateSalesStatisticsService.Migrate(cancellationToken);
+                    await migrationTaskRepo.Complete(MigrationTask.TaskType.SalesOrderStatistics, cancellationToken);
+                }
+
+                await demoService.EnsureCustomerWithMostOrderHasUser();
+
+                await _hubContext.Clients.All.Finished();
+            }
+            finally
             {
-                await migrateCustomerService.Migrate(cancellationToken);
-                await migrationTaskRepo.Complete(MigrationTask.TaskType.Customers, cancellationToken);
+                _isRunning = false;
             }
-
-            if (uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.SalesOrders))
-            {
-                await migrateSalesOrderService.Migrate(cancellationToken);
-                await migrationTaskRepo.Complete(MigrationTask.TaskType.SalesOrders, cancellationToken);
-            }
-
-            if (uncompletedTasks.Any(x => x.Type == MigrationTask.TaskType.SalesOrderStatistics))
-            {
-                await migrateSalesStatisticsService.Migrate(cancellationToken);
-                await migrationTaskRepo.Complete(MigrationTask.TaskType.SalesOrderStatistics, cancellationToken);
-            }
-
-            await demoService.EnsureCustomerWithMostOrderHasUser();
-
-            await _hubContext.Clients.All.Finished();
-
-            _isRunning = false;
         }
     }
 }
