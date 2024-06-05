@@ -105,10 +105,17 @@ namespace CIS.WebApp.Components.Pages.Admin
 
         private async Task StartBackgroundService()
         {
-            await SetToImportingState();
-            NotificationService.Notify(
-                NotificationSeverity.Info, "Import startet");
-            await BackgroundImportService.StartAsync(CancellationToken.None);
+            try
+            {
+                await SetToImportingState();
+                NotificationService.Notify(
+                    NotificationSeverity.Info, "Import startet");
+                await BackgroundImportService.StartAsync(CancellationToken.None);
+            }
+            finally
+            {
+                _isImporting = false;
+            }
         }
 
         private async Task StopBackgroundService()
